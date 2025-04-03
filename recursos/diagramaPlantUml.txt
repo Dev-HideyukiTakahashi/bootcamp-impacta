@@ -1,0 +1,84 @@
+@startuml
+entity Usuario {
+*id: Int
+email: String
+senha: String
+tipo: Enum
+criadoEm: Timestamp
+}
+
+entity Endereco {
+*id: int
+pais: String
+estado: String
+cidade: String
+cep: String
+rua: String
+numero: String
+bairro: String
+}
+
+entity Voluntario {
+nomeCompleto: String
+cpf: String
+telefone: String
+dataNascimento: Date
+}
+
+entity Tag{
+*id: Int
+nome: String
+}
+
+entity Ong {
+nome: String
+cnpj: String
+telefone: String
+}
+
+entity Atividade {
+*id: Int
+nome: String
+descricao: String
+periodo: String
+cargaHorariaDiaria: String
+enderecoCompleto: String
+possuiCertificacao: Boolean
+ong_id: FK
+}
+
+entity HistoricoAtividade {
+*id: Int
+voluntario_id: FK
+atividade_id: FK
+dataInscricao: Date
+certificado: Boolean
+statusCandidatura: String
+}
+
+entity Avaliacao {
+*id: Int
+voluntario_id: FK
+ong_id: FK
+feedback: String
+estrelas: Int
+isAvaliado: Boolean
+}
+
+entity Role {
+*id: Int
+authority: String
+}
+
+Usuario <|-- Voluntario
+Usuario <|-- Ong
+Usuario ||--o{ Role : "1..1"
+Ong ||--o{ Atividade : "1..*"
+Voluntario ||--o{ HistoricoAtividade : "1..*"
+HistoricoAtividade ||--|| Avaliacao : "1..1"
+Voluntario ||--o{ Tag: "0..*"
+Ong ||--o{ Tag: "0..*"
+Ong ||--o{ Avaliacao : "1..*"
+Atividade ||--o{ HistoricoAtividade : "1..*"
+Usuario ||--|| Endereco : "1..1"
+@enduml
