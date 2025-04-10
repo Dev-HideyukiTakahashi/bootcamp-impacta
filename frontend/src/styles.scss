@@ -1,0 +1,171 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f2f4f8;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Header */
+header {
+  background-color: #1e2352;
+  color: white;
+  padding: 15px 0;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav ul {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.btn-entrar {
+  padding: 8px 16px;
+  background-color: white;
+  color: #1e2352;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* Hero */
+.hero {
+  display: flex;
+  align-items: center;
+  padding: 60px 0;
+  background-color: #e9edf4;
+}
+
+.hero-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero .text h1 {
+  font-size: 36px;
+  color: #333;
+}
+
+.hero .text h1 span {
+  color: #f16623;
+}
+
+.hero .text p {
+  margin: 20px 0;
+  font-size: 16px;
+}
+
+.buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.btn-voluntario {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+}
+
+.btn-ong {
+  background-color: #1e2352;
+  color: white;
+}
+
+.hero .image img {
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+/* Como Funciona */
+.como-funciona {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.cards {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  text-align: left;
+}
+
+/* Depoimentos */
+.depoimentos {
+  padding: 60px 20px;
+  background-color: #ffffff;
+  text-align: center;
+}
+
+.depoimentos .card {
+  text-align: left;
+}
+
+.depoimentos h4 {
+  margin-top: 15px;
+  color: #1e2352;
+}
+
+.depoimentos small {
+  color: #777;
+}
+
+/* Footer */
+footer {
+  background-color: #1e2352;
+  color: white;
+  padding: 30px 0;
+  text-align: center;
+}
+
+.footer .social {
+  margin-bottom: 15px;
+}
+
+.footer .icons a {
+  margin: 0 10px;
+  display: inline-block;
+}
+
+.footer .icons img {
+  width: 24px;
+  height: 24px;
+  filter: invert(1);
+}
