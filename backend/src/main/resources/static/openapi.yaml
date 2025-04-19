@@ -1,0 +1,137 @@
+openapi: 3.0.3
+info:
+  title: Boação API
+  version: 1.0.0
+  description: API para gerenciar voluntários, ONGs, atividades e suas interações.
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+
+paths:
+  # ==========================================
+  # Endpoints de Tags
+  # ==========================================
+  /tags:
+    get:
+      summary: Buscar todas as Tags
+      description: Retorna todas as Tags de atividades
+      responses:
+        "200":
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TagDTO"
+        "401":
+          description: Não autorizado. Usuário não logado para acessar o recurso.
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  summary: Exemplo de resposta 401
+                  value:
+                    timestamp: "2025-04-19T08:25:17.664+00:00"
+                    status: 401
+                    error: "Unauthorized"
+                    message: "Não autorizado. Usuário não logado."
+                    path: "/tags"
+        "500":
+          description: Erro interno no servidor. Ocorreu um erro inesperado ao processar a solicitação.
+          content:
+            application/json:
+              examples:
+                server_error:
+                  summary: Exemplo de resposta 500
+                  value:
+                    timestamp: "2025-04-19T08:25:17.664+00:00"
+                    status: 500
+                    error: "Internal Server Error"
+                    message: "Erro ao processar a solicitação. Falha ao conectar com o banco de dados."
+                    path: "/tags"
+  /tags/{id}:
+    get:
+      summary: Buscar uma Tag pelo ID
+      description: Retorna a Tag de uma atividade específica com base no ID fornecido.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID da Tag a ser buscada
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Sucesso. A Tag foi encontrada e retornada.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TagDTO"
+        "401":
+          description: Não autorizado. Usuário não logado para acessar o recurso.
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  summary: Exemplo de resposta 401
+                  value:
+                    timestamp: "2025-04-19T08:25:17.664+00:00"
+                    status: 401
+                    error: "Unauthorized"
+                    message: "Não autorizado. Usuário não logado."
+                    path: "/tags/1"
+        "403":
+          description: Proibido. O usuário não tem permissão para acessar o recurso.
+          content:
+            application/json:
+              examples:
+                forbidden:
+                  summary: Exemplo de resposta 403
+                  value:
+                    timestamp: "2025-04-19T08:30:00.664+00:00"
+                    status: 403
+                    error: "Forbidden"
+                    message: "Proibido. O usuário não tem permissão para acessar o recurso."
+                    path: "/tags/1"
+        "404":
+          description: Não encontrado. A Tag com o ID fornecido não foi encontrada.
+          content:
+            application/json:
+              examples:
+                not_found:
+                  summary: Exemplo de resposta 404
+                  value:
+                    timestamp: "2025-04-19T08:35:17.664+00:00"
+                    status: 404
+                    error: "Not Found"
+                    message: "Tag não encontrada! Id: 22"
+                    path: "/tags/22"
+        "500":
+          description: Erro interno no servidor. Ocorreu um erro inesperado ao processar a solicitação.
+          content:
+            application/json:
+              examples:
+                server_error:
+                  summary: Exemplo de resposta 500
+                  value:
+                    timestamp: "2025-04-19T08:25:17.664+00:00"
+                    status: 500
+                    error: "Internal Server Error"
+                    message: "Erro ao processar a solicitação. Falha ao conectar com o banco de dados."
+                    path: "/tags/1"
+
+  # ==========================================
+  # Schemas
+  # ==========================================
+components:
+  schemas:
+    TagDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        nome:
+          type: string
+          example: "Administração e Gestão"

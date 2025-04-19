@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-BoacaoApplication<boacao>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "br.com.impacta.boacao.BoacaoApplication",
+      "projectName": "boacao",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
