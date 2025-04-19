@@ -1,0 +1,55 @@
+name: CI com Spring Boot e JaCoCo
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  build:
+    name: Build and Test with Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      # Passo 1: Fazer checkout do repositório
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Passo 2: Configurar o Java
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'zulu'
+
+      # Passo 3: Cache Maven dependencies
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: maven-${{ runner.os }}-${{ hashFiles('**/*.xml', '**/*.properties') }}
+          restore-keys: |
+            maven-${{ runner.os }}-
+
+      # Passo 4: Navegar para o diretório backend e rodar os testes com JaCoCo
+      - name: Build and run tests with coverage
+        run: |
+          cd backend
+          mvn clean test jacoco:report
+
+      # Passo 5: Fazer upload do relatório de cobertura
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: backend/target/site/jacoco/
+
+      # Passo 6: Verificar se o relatório foi gerado corretamente
+      - name: Verify the Jacoco report
+        run: |
+          if [ -d backend/target/site/jacoco ]; then
+            echo "JaCoCo report directory is available."
+          else
+            echo "JaCoCo report directory not found. Exiting with error."
+            exit 1
+          fi
