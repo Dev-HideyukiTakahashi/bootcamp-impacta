@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.impacta.boacao.dto.TagDTO;
 import br.com.impacta.boacao.entities.Tag;
-import br.com.impacta.boacao.exception.RecursoNaoEncontrado;
+import br.com.impacta.boacao.exception.RecursoNaoEncontradoException;
 import br.com.impacta.boacao.mapper.TagMapper;
 import br.com.impacta.boacao.repository.TagRepository;
 
@@ -36,7 +36,7 @@ public class TagService {
     @Transactional(readOnly = true)
     public TagDTO buscarPorId(Integer id) {
         Tag entidade = tagRepository.findById(id)
-                .orElseThrow(() -> new RecursoNaoEncontrado("Tag de não encontrada! Id: " + id));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Tag não encontrada! Id: " + id));
         log.info("Busca de tag realizada com sucesso! Id: {}", id);
 
         return TagMapper.paraDTO(entidade);
