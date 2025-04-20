@@ -157,7 +157,7 @@
 						<exclude>br/com/impacta/boacao/BoacaoApplication.class</exclude>
 						<exclude>br/com/impacta/boacao/config/**</exclude>
 						<exclude>br/com/impacta/boacao/dto/**</exclude>
-						<exclude>br/com/impacta/boacao/exceptions/**</exclude>
+						<exclude>br/com/impacta/boacao/exception/**</exclude>
 						<exclude>br/com/impacta/boacao/entities/**</exclude>
 						<exclude>br/com/impacta/boacao/mapper/**</exclude>
 					</excludes>
