@@ -18,26 +18,30 @@ INSERT INTO tag (nome) VALUES ('Suporte Tecnológico');
 INSERT INTO tag (nome) VALUES ('Eventos e Logística');
 INSERT INTO tag (nome) VALUES ('Tradução e Comunicação Internacional');
 
--- -- Inserindo papéis (Voluntário e ONG)
--- INSERT INTO role (authority) VALUES ('ROLE_VOLUNTARIO');
--- INSERT INTO role (authority) VALUES ('ROLE_ONG');
+-- Inserindo papéis (Voluntário e ONG)
+INSERT INTO role (authority) VALUES ('ROLE_VOLUNTARIO');
+INSERT INTO role (authority) VALUES ('ROLE_ONG');
 
 -- -- Inserindo usuários (Voluntários e ONGs)
--- INSERT INTO usuario (email, senha, tipo, criado_em) VALUES ('joao.silva@email.com', 'senha123', 'VOLUNTARIO', '2023-02-10');
--- INSERT INTO usuario (email, senha, tipo, criado_em) VALUES ('maria.oliveira@email.com', 'senha123', 'VOLUNTARIO', '2023-01-25');
--- INSERT INTO usuario (email, senha, tipo, criado_em) VALUES ('pedro.costa@email.com', 'senha123', 'VOLUNTARIO', '2023-03-12');
--- INSERT INTO usuario (email, senha, tipo, criado_em) VALUES ('ana.souza@email.com', 'senha123', 'VOLUNTARIO', '2023-06-01');
--- INSERT INTO usuario (email, senha, tipo, criado_em) VALUES ('lucas.almeida@email.com', 'senha123', 'VOLUNTARIO', '2023-04-18');
--- INSERT INTO usuario (email, senha, tipo, criado_em) VALUES ('camila.pereira@email.com', 'senha123', 'VOLUNTARIO', '2023-07-01');
--- INSERT INTO usuario (email, senha, tipo, criado_em) VALUES ('fernanda.costa@email.com', 'senha123', 'VOLUNTARIO', '2023-05-22');
--- INSERT INTO usuario (email, senha, tipo, criado_em) VALUES ('rafael.santos@email.com', 'senha123', 'VOLUNTARIO', '2023-03-28');
--- INSERT INTO usuario (email, senha, tipo, criado_em) VALUES ('juliana.rocha@email.com', 'senha123', 'VOLUNTARIO', '2023-04-10');
--- INSERT INTO usuario (email, senha, tipo, criado_em) VALUES ('bruno.martins@email.com', 'senha123', 'VOLUNTARIO', '2023-02-15');
--- INSERT INTO usuario (email, senha, tipo, criado_em) VALUES ('coracao.solidario@email.com', 'senha123', 'ONG', '2023-05-15');
--- INSERT INTO usuario (email, senha, tipo, criado_em) VALUES ('esperanca.e.vida@email.com', 'senha123', 'ONG', '2023-06-10');
--- INSERT INTO usuario (email, senha, tipo, criado_em) VALUES ('maos.amigas@email.com', 'senha123', 'ONG', '2023-04-20');
--- INSERT INTO usuario (email, senha, tipo, criado_em) VALUES ('sorriso.de.crianca@email.com', 'senha123', 'ONG', '2023-07-05');
--- INSERT INTO usuario (email, senha, tipo, criado_em) VALUES ('projeto.vida.melhor@email.com', 'senha123', 'ONG', '2023-03-30');
+-- Voluntários
+INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('joao.silva@email.com', '$2b$12$O8eg3qy7F4RMa7s1rH2YQeKaPazjt4J97iqYEWpdlSyqdK5Y47jy2', 2, '2023-02-10 10:00:00');
+INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('maria.oliveira@email.com', '$2b$12$O8eg3qy7F4RMa7s1rH2YQeKaPazjt4J97iqYEWpdlSyqdK5Y47jy2', 2, '2023-01-25 11:30:00');
+INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('pedro.costa@email.com', '$2b$12$O8eg3qy7F4RMa7s1rH2YQeKaPazjt4J97iqYEWpdlSyqdK5Y47jy2', 2, '2023-03-12 14:45:00');
+INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('ana.souza@email.com', '$2b$12$O8eg3qy7F4RMa7s1rH2YQeKaPazjt4J97iqYEWpdlSyqdK5Y47jy2', 2, '2023-06-01 08:00:00');
+INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('lucas.almeida@email.com', '$2b$12$O8eg3qy7F4RMa7s1rH2YQeKaPazjt4J97iqYEWpdlSyqdK5Y47jy2', 2, '2023-04-18 16:20:00');
+INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('camila.pereira@email.com', '$2b$12$O8eg3qy7F4RMa7s1rH2YQeKaPazjt4J97iqYEWpdlSyqdK5Y47jy2', 2, '2023-07-01 10:30:00');
+INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('fernanda.costa@email.com', '$2b$12$O8eg3qy7F4RMa7s1rH2YQeKaPazjt4J97iqYEWpdlSyqdK5Y47jy2', 2, '2023-05-22 12:15:00');
+INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('rafael.santos@email.com', '$2b$12$O8eg3qy7F4RMa7s1rH2YQeKaPazjt4J97iqYEWpdlSyqdK5Y47jy2', 2, '2023-03-28 17:00:00');
+INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('juliana.rocha@email.com', '$2b$12$O8eg3qy7F4RMa7s1rH2YQeKaPazjt4J97iqYEWpdlSyqdK5Y47jy2', 2, '2023-04-10 09:00:00');
+INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('bruno.martins@email.com', '$2b$12$O8eg3qy7F4RMa7s1rH2YQeKaPazjt4J97iqYEWpdlSyqdK5Y47jy2', 2, '2023-02-15 13:50:00');
+-- ONGs
+INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('coracao.solidario@email.com', '$2b$12$O8eg3qy7F4RMa7s1rH2YQeKaPazjt4J97iqYEWpdlSyqdK5Y47jy2', 1, '2023-05-15 14:00:00');
+INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('esperanca.e.vida@email.com', '$2b$12$O8eg3qy7F4RMa7s1rH2YQeKaPazjt4J97iqYEWpdlSyqdK5Y47jy2', 1, '2023-06-10 15:30:00');
+INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('maos.amigas@email.com', '$2b$12$O8eg3qy7F4RMa7s1rH2YQeKaPazjt4J97iqYEWpdlSyqdK5Y47jy2', 1, '2023-04-20 11:45:00');
+INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('sorriso.de.crianca@email.com', '$2b$12$O8eg3qy7F4RMa7s1rH2YQeKaPazjt4J97iqYEWpdlSyqdK5Y47jy2', 1, '2023-07-05 16:00:00');
+INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('projeto.vida.melhor@email.com', '$2b$12$O8eg3qy7F4RMa7s1rH2YQeKaPazjt4J97iqYEWpdlSyqdK5Y47jy2', 1, '2023-03-30 18:00:00');
+
+
 
 
 -- -- Inserindo ONGs

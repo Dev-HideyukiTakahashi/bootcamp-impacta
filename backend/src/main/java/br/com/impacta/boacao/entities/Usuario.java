@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 /**
  * Entidade base para os usuários do sistema.
@@ -26,6 +27,9 @@ public class Usuario {
 
     @Column(columnDefinition = "DATETIME") // definindo tipo para SQL server
     private Timestamp criadoEm;
+
+    @ManyToOne
+    private Role role;
 
     public Usuario() {
 
@@ -68,6 +72,30 @@ public class Usuario {
 
     public void setCriadoEm(Timestamp criadoEm) {
         this.criadoEm = criadoEm;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    /**
+     * Verifica se o usuário possui o papel (role) especificado.
+     * Este método verifica se o papel do usuário corresponde ao papel fornecido
+     * como parâmetro.
+     * 
+     * @param roleName o nome do papel a ser verificado (ex: "ROLE_VOLUNTARIO")
+     * @return true se o usuário possui o papel informado, ou false se o papel não
+     *         for encontrado
+     */
+    public boolean hasRole(String roleName) {
+        if (role != null && roleName.equals(role.getAuthority())) {
+            return true;
+        }
+        return false;
     }
 
     @Override
