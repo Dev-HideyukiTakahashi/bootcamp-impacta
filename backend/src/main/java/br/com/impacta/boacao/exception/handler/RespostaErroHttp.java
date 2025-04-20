@@ -1,4 +1,4 @@
-package br.com.impacta.boacao.dto;
+package br.com.impacta.boacao.exception.handler;
 
 import java.time.Instant;
 
