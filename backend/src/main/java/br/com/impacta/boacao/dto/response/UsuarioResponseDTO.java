@@ -1,4 +1,4 @@
-package br.com.impacta.boacao.dto;
+package br.com.impacta.boacao.dto.response;
 
 /**
  * DTO utilizado para respostas (responses) relacionadas ao usuário.

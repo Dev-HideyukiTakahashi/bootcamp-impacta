@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.impacta.boacao.dto.TagDTO;
-import br.com.impacta.boacao.entities.Tag;
+import br.com.impacta.boacao.dto.request.TagRequestDTO;
+import br.com.impacta.boacao.entity.Tag;
 import br.com.impacta.boacao.exception.RecursoNaoEncontradoException;
 import br.com.impacta.boacao.mapper.TagMapper;
 import br.com.impacta.boacao.repository.TagRepository;
@@ -24,7 +24,7 @@ public class TagService {
     }
 
     @Transactional(readOnly = true)
-    public List<TagDTO> buscarTodos() {
+    public List<TagRequestDTO> buscarTodos() {
         List<Tag> lista = tagRepository.findAll();
         log.info("Busca de todas as tags concluída com sucesso.");
 
@@ -34,7 +34,7 @@ public class TagService {
     }
 
     @Transactional(readOnly = true)
-    public TagDTO buscarPorId(Integer id) {
+    public TagRequestDTO buscarPorId(Integer id) {
         Tag entidade = tagRepository.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Tag não encontrada! Id: " + id));
         log.info("Busca de tag realizada com sucesso! Id: {}", id);

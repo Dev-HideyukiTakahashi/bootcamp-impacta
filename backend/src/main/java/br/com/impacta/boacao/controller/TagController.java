@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.impacta.boacao.dto.TagDTO;
+import br.com.impacta.boacao.dto.request.TagRequestDTO;
 import br.com.impacta.boacao.service.TagService;
 
 @RestController
@@ -25,17 +25,17 @@ public class TagController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TagDTO>> buscarTodos() {
+    public ResponseEntity<List<TagRequestDTO>> buscarTodos() {
         log.info("Iniciando busca de todas as tags.");
-        List<TagDTO> dto = tagService.buscarTodos();
+        List<TagRequestDTO> dto = tagService.buscarTodos();
 
         return ResponseEntity.ok(dto);
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<TagDTO> buscarPorId(@PathVariable Integer id) {
+    public ResponseEntity<TagRequestDTO> buscarPorId(@PathVariable Integer id) {
         log.info("Iniciando busca de tag id {}.", id);
-        TagDTO dto = tagService.buscarPorId(id);
+        TagRequestDTO dto = tagService.buscarPorId(id);
 
         return ResponseEntity.ok(dto);
     }

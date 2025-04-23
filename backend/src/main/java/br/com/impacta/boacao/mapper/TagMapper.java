@@ -1,14 +1,13 @@
 package br.com.impacta.boacao.mapper;
 
-import br.com.impacta.boacao.dto.TagDTO;
-import br.com.impacta.boacao.entities.Tag;
+import br.com.impacta.boacao.dto.request.TagRequestDTO;
+import br.com.impacta.boacao.entity.Tag;
 
 public class TagMapper {
 
-    public static TagDTO paraDTO(Tag entidade){
-        return new TagDTO(
+    public static TagRequestDTO paraDTO(Tag entidade) {
+        return new TagRequestDTO(
                 entidade.getId(),
-                entidade.getNome()
-        );
+                entidade.getNome());
     }
 }

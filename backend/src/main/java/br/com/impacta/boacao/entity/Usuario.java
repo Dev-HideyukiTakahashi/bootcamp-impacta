@@ -1,4 +1,4 @@
-package br.com.impacta.boacao.entities;
+package br.com.impacta.boacao.entity;
 
 import java.sql.Timestamp;
 

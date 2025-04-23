@@ -1,4 +1,4 @@
-package br.com.impacta.boacao.dto;
+package br.com.impacta.boacao.dto.request;
 
 import java.sql.Timestamp;
 import java.time.Instant;
