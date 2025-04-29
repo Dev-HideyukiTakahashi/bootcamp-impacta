@@ -1,6 +1,11 @@
 package br.com.impacta.boacao.entity;
 
 import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +22,7 @@ import jakarta.persistence.ManyToOne;
  * integrando-se à configuração do Spring Security.
  */
 @Entity
-public class Usuario {
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -80,6 +85,21 @@ public class Usuario {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    @Override
+    public String getPassword() {
+        return senha;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(role);
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 
     /**
