@@ -1,10 +1,5 @@
-<header>
-  <div class="container nav">
-    <div class="logo">
-      <img src="assets/logo.png" alt="Logo BoAção" />
-    </div>
-  </div>
-</header>
+<app-header />
+
 <div class="container2">
   <div class="row justify-content-center">
     <div class="col-12">
@@ -16,7 +11,7 @@
             <label for="email" class="form-label">Email:</label>
             <input
               type="email"
-              [(ngModel)]="username"
+              [(ngModel)]="loginModel.username"
               name="username"
               placeholder="Digite seu email"
               required
@@ -27,7 +22,7 @@
             <label for="senha" class="form-label">Senha:</label>
             <input
               type="password"
-              [(ngModel)]="password"
+              [(ngModel)]="loginModel.password"
               name="password"
               placeholder="Digite sua senha"
               required
