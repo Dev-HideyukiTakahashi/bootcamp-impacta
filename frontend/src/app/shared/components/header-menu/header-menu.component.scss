@@ -1,0 +1,52 @@
+// ---------- MENU NAV DO HEADER ----------------
+.nav {
+  display: flex;
+  margin-right: 110px;
+  gap: 28px; // espaçamento entre o menu e botão
+
+  &__menu {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    a {
+      text-decoration: none;
+      color: #ffffff;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1;
+      cursor: pointer;
+
+      &:hover {
+        color: #ff6c00;
+        font-weight: bold;
+      }
+    }
+  }
+
+  &__button {
+    width: 144px;
+    height: 40px;
+    background-color: white;
+    color: #1e2352;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+
+    transition: background-color 0.3s ease, color 0.3s ease;
+
+    &:hover {
+      background-color: #4b5563;
+      color: white;
+    }
+  }
+}
+
+.selecionado {
+  cursor: pointer;
+  color: #ff6c00 !important;
+  font-weight: bold !important;
+}
