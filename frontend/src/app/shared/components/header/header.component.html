@@ -1,0 +1,20 @@
+<header class="header">
+  <div class="header__logo">
+    <img class="header__logo-icon" src="logo.png" alt="Logo BoAção" />
+    <h1 class="header__logo-title" (click)="logo()">BoAção</h1>
+  </div>
+  <nav class="header__nav">
+    <!-- Verificando ONG logado -->
+    @if(ongLogado ){
+    <app-header-menu logado="ong" (buttonLogout)="logout()"></app-header-menu>
+    }
+    <!-- Verificando VOLUNTÁRIO logado -->
+    @else if(voluntarioLogado){
+    <app-header-menu logado="voluntario" (buttonLogout)="logout()"></app-header-menu>
+    }
+    <!-- Nenhum usuário logado -->
+    @else {
+    <app-header-menu logado="deslogado"></app-header-menu>
+    }
+  </nav>
+</header>
