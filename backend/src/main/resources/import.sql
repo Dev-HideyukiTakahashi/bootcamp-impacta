@@ -25,7 +25,7 @@ INSERT INTO role (authority) VALUES ('ROLE_ONG');
 -- -- Inserindo usuários (Voluntários e ONGs)
 -- Voluntários
 INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('joao.silva@email.com', '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16', 1, '2023-02-10 10:00:00');
-INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('maria.oliveira@email.com', '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16', 1, '2023-01-25 11:30:00');
+INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('hideyuki.takahashi@aluno.faculdadeimpacta.com.br', '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16', 1, '2023-01-25 11:30:00');
 INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('pedro.costa@email.com', '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16', 1, '2023-03-12 14:45:00');
 
 INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('João Silva', '12345678901', '(11) 98765-4321', '1990-05-20', 1);
