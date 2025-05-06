@@ -57,4 +57,37 @@ export class LoginComponent {
 
     return null;
   }
+
+  // Métodos para o modal
+  showForgotPasswordModal = false;
+  recoveryEmail = '';
+  forgotPasswordError: string | null = null;
+
+  openForgotPasswordModal(): void {
+    this.showForgotPasswordModal = true;
+    this.forgotPasswordError = null;
+    this.recoveryEmail = '';
+  }
+
+  closeModal(): void {
+    this.showForgotPasswordModal = false;
+  }
+
+  submitForgotPassword(): void {
+    this.forgotPasswordError = '';
+    if (!this.recoveryEmail || !this.recoveryEmail.includes('@')) {
+      this.forgotPasswordError = 'Por favor, insira um email válido';
+      return;
+    }
+
+    this.authService.recuperarSenha(this.recoveryEmail).subscribe({
+      next: () => {
+        alert('Email de recuperação enviado com sucesso!');
+        this.closeModal();
+      },
+      error: () => {
+        this.forgotPasswordError = 'Email não cadastrado';
+      },
+    });
+  }
 }

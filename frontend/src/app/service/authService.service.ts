@@ -6,12 +6,13 @@ import { jwtDecode } from 'jwt-decode';
   providedIn: 'root',
 })
 export class AuthService {
-  private tokenUrl = 'http://localhost:8080';
+  private API = 'http://localhost:8080';
   clientId = 'myclientid'; // colocar em variavel de ambiente
   clientSecret = 'myclientsecret'; // colocar em variavel de ambiente
 
   constructor(private http: HttpClient) {}
 
+  // LOGIN
   login(username: string, password: string) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -23,7 +24,32 @@ export class AuthService {
       .set('username', username)
       .set('password', password);
 
-    return this.http.post(`${this.tokenUrl}/oauth2/token`, body.toString(), { headers });
+    return this.http.post(`${this.API}/oauth2/token`, body.toString(), { headers });
+  }
+
+  // EMAIL COM TOKEN PARA RECUPERAR SENHA
+  recuperarSenha(email: string) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Basic ' + btoa(`${this.clientId}:${this.clientSecret}`),
+    });
+
+    return this.http.post(`${this.API}/auth/recuperar-senha`, { email }, { headers });
+  }
+
+  // RESET DE SENHA
+  resetPassword(token: string, password: string) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Basic ' + btoa(`${this.clientId}:${this.clientSecret}`),
+    });
+
+    const body = {
+      token,
+      password,
+    };
+
+    return this.http.put(`${this.API}/auth/resetar-senha`, body, { headers });
   }
 
   logout(): void {
@@ -55,19 +81,5 @@ export class AuthService {
   isVoluntario(): boolean {
     if (!this.getDecodedToken()) return false;
     return this.getUserRole() === 'ROLE_VOLUNTARIO';
-  }
-
-  resetPassword(token: string, password: string) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: 'Basic ' + btoa(`${this.clientId}:${this.clientSecret}`),
-    });
-
-    const body = {
-      token,
-      password,
-    };
-
-    return this.http.put(`${this.tokenUrl}/auth/resetar-senha`, body, { headers });
   }
 }
