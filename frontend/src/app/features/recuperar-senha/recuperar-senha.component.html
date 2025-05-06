@@ -4,8 +4,7 @@
   <div class="row justify-content-center">
     <div class="col-12">
       <div class="login-container">
-        <h1>Acesse sua Conta</h1>
-
+        <h1>Recuperar Senha</h1>
         <!-- Error container -->
         <div class="error-container">
           <div
@@ -17,43 +16,41 @@
             {{ errorMessage }}
           </div>
         </div>
-        <!-- Form de login-->
-        <form class="conteudo-form" (ngSubmit)="submitLogin()">
+        <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+          {{ errorMessage }}
+        </div>
+        <!-- Form para recuperar a senha -->
+        <form [formGroup]="form" class="conteudo-form" (ngSubmit)="onSubmit()">
           <div class="mb-3">
-            <label for="email" class="form-label">Email:</label>
+            <label for="password" class="form-label">Nova Senha</label>
             <input
-              type="email"
-              [(ngModel)]="loginModel.username"
-              name="username"
-              placeholder="Digite seu email"
+              id="Password"
+              type="password"
+              formControlName="password"
               class="form-control"
-              required
+              placeholder="Digite sua nova senha"
             />
           </div>
 
           <div class="mb-3">
-            <label for="senha" class="form-label">Senha:</label>
+            <label for="confirmPassword" class="form-label">Confirmar Senha</label>
             <input
+              id="confirmPassword"
               type="password"
-              [(ngModel)]="loginModel.password"
-              name="password"
-              placeholder="Digite sua senha"
+              formControlName="confirmPassword"
               class="form-control"
+              placeholder="Confirme sua nova senha"
               required
             />
           </div>
 
           <button type="submit" class="btn btn-login">
-            <i class="fas fa-sign-in-alt"></i> Entrar
+            <i class="fas fa-key"></i> Alterar Senha
           </button>
         </form>
-
-        <a href="#" class="esqueceu-senha">Esqueceu a senha?</a>
-
-        <div class="google-login">
-          <img src="assets/icon-google.png" alt="Google" />
-        </div>
       </div>
     </div>
   </div>
 </div>
+
+<app-footer />

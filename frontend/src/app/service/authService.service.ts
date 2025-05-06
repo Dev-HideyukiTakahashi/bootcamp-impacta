@@ -6,17 +6,16 @@ import { jwtDecode } from 'jwt-decode';
   providedIn: 'root',
 })
 export class AuthService {
-  private tokenUrl = 'http://localhost:8080/oauth2/token';
+  private tokenUrl = 'http://localhost:8080';
+  clientId = 'myclientid'; // colocar em variavel de ambiente
+  clientSecret = 'myclientsecret'; // colocar em variavel de ambiente
 
   constructor(private http: HttpClient) {}
 
   login(username: string, password: string) {
-    const clientId = 'myclientid';
-    const clientSecret = 'myclientsecret';
-
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: 'Basic ' + btoa(`${clientId}:${clientSecret}`),
+      Authorization: 'Basic ' + btoa(`${this.clientId}:${this.clientSecret}`),
     });
 
     const body = new HttpParams()
@@ -24,7 +23,7 @@ export class AuthService {
       .set('username', username)
       .set('password', password);
 
-    return this.http.post(this.tokenUrl, body.toString(), { headers });
+    return this.http.post(`${this.tokenUrl}/oauth2/token`, body.toString(), { headers });
   }
 
   logout(): void {
@@ -56,5 +55,19 @@ export class AuthService {
   isVoluntario(): boolean {
     if (!this.getDecodedToken()) return false;
     return this.getUserRole() === 'ROLE_VOLUNTARIO';
+  }
+
+  resetPassword(token: string, password: string) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Basic ' + btoa(`${this.clientId}:${this.clientSecret}`),
+    });
+
+    const body = {
+      token,
+      password,
+    };
+
+    return this.http.put(`${this.tokenUrl}/auth/resetar-senha`, body, { headers });
   }
 }
