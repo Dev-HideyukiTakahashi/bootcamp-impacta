@@ -4,6 +4,7 @@ import { HomeVoluntarioComponent } from './features/home-voluntario/home-volunta
 import { HomeComponent } from './features/home/home.component';
 import { LoginComponent } from './features/login/login.component';
 import { QuemSomosComponent } from './features/quem-somos/quem-somos.component';
+import { RecuperarSenhaComponent } from './features/recuperar-senha/recuperar-senha.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -11,4 +12,5 @@ export const routes: Routes = [
   { path: 'quem-somos', component: QuemSomosComponent },
   { path: 'home-voluntario', component: HomeVoluntarioComponent },
   { path: 'home-ong', component: HomeOngComponent },
+  { path: 'recuperar-senha/:token', component: RecuperarSenhaComponent },
 ];
