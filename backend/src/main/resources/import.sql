@@ -53,7 +53,7 @@ INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('projeto.vida.mel
 
 
 -- -- Inserindo Voluntários
- INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento) VALUES ('João Silva', '12345678901', '(11) 98765-4321', '1990-05-20');
+-- INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('João Silva', '12345678901', '(11) 98765-4321', '1990-05-20', 1);
 -- INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('Maria Oliveira', '23456789012', '(21) 91234-5678', '1992-07-15', 2);
 -- INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('Pedro Costa', '34567890123', '(31) 92345-6789', '1985-03-10', 3);
 -- INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('Ana Souza', '45678901234', '(41) 93456-7890', '1995-02-28', 4);
