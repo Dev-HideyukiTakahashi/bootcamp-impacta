@@ -144,8 +144,8 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<!-- ========== TEST COVERAGE ========== -->
 			<!-- Mostra a porcentagem de código testado em cada pacote e classe -->
