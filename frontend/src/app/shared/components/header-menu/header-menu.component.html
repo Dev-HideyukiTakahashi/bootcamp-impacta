@@ -1,0 +1,65 @@
+<!-- ONG LOGADO -->
+@if(logado === 'ong'){
+<div class="nav">
+  <ul class="nav__menu">
+    <li>
+      <a routerLink="/home-ong" routerLinkActive="selecionado">Página Inicial</a>
+    </li>
+    <li>
+      <a routerLink="/meu-perfil" routerLinkActive="selecionado">Meu Perfil</a>
+    </li>
+    <li>
+      <a routerLink="/atividades" routerLinkActive="selecionado">Atividades</a>
+    </li>
+    <li>
+      <a routerLink="/gestao-de-voluntarios" routerLinkActive="selecionado"
+        >Gestão de Voluntários</a
+      >
+    </li>
+  </ul>
+  <button class="nav__button" (click)="logout()">Sair</button>
+</div>
+}
+
+<!-- VOLUNTÁRIO LOGADO -->
+@if(logado === 'voluntario'){
+<div class="nav">
+  <ul class="nav__menu">
+    <li>
+      <a routerLink="/home-voluntario" routerLinkActive="selecionado">Página Inicial</a>
+    </li>
+    <li>
+      <a routerLink="/meu-perfil" routerLinkActive="selecionado">Meu Perfil</a>
+    </li>
+    <li>
+      <a routerLink="/historico-de-atividades" routerLinkActive="selecionado"
+        >Histórico de Atividades</a
+      >
+    </li>
+    <li>
+      <a routerLink="/buscar-ongs" routerLinkActive="selecionado">Buscar Ongs</a>
+    </li>
+  </ul>
+  <button class="nav__button" (click)="logout()">Sair</button>
+</div>
+}
+
+<!-- NENHUM USUÁRIO LOGADO -->
+@if(logado === 'deslogado'){
+<div class="nav">
+  <ul class="nav__menu">
+    <li>
+      <a routerLink="/" routerLinkActive="selecionado" [routerLinkActiveOptions]="{ exact: true }"
+        >Home</a
+      >
+    </li>
+    <li>
+      <a routerLink="/quem-somos" routerLinkActive="selecionado">Quem somos</a>
+    </li>
+    <li>
+      <a href="#como-funciona">Como Funciona</a>
+    </li>
+  </ul>
+  <button class="nav__button" routerLink="/login">Entrar</button>
+</div>
+}
