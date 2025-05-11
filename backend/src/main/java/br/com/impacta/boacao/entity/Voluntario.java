@@ -1,15 +1,11 @@
 package br.com.impacta.boacao.entity;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-//import java.time.LocalDateTime;
-import java.util.Date;
 
 
 
@@ -25,8 +21,6 @@ public class Voluntario {
     private int    id;
     private String nomeCompleto;
     private String cpf;
-    private String email;
-    private String senha;
     private String cep;
     private String rua;
     private String numero;
@@ -36,8 +30,7 @@ public class Voluntario {
     private String telefone;
     private Date   dataNascimento;
 
-    @Column(columnDefinition = "DATETIME") // definindo tipo para SQL server
-    private Timestamp criadoEm;
+
 
     /*@ManyToOne
     private Role role;
@@ -48,13 +41,11 @@ public class Voluntario {
     public Voluntario(){
 
     }
-    public Voluntario(int id, String nomeCompleto, String cpf, String email, String senha, String cep, String rua, String numero, 
-    String complemento, String cidade, String estado, String telefone, Date dataNascimento, Timestamp criadoEm) {
+    public Voluntario(int id, String nomeCompleto, String cpf, String cep, String rua, String numero, 
+    String complemento, String cidade, String estado, String telefone, Date dataNascimento) {
         this.id = id;
         this.nomeCompleto = nomeCompleto;
         this.cpf = cpf;
-        this.email = email;
-        this.senha = senha;
         this.cep = cep;
         this.rua = rua;
         this.numero = numero;
@@ -62,9 +53,7 @@ public class Voluntario {
         this.cidade = cidade;
         this.estado = estado;
         this.telefone = telefone;
-        this.dataNascimento = dataNascimento;
-        this.criadoEm = criadoEm;
-    }
+        this.dataNascimento = dataNascimento;    }
     
     public int getId(){
         return id;
@@ -90,21 +79,6 @@ public class Voluntario {
       this.cpf = cpf;
     }
 
-    public String getEmail() {
-      return email;
-    }
-
-    public void setEmail(String email) {
-      this.email = email;
-    }
-
-    public String getSenha() {
-      return senha;
-    }
-
-    public void setSenha(String senha) {
-      this.senha = senha;
-    }
 
     public String getCep() {
       return cep;

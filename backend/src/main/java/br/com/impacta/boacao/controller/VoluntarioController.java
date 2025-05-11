@@ -15,7 +15,7 @@ import br.com.impacta.boacao.service.VoluntarioService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/voluntarios")
+@RequestMapping("/api/voluntario")
 public class VoluntarioController {
 
     private final VoluntarioService voluntarioService;
@@ -25,17 +25,12 @@ public class VoluntarioController {
         this.voluntarioService = voluntarioService;
     }
 
-    @PostMapping
-    public ResponseEntity<VoluntarioResponseDTO> cadastrar(
-            @Valid @RequestBody VoluntarioRequestDTO dto
-    ) {
-        // Salva e obtém o DTO de resposta já com o ID criado
+    @PostMapping("/cadastrar")
+    public ResponseEntity<VoluntarioResponseDTO> cadastrar(@Valid @RequestBody VoluntarioRequestDTO dto) {
         VoluntarioResponseDTO response = voluntarioService.salvar(dto);
 
-        // Monta a URI do recurso criado: /api/voluntarios/{id}
-        URI location = URI.create(String.format("/api/voluntarios/cadastrar", response.getId()));
+        URI location = URI.create(String.format("/cadastrar", response.getId()));
 
-        // Retorna 201 Created + Location header
         return ResponseEntity
                 .created(location)
                 .body(response);

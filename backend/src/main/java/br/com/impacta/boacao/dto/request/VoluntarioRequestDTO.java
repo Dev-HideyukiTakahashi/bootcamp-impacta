@@ -1,22 +1,37 @@
 package br.com.impacta.boacao.dto.request;
-
 import java.util.Date;
 
+//import jakarta.validation.constraints.NotBlank;
 public class VoluntarioRequestDTO {
-
+  
+  //@NotBlank(message = "O nome completo é obrigatório")
   private String nomeCompleto;
-  private String cpf;
-  private String email;
-  private String senha;
-  private String cep;
-  private String rua;
-  private String numero;
-  private String complemento;
-  private String cidade;
-  private String estado;
-  private String telefone;
-  private Date dataNascimento;
 
+ // @NotBlank(message = "O numero do documento (cpf) é obrigatório")
+  private String cpf;
+  
+ //@NotBlank(message = "O preenchimento do CEP é obrigatório")
+  private String cep;
+
+//  @NotBlank(message = "O preenchimento do seu endereço é obrigatório")
+  private String rua;
+
+//  @NotBlank(message = "O preenchimento do número é obrigatório")
+  private String numero;
+  
+//  @NotBlank(message = "O preenchimento da Cidade é obrigatório")
+  private String cidade;
+  
+//  @NotBlank(message = "O preenchimento do estado é obrigatório")
+  private String estado;
+  
+//  @NotBlank(message = "O preenchimento do telefone é obrigatório")
+  private String telefone;
+  
+ // @NotBlank(message = "O preenchimento da data de nascimento é obrigatório")
+  private Date dataNascimento;
+  // nao obrigatorio
+  private String complemento;
   
   public String getNomeCompleto() {
     return nomeCompleto;
@@ -32,22 +47,6 @@ public class VoluntarioRequestDTO {
 
   public void setCpf(String cpf) {
     this.cpf = cpf;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public String getSenha() {
-    return senha;
-  }
-
-  public void setSenha(String senha) {
-    this.senha = senha;
   }
 
   public String getCep() {
@@ -118,8 +117,6 @@ public class VoluntarioRequestDTO {
   public VoluntarioRequestDTO(
       String nomeCompleto,
       String cpf,
-      String email,
-      String senha,
       String cep,
       String rua,
       String numero,
@@ -131,8 +128,7 @@ public class VoluntarioRequestDTO {
   ) {
     this.nomeCompleto = nomeCompleto;
     this.cpf = cpf;
-    this.email = email;
-    this.senha = senha;
+
     this.cep = cep;
     this.rua = rua;
     this.numero = numero;

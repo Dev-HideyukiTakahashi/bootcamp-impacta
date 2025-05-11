@@ -43,6 +43,7 @@ INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('projeto.vida.mel
 
 
 
+ INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento) VALUES ('João Silva', '12345678901', '(11) 98765-4321', '1990-05-20');
 
 -- -- Inserindo ONGs
 -- INSERT INTO ong (nome, cnpj, telefone, usuario_id) VALUES ('Coração Solidário', '12345678000100', '(11) 1234-5678', 11);

@@ -9,14 +9,12 @@ package br.com.impacta.boacao.dto.response;
 public class UsuarioResponseDTO {
 
     private int id;
-    private String email;
 
     public UsuarioResponseDTO() {
     }
 
-    public UsuarioResponseDTO(int id, String email) {
+    public UsuarioResponseDTO(int id) {
         this.id = id;
-        this.email = email;
     }
 
     public int getId() {
@@ -25,13 +23,5 @@ public class UsuarioResponseDTO {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 }

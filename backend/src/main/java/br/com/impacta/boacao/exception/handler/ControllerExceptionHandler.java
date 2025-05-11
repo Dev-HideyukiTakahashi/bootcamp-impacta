@@ -26,4 +26,16 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(respostaErroHttp);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<RespostaErroHttp> illegalArgumentHandler(IllegalArgumentException e, HttpServletRequest request) {
+       RespostaErroHttp respostaErroHttp = new RespostaErroHttp();
+       respostaErroHttp.setTimestamp(Instant.now());
+       respostaErroHttp.setStatus(HttpStatus.BAD_REQUEST.value());
+       respostaErroHttp.setError("Bad Request");
+       respostaErroHttp.setMessage(e.getMessage());
+       respostaErroHttp.setPath(request.getRequestURI());
+
+       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respostaErroHttp);
+    }
+
 }

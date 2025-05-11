@@ -53,7 +53,7 @@ public class ResourceServerConfig {
                         // Permite acesso aos endpoints de autenticação
                         .requestMatchers("/auth/**").permitAll()
                         // permite acesso ao cad de voluntarios
-                        .requestMatchers("/api/voluntarios").permitAll()
+                        .requestMatchers("/api/voluntario/cadastrar").permitAll()
                         // Exige autenticação para todas as outras requisições
                         .anyRequest().authenticated())
 

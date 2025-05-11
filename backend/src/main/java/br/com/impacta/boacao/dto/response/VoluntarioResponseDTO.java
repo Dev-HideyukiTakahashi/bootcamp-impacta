@@ -9,23 +9,20 @@ package br.com.impacta.boacao.dto.response;
 public class VoluntarioResponseDTO {
   private int id;
   private String nomeCompleto;
-  private String email;
   
   // Construtor vazio
   public VoluntarioResponseDTO() {
   }
 
   // Construtor com todos os campos
-  public VoluntarioResponseDTO(int id, String nomeCompleto, String email) {
+  public VoluntarioResponseDTO(int id, String nomeCompleto) {
     this.id = id;
     this.nomeCompleto = nomeCompleto;
-    this.email = email;
   }
 
 
-  public VoluntarioResponseDTO(String nomeCompleto, String email){
+  public VoluntarioResponseDTO(String nomeCompleto){
     this.nomeCompleto = nomeCompleto;
-    this.email = email;
   }
 
   //GS
@@ -45,12 +42,5 @@ public class VoluntarioResponseDTO {
     this.nomeCompleto = nomeCompleto;
   }
 
-  public String getEmail(){
-    return email;
-  }
-
-  public void setEmail(String email){
-    this.email = email;
-  } 
 
 }

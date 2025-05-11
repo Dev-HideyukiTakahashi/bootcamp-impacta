@@ -10,8 +10,6 @@ public class VoluntarioMapper {
     Voluntario v = new Voluntario();
     v.setNomeCompleto(dto.getNomeCompleto());
     v.setCpf(dto.getCpf());
-    v.setEmail(dto.getEmail());
-    v.setSenha(dto.getSenha());
     v.setCep(dto.getCep());
     v.setRua(dto.getRua());
     v.setNumero(dto.getNumero());
@@ -26,8 +24,7 @@ public class VoluntarioMapper {
   public static VoluntarioResponseDTO toResponse(Voluntario v) {
     return new VoluntarioResponseDTO(
         v.getId(),
-        v.getNomeCompleto(),
-        v.getEmail()
+        v.getNomeCompleto()
     );
   }
 }
