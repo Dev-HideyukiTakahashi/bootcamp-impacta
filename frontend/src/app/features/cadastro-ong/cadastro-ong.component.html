@@ -1,0 +1,89 @@
+<app-header/>
+
+<div class="container">
+  <h2>Cadastro de ONG</h2>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <label>Nome:
+      <input type="text" formControlName="nome"/>
+      <div class="mensagem-erro" *ngIf="form.get('nome')?.invalid && form.get('nome')?.touched">
+        <span *ngIf="form.get('nome')?.errors?.['required']">Nome é obrigatório.</span>
+      </div>
+    </label>
+
+    <label>Email:
+      <input type="email" formControlName="email" />
+      <div class="mensagem-erro" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+        <span *ngIf="form.get('email')?.errors?.['required']">Email é obrigatório.</span>
+        <span *ngIf="form.get('email')?.errors?.['pattern']">Formato de email inválido.</span>
+      </div>
+    </label>
+
+    <label>CNPJ:
+      <input type="text" inputmode="numeric" formControlName="cnpj" mask="00.000.000/0000-00" />
+      <div class="mensagem-erro" *ngIf="form.get('cnpj')?.invalid && form.get('cnpj')?.touched">
+        <span *ngIf="form.get('cnpj')?.errors?.['required']">CNPJ é obrigatório.</span>
+        <span *ngIf="form.get('cnpj')?.errors?.['pattern']">Formato de CNPJ inválido.</span>
+      </div>
+    </label>
+
+    <label>Telefone:
+      <input type="text" formControlName="telefone" mask="(00) 00000-0000" />
+      <div class="mensagem-erro" *ngIf="form.get('telefone')?.invalid && form.get('telefone')?.touched">
+        <span *ngIf="form.get('telefone')?.errors?.['required']">Telefone é obrigatório.</span>
+        <span *ngIf="form.get('telefone')?.errors?.['pattern']">Formato de telefone inválido.</span>
+      </div>
+    </label>
+
+    <label>CEP:
+      <input type="text" formControlName="cep" (blur)="buscarEndereco()" mask="00000-000" />
+      <div class="mensagem-erro" *ngIf="form.get('cep')?.invalid && form.get('cep')?.touched">
+        <span *ngIf="form.get('cep')?.errors?.['required']">CEP é obrigatório.</span>
+        <span *ngIf="form.get('cep')?.errors?.['pattern']">Formato de CEP inválido.</span>
+      </div>
+    </label>
+
+    <label>Endereço:
+      <input type="text" formControlName="endereco" readonly />
+    </label>
+
+    <label>Senha:
+      <input type="password" autocomplete="new-password" formControlName="senha" />
+      <div class="mensagem-erro" *ngIf="form.get('senha')?.invalid && form.get('senha')?.touched">
+        <span *ngIf="form.get('senha')?.errors?.['required']">Senha é obrigatória.</span>
+        <span *ngIf="form.get('senha')?.errors?.['minlength']">Senha deve ter ao menos 6 caracteres.</span>
+      </div>
+    </label>
+
+    <label>Confirmar Senha:
+      <input type="password" autocomplete="new-password" formControlName="confirmarSenha" />
+      <div class="mensagem-erro" *ngIf="form.get('confirmarSenha')?.touched && form.errors?.['senhasDiferentes']">
+        As senhas não coincidem.
+      </div>
+    </label>
+
+    <button type="submit" [disabled]="form.invalid" class="btn-cadastrar">Cadastrar</button>
+
+  </form>
+
+  <div class="login-redirect">
+    <p>Já possui cadastro?<br> 
+      <button routerLink="/login">ENTRAR</button>
+    </p>
+  </div>
+</div>
+
+<app-footer/>
+
+<!-- Modal de Sucesso/Erro -->
+<div *ngIf="showModal" class="modal-overlay">
+  <div class="modal-box">
+ 
+    <h2 *ngIf="msg" style="color: green;">{{ msg }}</h2>
+    <h2 *ngIf="erro" style="color: black;">{{ erro }}</h2>
+
+    <button class="btn-x" *ngIf="erro" (click)="fecharModal()">x</button>
+    
+    <button type="button" class="btn-close" *ngIf="erro" (click)="fecharModal()">OK</button>
+  </div>
+</div>
