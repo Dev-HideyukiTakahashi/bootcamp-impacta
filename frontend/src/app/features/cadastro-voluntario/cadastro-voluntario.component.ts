@@ -6,9 +6,7 @@ import { HeaderComponent } from '../../shared/components/header/header.component
 import { FooterComponent } from '../../shared/footer/footer.component';
 import { NgxMaskDirective } from 'ngx-mask';
 import { Router } from '@angular/router';
-
-
-
+import { VoluntarioService } from '../../service/voluntario.service';
 
 @Component({
   selector: 'app-cadastro-voluntario',
@@ -19,9 +17,9 @@ import { Router } from '@angular/router';
 })
 export class CadastroVoluntarioComponent {
   fb = inject(FormBuilder);
-  http = inject(HttpClient);
   router = inject(Router)
   showModal: boolean = false;
+  voluntarioService = inject(VoluntarioService);
 
   msg: string | null = null;
   erro: string | null = null;
@@ -34,7 +32,7 @@ export class CadastroVoluntarioComponent {
       telefone: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]],
       dataNascimento: ['', [Validators.required, this.maiorDeIdadeValidator]],
       senha: ['', [Validators.required, Validators.minLength(6)]],
-      confirmarSenha: ['', Validators.required] 
+      confirmarSenha: ['', Validators.required]
   },
     { validators: this.senhaConfirmadaValidator() }
   );
@@ -42,23 +40,23 @@ export class CadastroVoluntarioComponent {
   permitirSomenteLetras(event: KeyboardEvent): void {
     const tecla = event.key;
     const input = event.target as HTMLInputElement;
-  
+
     const regex = /^[A-Za-zÀ-ÖØ-öø-ÿ]$/; // Apenas letras (sem espaço)
     const teclasControle = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'];
-  
+
     if (teclasControle.includes(tecla) || event.ctrlKey || event.metaKey) return;
-  
+
     if (tecla === ' ') {
       const valor = input.value;
       const cursor = input.selectionStart || 0;
-  
+
       // Bloqueia espaço no início ou se já houver espaço antes
       if (cursor === 0 || valor[cursor - 1] === ' ' || valor[cursor] === ' ') {
         event.preventDefault();
       }
       return;
     }
-  
+
     if (!regex.test(tecla)) {
       event.preventDefault();
     }
@@ -86,16 +84,15 @@ export class CadastroVoluntarioComponent {
     if (this.form.invalid) return;
 
     const payload = {
-      nome: this.form.value.nome.trim(),
+      nomeCompleto: this.form.value.nome.trim(),
       email: this.form.value.email.trim(),
       cpf: this.form.value.cpf.replace(/\D/g, ''),
       telefone: this.form.value.telefone.replace(/\D/g, ''),
       dataNascimento: this.form.value.dataNascimento,
       senha: this.form.value.senha
     };
- 
-    
-    this.http.post('http://localhost:8080/voluntario', payload).subscribe({
+
+    this.voluntarioService.cadastrarVoluntario(payload).subscribe({
       next: () => {
         this.msg = 'Cadastro realizado com sucesso!';
         this.erro = null;
@@ -106,7 +103,6 @@ export class CadastroVoluntarioComponent {
       },
       error: (err) => {
         this.msg = null;
-      
         if (err.status === 409) {
           this.erro = err.error?.message || 'Email ou CPF já cadastrado.';
         } else {
@@ -121,5 +117,5 @@ export class CadastroVoluntarioComponent {
     this.erro = null;
     this.msg = null;
   }
-  
+
 }
