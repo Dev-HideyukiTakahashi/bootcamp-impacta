@@ -10,6 +10,7 @@ public class VoluntarioResponseDTO {
   private int id;
   private String nomeCompleto;
   
+  
   // Construtor vazio
   public VoluntarioResponseDTO() {
   }

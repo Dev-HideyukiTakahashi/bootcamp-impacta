@@ -10,12 +10,6 @@ public class VoluntarioMapper {
     Voluntario v = new Voluntario();
     v.setNomeCompleto(dto.getNomeCompleto());
     v.setCpf(dto.getCpf());
-    v.setCep(dto.getCep());
-    v.setRua(dto.getRua());
-    v.setNumero(dto.getNumero());
-    v.setComplemento(dto.getComplemento());
-    v.setCidade(dto.getCidade());
-    v.setEstado(dto.getEstado());
     v.setTelefone(dto.getTelefone());
     v.setDataNascimento(dto.getDataNascimento());
     return v;

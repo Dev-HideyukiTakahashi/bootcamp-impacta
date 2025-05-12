@@ -46,6 +46,11 @@ public class Usuario implements UserDetails {
         this.senha = senha;
         this.criadoEm = criadoEm;
     }
+    // user
+    public Usuario(String email, String senha) {
+        this.email = email;
+        this.senha = senha;
+    }
 
     public int getId() {
         return id;
