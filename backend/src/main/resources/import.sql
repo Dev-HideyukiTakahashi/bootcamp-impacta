@@ -1,291 +1,46 @@
 -- -- -- SEED PARA BANCO DE TESTES
 
 -- -- -- Inserindo Tag das Atividades
--- INSERT INTO tag (nome) VALUES ('Administração e Gestão');
+INSERT INTO tag (nome) VALUES ('Administração e Gestão');
+INSERT INTO tag (nome) VALUES ('Assistência Social e Comunitária');
+INSERT INTO tag (nome) VALUES ('Saúde e Bem-Estar');
+INSERT INTO tag (nome) VALUES ('Captação de Recursos e Marketing');
+INSERT INTO tag (nome) VALUES ('Produção e Artesanato');
+INSERT INTO tag (nome) VALUES ('Alimentação Comunitária');
+INSERT INTO tag (nome) VALUES ('Educação e Mentoria');
+INSERT INTO tag (nome) VALUES ('Esporte, Cultura e Recreação');
+INSERT INTO tag (nome) VALUES ('Comunicação e Mídia');
+INSERT INTO tag (nome) VALUES ('Construção e Manutenção');
+INSERT INTO tag (nome) VALUES ('Meio Ambiente e Sustentabilidade');
+INSERT INTO tag (nome) VALUES ('Cuidado com Pessoas');
+INSERT INTO tag (nome) VALUES ('Proteção Animal');
+INSERT INTO tag (nome) VALUES ('Suporte Tecnológico');
+INSERT INTO tag (nome) VALUES ('Eventos e Logística');
+INSERT INTO tag (nome) VALUES ('Tradução e Comunicação Internacional');
 
--- INSERT INTO tag (nome) VALUES ( 'Assistência Social e Comunitária' );
-
--- INSERT INTO tag (nome) VALUES ('Saúde e Bem-Estar');
-
--- INSERT INTO tag (nome) VALUES ( 'Captação de Recursos e Marketing' );
-
--- INSERT INTO tag (nome) VALUES ('Produção e Artesanato');
-
--- INSERT INTO tag (nome) VALUES ('Alimentação Comunitária');
-
--- INSERT INTO tag (nome) VALUES ('Educação e Mentoria');
-
--- INSERT INTO tag (nome) VALUES ( 'Esporte, Cultura e Recreação' );
-
--- INSERT INTO tag (nome) VALUES ('Comunicação e Mídia');
-
--- INSERT INTO tag (nome) VALUES ('Construção e Manutenção');
-
--- INSERT INTO tag (nome) VALUES ( 'Meio Ambiente e Sustentabilidade' );
-
--- INSERT INTO tag (nome) VALUES ('Cuidado com Pessoas');
-
--- INSERT INTO tag (nome) VALUES ('Proteção Animal');
-
--- INSERT INTO tag (nome) VALUES ('Suporte Tecnológico');
-
--- INSERT INTO tag (nome) VALUES ('Eventos e Logística');
-
--- INSERT INTO
---     tag (nome)
--- VALUES (
---         'Tradução e Comunicação Internacional'
---     );
-
--- -- Inserindo papéis (Voluntário e ONG)
+-- Inserindo papéis (Voluntário e ONG)
 INSERT INTO role (authority) VALUES ('ROLE_VOLUNTARIO');
-
 INSERT INTO role (authority) VALUES ('ROLE_ONG');
 
--- -- -- Inserindo usuários (Voluntários e ONGs)
--- -- Voluntários
--- INSERT INTO
---     usuario (
---         email,
---         senha,
---         role_id,
---         criado_em
---     )
--- VALUES (
---         'joao.silva@email.com',
---         '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16',
---         1,
---         '2023-02-10 10:00:00'
---     );
+-- -- Inserindo usuários (Voluntários e ONGs)
+-- Voluntários
+INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('joao.silva@email.com', '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16', 1, '2023-02-10 10:00:00');
+INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('maria.oliveira@email.com', '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16', 1, '2023-01-25 11:30:00');
+INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('pedro.costa@email.com', '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16', 1, '2023-03-12 14:45:00');
 
--- INSERT INTO
---     usuario (
---         email,
---         senha,
---         role_id,
---         criado_em
---     )
--- VALUES (
---         'maria.oliveira@email.com',
---         '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16',
---         1,
---         '2023-01-25 11:30:00'
---     );
+INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('João Silva', '12345678901', '(11) 98765-4321', '1990-05-20', 1);
+INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('Maria Oliveira', '23456789012', '(11) 98765-4322', '1985-08-15', 2);
+INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('Pedro Costa', '34567890123', '(11) 98765-4323', '1992-03-10', 3);
 
--- INSERT INTO
---     usuario (
---         email,
---         senha,
---         role_id,
---         criado_em
---     )
--- VALUES (
---         'pedro.costa@email.com',
---         '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16',
---         1,
---         '2023-03-12 14:45:00'
---     );
-
--- INSERT INTO
---     usuario (
---         email,
---         senha,
---         role_id,
---         criado_em
---     )
--- VALUES (
---         'ana.souza@email.com',
---         '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16',
---         1,
---         '2023-06-01 08:00:00'
---     );
-
--- INSERT INTO
---     usuario (
---         email,
---         senha,
---         role_id,
---         criado_em
---     )
--- VALUES (
---         'lucas.almeida@email.com',
---         '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16',
---         1,
---         '2023-04-18 16:20:00'
---     );
-
--- INSERT INTO
---     usuario (
---         email,
---         senha,
---         role_id,
---         criado_em
---     )
--- VALUES (
---         'camila.pereira@email.com',
---         '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16',
---         1,
---         '2023-07-01 10:30:00'
---     );
-
--- INSERT INTO
---     usuario (
---         email,
---         senha,
---         role_id,
---         criado_em
---     )
--- VALUES (
---         'fernanda.costa@email.com',
---         '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16',
---         1,
---         '2023-05-22 12:15:00'
---     );
-
--- INSERT INTO
---     usuario (
---         email,
---         senha,
---         role_id,
---         criado_em
---     )
--- VALUES (
---         'rafael.santos@email.com',
---         '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16',
---         1,
---         '2023-03-28 17:00:00'
---     );
-
--- INSERT INTO
---     usuario (
---         email,
---         senha,
---         role_id,
---         criado_em
---     )
--- VALUES (
---         'juliana.rocha@email.com',
---         '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16',
---         1,
---         '2023-04-10 09:00:00'
---     );
-
--- INSERT INTO
---     usuario (
---         email,
---         senha,
---         role_id,
---         criado_em
---     )
--- VALUES (
---         'bruno.martins@email.com',
---         '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16',
---         1,
---         '2023-02-15 13:50:00'
---     );
 -- -- ONGs
--- INSERT INTO
---     usuario (
---         email,
---         senha,
---         role_id,
---         criado_em
---     )
--- VALUES (
---         'coracao.solidario@email.com',
---         '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16',
---         2,
---         '2023-05-15 14:00:00'
---     );
+-- INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('coracao.solidario@email.com', '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16', 2, '2023-05-15 14:00:00');
+-- INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('esperanca.e.vida@email.com', '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16', 2, '2023-06-10 15:30:00');
+-- INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('maos.amigas@email.com', '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16', 2, '2023-04-20 11:45:00');
+-- INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('sorriso.de.crianca@email.com', '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16', 2, '2023-07-05 16:00:00');
+-- INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('projeto.vida.melhor@email.com', '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16', 2, '2023-03-30 18:00:00');
 
--- INSERT INTO
---     usuario (
---         email,
---         senha,
---         role_id,
---         criado_em
---     )
--- VALUES (
---         'esperanca.e.vida@email.com',
---         '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16',
---         2,
---         '2023-06-10 15:30:00'
---     );
 
--- INSERT INTO
---     usuario (
---         email,
---         senha,
---         role_id,
---         criado_em
---     )
--- VALUES (
---         'maos.amigas@email.com',
---         '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16',
---         2,
---         '2023-04-20 11:45:00'
---     );
 
--- INSERT INTO
---     usuario (
---         email,
---         senha,
---         role_id,
---         criado_em
---     )
--- VALUES (
---         'sorriso.de.crianca@email.com',
---         '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16',
---         2,
---         '2023-07-05 16:00:00'
---     );
-
--- INSERT INTO
---     usuario (
---         email,
---         senha,
---         role_id,
---         criado_em
---     )
--- VALUES (
---         'projeto.vida.melhor@email.com',
---         '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16',
---         2,
---         '2023-03-30 18:00:00'
---     );
-
--- INSERT INTO
---     Voluntario (
---         nome_completo,
---         cpf,
---         telefone,
---         data_nascimento
---     )
--- VALUES (
---         'João Silva',
---         '12345678901',
---         '(11) 98765-4321',
---         '1990-05-20'
---     );
-
--- -- Inserindo ONGs
--- INSERT INTO ong (nome, cnpj, telefone, usuario_id) VALUES ('Coração Solidário', '12345678000100', '(11) 1234-5678', 11);
--- INSERT INTO ong (nome, cnpj, telefone, usuario_id) VALUES ('Esperança e Vida', '22345678000100', '(21) 2345-6789', 12);
--- INSERT INTO ong (nome, cnpj, telefone, usuario_id) VALUES ('Mãos Amigas', '32345678000100', '(31) 3456-7890', 13);
--- INSERT INTO ong (nome, cnpj, telefone, usuario_id) VALUES ('Sorriso de Criança', '42345678000100', '(41) 4567-8901', 14);
--- INSERT INTO ong (nome, cnpj, telefone, usuario_id) VALUES ('Projeto Vida Melhor', '52345678000100', '(51) 5678-9012', 15);
-
--- -- Inserindo Voluntários
--- INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('João Silva', '12345678901', '(11) 98765-4321', '1990-05-20', 1);
--- INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('Maria Oliveira', '23456789012', '(21) 91234-5678', '1992-07-15', 2);
--- INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('Pedro Costa', '34567890123', '(31) 92345-6789', '1985-03-10', 3);
--- INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('Ana Souza', '45678901234', '(41) 93456-7890', '1995-02-28', 4);
--- INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('Lucas Almeida', '56789012345', '(51) 94567-8901', '1990-08-25', 5);
--- INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('Camila Pereira', '67890123456', '(61) 95678-9012', '1993-06-15', 6);
--- INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('Fernanda Costa', '78901234567', '(71) 96789-0123', '1994-11-10', 7);
--- INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('Rafael Santos', '89012345678', '(81) 97890-1234', '1992-01-05', 8);
--- INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('Juliana Rocha', '90123456789', '(91) 98901-2345', '1988-09-20', 9);
--- INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('Bruno Martins', '01234567890', '(61) 98012-3456', '1991-04-10', 10);
 
 -- -- Inserindo Endereços
 -- INSERT INTO endereco (pais, estado, cidade, cep, rua, numero, bairro, usuario_id) VALUES
