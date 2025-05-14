@@ -15,12 +15,15 @@ import { HeaderComponent } from '../../shared/components/header/header.component
 })
 export class LoginComponent {
   private router = inject(Router);
-
-  loginModel: LoginModel = {} as LoginModel;
-
   private authService = inject(AuthService);
 
+  errorMessage: string | null = null;
+  loginModel: LoginModel = {} as LoginModel;
+
   submitLogin() {
+    this.errorMessage = this.validateForm();
+    if (this.errorMessage) return;
+
     this.authService.login(this.loginModel.username, this.loginModel.password).subscribe({
       next: (response: any) => {
         const accessToken = response.access_token;
@@ -39,8 +42,51 @@ export class LoginComponent {
           ? this.router.navigate(['/home-ong'])
           : this.router.navigate(['/home-voluntario']);
       },
-      error: (err) => {
-        console.error('Erro ao fazer login:', err);
+      error: () => {
+        this.errorMessage = 'Usuário ou senha inválido';
+      },
+    });
+  }
+
+  private validateForm(): string | null {
+    if (!this.loginModel.username) return 'O email é obrigatório';
+
+    if (!this.loginModel.password) return 'A senha é obrigatória';
+
+    if (!this.loginModel.username.includes('@')) return 'Por favor, insira um email válido';
+
+    return null;
+  }
+
+  // Métodos para o modal
+  showForgotPasswordModal = false;
+  recoveryEmail = '';
+  forgotPasswordError: string | null = null;
+
+  openForgotPasswordModal(): void {
+    this.showForgotPasswordModal = true;
+    this.forgotPasswordError = null;
+    this.recoveryEmail = '';
+  }
+
+  closeModal(): void {
+    this.showForgotPasswordModal = false;
+  }
+
+  submitForgotPassword(): void {
+    this.forgotPasswordError = '';
+    if (!this.recoveryEmail || !this.recoveryEmail.includes('@')) {
+      this.forgotPasswordError = 'Por favor, insira um email válido';
+      return;
+    }
+
+    this.authService.recuperarSenha(this.recoveryEmail).subscribe({
+      next: () => {
+        alert('Email de recuperação enviado com sucesso!');
+        this.closeModal();
+      },
+      error: () => {
+        this.forgotPasswordError = 'Email não cadastrado';
       },
     });
   }

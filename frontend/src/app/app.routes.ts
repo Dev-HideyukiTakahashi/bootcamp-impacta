@@ -7,6 +7,7 @@ import { HomeComponent } from './features/home/home.component';
 import { LoginComponent } from './features/login/login.component';
 import { MeuPerfilComponent } from './features/meu-perfil/meu-perfil.component';
 import { QuemSomosComponent } from './features/quem-somos/quem-somos.component';
+import { RecuperarSenhaComponent } from './features/recuperar-senha/recuperar-senha.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -17,4 +18,5 @@ export const routes: Routes = [
   { path: 'cadastro-voluntario', component: CadastroVoluntarioComponent },
   { path: 'cadastro-ong', component: CadastroOngComponent },
   { path: 'meu-perfil', component: MeuPerfilComponent },
+  { path: 'recuperar-senha/:token', component: RecuperarSenhaComponent },
 ];
