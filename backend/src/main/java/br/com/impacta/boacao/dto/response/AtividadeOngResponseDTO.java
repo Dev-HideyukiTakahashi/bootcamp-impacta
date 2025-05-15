@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
  * DTO utilizado para respostas (responses) relacionadas a gestão de atividades da ong.
  * contém apenas os dados essenciais que devem ser retornados ao cliente,
  */
-public class AtividadesOngResponseDTO {
+public class AtividadeOngResponseDTO {
 
     private Integer id;
     private String nome;
@@ -20,10 +20,10 @@ public class AtividadesOngResponseDTO {
     private String descricao;
 
 
-    public AtividadesOngResponseDTO() {
+    public AtividadeOngResponseDTO() {
     }
-    public AtividadesOngResponseDTO(Integer id, String nome, Long voluntarios, String cargaHorariaDiaria,
-                                    String periodo, LocalDateTime criadoEm, StatusAtividade statusAtvidade, String descricao) {
+    public AtividadeOngResponseDTO(Integer id, String nome, Long voluntarios, String cargaHorariaDiaria,
+                                   String periodo, LocalDateTime criadoEm, StatusAtividade statusAtvidade, String descricao) {
         this.id = id;
         this.nome = nome;
         this.voluntarios = voluntarios;
