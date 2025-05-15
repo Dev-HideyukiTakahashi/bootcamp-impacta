@@ -1,6 +1,10 @@
 package br.com.impacta.boacao.service;
 
-import br.com.impacta.boacao.dto.response.AtividadesOngResponseDTO;
+import br.com.impacta.boacao.dto.request.AtividadeStatusRequestDTO;
+import br.com.impacta.boacao.dto.response.AtividadeOngResponseDTO;
+import br.com.impacta.boacao.dto.response.AtividadeStatusResponseDTO;
+import br.com.impacta.boacao.entity.Atividade;
+import br.com.impacta.boacao.mapper.AtividadeMapper;
 import br.com.impacta.boacao.repository.AtividadeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +24,17 @@ public class AtividadeService {
     }
 
     @Transactional(readOnly = true)
-    public Page<AtividadesOngResponseDTO> buscarTodos(Pageable pageable){
+    public Page<AtividadeOngResponseDTO> buscarTodos(Pageable pageable){
         return atividadeRepository.buscarTodosPage(pageable);
     }
+
+    @Transactional
+    public AtividadeStatusResponseDTO atualizarStatus(Integer id, AtividadeStatusRequestDTO dto){
+        Atividade entidade = atividadeRepository.getReferenceById(id);
+        entidade.setStatusAtividade(dto.getStatusAtividade());
+
+        logger.info("Status da ong atualizado para: {}", entidade.getStatusAtividade());
+        return AtividadeMapper.toOngResponseDTO(entidade);
+    }
+
 }
