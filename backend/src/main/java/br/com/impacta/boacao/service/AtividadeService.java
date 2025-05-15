@@ -4,13 +4,17 @@ import br.com.impacta.boacao.dto.request.AtividadeStatusRequestDTO;
 import br.com.impacta.boacao.dto.response.AtividadeOngResponseDTO;
 import br.com.impacta.boacao.dto.response.AtividadeStatusResponseDTO;
 import br.com.impacta.boacao.entity.Atividade;
+import br.com.impacta.boacao.exception.DatabaseException;
+import br.com.impacta.boacao.exception.RecursoNaoEncontradoException;
 import br.com.impacta.boacao.mapper.AtividadeMapper;
 import br.com.impacta.boacao.repository.AtividadeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -35,6 +39,22 @@ public class AtividadeService {
 
         logger.info("Status da ong atualizado para: {}", entidade.getStatusAtividade());
         return AtividadeMapper.toOngResponseDTO(entidade);
+    }
+
+    // annotation necessaria para propagar error do java, sem ela vai lançar erro de sql
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void deletar(Integer id){
+
+        if(!atividadeRepository.existsById(id)){
+            throw new RecursoNaoEncontradoException("Atividade não existe id: "+ id);
+        }
+
+        try{
+            atividadeRepository.deleteById(id);
+            logger.info("Atividade deletada, id: {}", id);
+        }catch(DataIntegrityViolationException e){
+            throw new DatabaseException("Não foi possível excluir a atividade pois ela está vinculada a outros registros.");
+        }
     }
 
 }

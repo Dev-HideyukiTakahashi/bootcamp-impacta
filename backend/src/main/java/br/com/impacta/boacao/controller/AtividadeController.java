@@ -40,4 +40,12 @@ public class AtividadeController {
         return ResponseEntity.ok(response);
     }
 
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Integer id){
+        logger.info("Ong deletando atividade de id: {}", id);
+
+        atividadeService.deletar(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
