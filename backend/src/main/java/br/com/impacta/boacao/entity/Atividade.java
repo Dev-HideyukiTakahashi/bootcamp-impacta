@@ -1,5 +1,6 @@
 package br.com.impacta.boacao.entity;
 
+import br.com.impacta.boacao.entity.enums.PeriodoAtividade;
 import br.com.impacta.boacao.entity.enums.StatusAtividade;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
@@ -23,7 +24,8 @@ public class Atividade {
 
     private String descricao;
 
-    private String periodo;
+    @Enumerated(EnumType.STRING)
+    private PeriodoAtividade periodo;
 
     private String cargaHorariaDiaria;
 
@@ -45,7 +47,7 @@ public class Atividade {
     public Atividade() {
     }
 
-    public Atividade(Integer id, String nome, String descricao, String periodo, String cargaHorariaDiaria,
+    public Atividade(Integer id, String nome, String descricao, PeriodoAtividade periodo, String cargaHorariaDiaria,
                      String enderecoCompleto, Boolean possuiCertificacao, StatusAtividade statusAtividade) {
         this.id = id;
         this.nome = nome;
@@ -81,11 +83,11 @@ public class Atividade {
         this.descricao = descricao;
     }
 
-    public String getPeriodo() {
+    public PeriodoAtividade getPeriodo() {
         return periodo;
     }
 
-    public void setPeriodo(String periodo) {
+    public void setPeriodo(PeriodoAtividade periodo) {
         this.periodo = periodo;
     }
 

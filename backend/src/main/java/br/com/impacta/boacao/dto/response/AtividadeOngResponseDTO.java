@@ -1,5 +1,6 @@
 package br.com.impacta.boacao.dto.response;
 
+import br.com.impacta.boacao.entity.enums.PeriodoAtividade;
 import br.com.impacta.boacao.entity.enums.StatusAtividade;
 
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ public class AtividadeOngResponseDTO {
     private String nome;
     private Long voluntarios;
     private String cargaHorariaDiaria;
-    private String periodo;
+    private PeriodoAtividade periodo;
     private LocalDateTime criadoEm;
     private StatusAtividade statusAtvidade;
     private String descricao;
@@ -23,7 +24,7 @@ public class AtividadeOngResponseDTO {
     public AtividadeOngResponseDTO() {
     }
     public AtividadeOngResponseDTO(Integer id, String nome, Long voluntarios, String cargaHorariaDiaria,
-                                   String periodo, LocalDateTime criadoEm, StatusAtividade statusAtvidade, String descricao) {
+                                   PeriodoAtividade periodo, LocalDateTime criadoEm, StatusAtividade statusAtvidade, String descricao) {
         this.id = id;
         this.nome = nome;
         this.voluntarios = voluntarios;
@@ -50,7 +51,7 @@ public class AtividadeOngResponseDTO {
         return cargaHorariaDiaria;
     }
 
-    public String getPeriodo() {
+    public PeriodoAtividade getPeriodo() {
         return periodo;
     }
 
