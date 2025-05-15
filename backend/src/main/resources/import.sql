@@ -79,11 +79,11 @@ INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_i
 
 -- -- Inserindo Atividades
 -- TODO Inserir ONG ID
-INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em) VALUES ('Curso de Programação', 'Curso de programação para iniciantes', 'Tarde', '4 horas', 'Rua A, 10 - São Paulo', 1, 'ANDAMENTO', '2025-05-28');
-INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em) VALUES ('Ação Social', 'Distribuição de alimentos para moradores de rua', 'Manhã', '3 horas', 'Rua B, 15 - Rio de Janeiro', 0, 'ANDAMENTO', '2025-02-18');
-INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em) VALUES ('Plantio de Árvores', 'Atividade de plantio de árvores em áreas urbanas', 'Manhã', '5 horas', 'Rua C, 20 - Belo Horizonte', 1, 'ENCERRADA', '2024-06-20');
-INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em) VALUES ('Oficina de Artes', 'Oficina de pintura e escultura para crianças', 'Tarde', '2 horas', 'Rua D, 25 - Curitiba', 0, 'ANDAMENTO','2024-11-11');
-INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em) VALUES ('Aulas de Idiomas', 'Aulas de inglês para pessoas em situação de vulnerabilidade', 'Noite', '3 horas', 'Rua E, 30 - Salvador', 1, 'CONGELADA', '2024-01-10');
+INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em) VALUES ('Curso de Programação', 'Curso de programação para iniciantes', 'TARDE', '4 horas', 'Rua A, 10 - São Paulo', 1, 'ANDAMENTO', '2025-05-28');
+INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em) VALUES ('Ação Social', 'Distribuição de alimentos para moradores de rua', 'MANHA', '3 horas', 'Rua B, 15 - Rio de Janeiro', 0, 'ANDAMENTO', '2025-02-18');
+INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em) VALUES ('Plantio de Árvores', 'Atividade de plantio de árvores em áreas urbanas', 'MANHA', '5 horas', 'Rua C, 20 - Belo Horizonte', 1, 'ENCERRADA', '2024-06-20');
+INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em) VALUES ('Oficina de Artes', 'Oficina de pintura e escultura para crianças', 'TARDE', '2 horas', 'Rua D, 25 - Curitiba', 0, 'ANDAMENTO','2024-11-11');
+INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em) VALUES ('Aulas de Idiomas', 'Aulas de inglês para pessoas em situação de vulnerabilidade', 'NOITE', '3 horas', 'Rua E, 30 - Salvador', 1, 'CONGELADA', '2024-01-10');
 
 -- Inserindo Histórico de Atividade
 INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura) VALUES (1, 1, '2024-04-01', 1, 'REALIZADO');
