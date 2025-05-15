@@ -4,6 +4,7 @@ import br.com.impacta.boacao.dto.request.AtividadeStatusRequestDTO;
 import br.com.impacta.boacao.dto.response.AtividadeOngResponseDTO;
 import br.com.impacta.boacao.dto.response.AtividadeStatusResponseDTO;
 import br.com.impacta.boacao.service.AtividadeService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -32,7 +33,7 @@ public class AtividadeController {
 
     @PutMapping(path = "/{id}/status")
     public ResponseEntity<AtividadeStatusResponseDTO> atualizarStatus(@PathVariable Integer id,
-                                                                      @RequestBody AtividadeStatusRequestDTO dto){
+                                                                      @Valid @RequestBody AtividadeStatusRequestDTO dto){
         logger.info("Ong começando atualização de status da atividade");
 
         AtividadeStatusResponseDTO response = atividadeService.atualizarStatus(id, dto);
