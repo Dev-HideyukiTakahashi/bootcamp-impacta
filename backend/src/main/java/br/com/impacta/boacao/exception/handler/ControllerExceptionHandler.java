@@ -3,6 +3,7 @@ package br.com.impacta.boacao.exception.handler;
 import java.time.Instant;
 import java.util.Arrays;
 
+import br.com.impacta.boacao.exception.DatabaseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -42,7 +43,7 @@ public class ControllerExceptionHandler {
 
     // Erro personalizado para enums
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<RespostaErroHttp> illegalArgumentHandler(HttpMessageNotReadableException e, HttpServletRequest request) {
+    public ResponseEntity<RespostaErroHttp> httpMessageNotReadableHandler(HttpMessageNotReadableException e, HttpServletRequest request) {
 
         String mensagemPersonalizada = "Erro de leitura no corpo da requisição.";
 
@@ -65,6 +66,19 @@ public class ControllerExceptionHandler {
         respostaErroHttp.setPath(request.getRequestURI());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respostaErroHttp);
+    }
+
+    // Erro personalizado para integridade referencial no banco de dados
+    @ExceptionHandler(DatabaseException.class)
+    public ResponseEntity<RespostaErroHttp> dataIntegrityViolationHandler(DatabaseException e, HttpServletRequest request) {
+        RespostaErroHttp respostaErroHttp = new RespostaErroHttp();
+        respostaErroHttp.setTimestamp(Instant.now());
+        respostaErroHttp.setStatus(HttpStatus.CONFLICT.value());
+        respostaErroHttp.setError("Erro no banco de dados");
+        respostaErroHttp.setMessage(e.getMessage());
+        respostaErroHttp.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(respostaErroHttp);
     }
 
 }
