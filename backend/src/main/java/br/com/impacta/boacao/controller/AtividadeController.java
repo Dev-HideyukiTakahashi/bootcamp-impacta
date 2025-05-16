@@ -1,6 +1,7 @@
 package br.com.impacta.boacao.controller;
 
 import br.com.impacta.boacao.dto.request.AtividadeStatusRequestDTO;
+import br.com.impacta.boacao.dto.request.NovaAtividadeRequestDTO;
 import br.com.impacta.boacao.dto.response.AtividadeOngResponseDTO;
 import br.com.impacta.boacao.dto.response.AtividadeStatusResponseDTO;
 import br.com.impacta.boacao.service.AtividadeService;
@@ -27,6 +28,7 @@ public class AtividadeController {
     public ResponseEntity<Page<AtividadeOngResponseDTO>> buscarTodos(Pageable pageable){
         logger.info("Ong começando busca por todas atividades");
         Page<AtividadeOngResponseDTO> response = atividadeService.buscarTodos(pageable);
+
         logger.info("Sucesso em busca por todas atividades");
         return ResponseEntity.ok(response);
     }
@@ -37,6 +39,23 @@ public class AtividadeController {
         logger.info("Ong começando atualização de status da atividade");
 
         AtividadeStatusResponseDTO response = atividadeService.atualizarStatus(id, dto);
+        return ResponseEntity.ok(response);
+    }
+
+//    @PutMapping(path = "/{id}")
+//    public ResponseEntity<AtividadeStatusResponseDTO> atualizar(@PathVariable Integer id,
+//                                                                      @Valid @RequestBody AtividadeStatusRequestDTO dto){
+//        logger.info("Ong começando atualização de status da atividade");
+//
+//        AtividadeStatusResponseDTO response = atividadeService.atualizarStatus(id, dto);
+//        return ResponseEntity.ok(response);
+//    }
+
+    @PostMapping()
+    public ResponseEntity<NovaAtividadeRequestDTO> cadastrar(@Valid @RequestBody NovaAtividadeRequestDTO dto){
+        logger.info("Iniciando cadastro de nova atividade");
+
+        NovaAtividadeRequestDTO response = atividadeService.cadastrar(dto);
         return ResponseEntity.ok(response);
     }
 

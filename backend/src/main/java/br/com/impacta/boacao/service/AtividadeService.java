@@ -1,9 +1,11 @@
 package br.com.impacta.boacao.service;
 
 import br.com.impacta.boacao.dto.request.AtividadeStatusRequestDTO;
+import br.com.impacta.boacao.dto.request.NovaAtividadeRequestDTO;
 import br.com.impacta.boacao.dto.response.AtividadeOngResponseDTO;
 import br.com.impacta.boacao.dto.response.AtividadeStatusResponseDTO;
 import br.com.impacta.boacao.entity.Atividade;
+import br.com.impacta.boacao.entity.enums.StatusAtividade;
 import br.com.impacta.boacao.exception.DatabaseException;
 import br.com.impacta.boacao.exception.RecursoNaoEncontradoException;
 import br.com.impacta.boacao.mapper.AtividadeMapper;
@@ -39,6 +41,15 @@ public class AtividadeService {
 
         logger.info("Status da ong atualizado para: {}", entidade.getStatusAtividade());
         return AtividadeMapper.toOngResponseDTO(entidade);
+    }
+
+    @Transactional
+    public NovaAtividadeRequestDTO cadastrar(NovaAtividadeRequestDTO dto){
+        dto.setStatusAtividade(StatusAtividade.ANDAMENTO);
+        Atividade entidade = atividadeRepository.save(AtividadeMapper.toEntity(dto));
+
+        logger.info("Atividade: {}, foi criada", entidade.getNome());
+        return AtividadeMapper.toNovaAtividadeDTO(entidade);
     }
 
     // annotation necessaria para propagar error do java, sem ela vai lançar erro de sql

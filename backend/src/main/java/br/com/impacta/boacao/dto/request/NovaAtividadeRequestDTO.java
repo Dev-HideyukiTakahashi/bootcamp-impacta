@@ -1,58 +1,52 @@
-package br.com.impacta.boacao.entity;
+package br.com.impacta.boacao.dto.request;
 
 import br.com.impacta.boacao.entity.enums.PeriodoAtividade;
 import br.com.impacta.boacao.entity.enums.StatusAtividade;
-import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-@Entity
-public class Atividade {
+public class NovaAtividadeRequestDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank(message = "O nome é obrigatório.")
     private String nome;
 
-    private String descricao;
-
-    @Enumerated(EnumType.STRING)
     private PeriodoAtividade periodo;
 
+    @NotBlank(message = "A carga horária diária é obrigatória.")
     private String cargaHorariaDiaria;
 
+    @NotBlank(message = "O endereço completo é obrigatório.")
     private String enderecoCompleto;
 
+    @NotNull(message = "O campo possui certificação é obrigatório.")
     private Boolean possuiCertificacao;
 
-    @Enumerated(EnumType.STRING)
+    @NotBlank(message = "A descrição é obrigatória.")
+    private String descricao;
+
     private StatusAtividade statusAtividade;
     private LocalDateTime criadoEm;
 
-    // TODO
-    // @ManyToOne
-    // private Ong ong;
-
-    @OneToMany(mappedBy = "atividade")
-    private final List<HistoricoAtividade> historicoAtividades = new ArrayList<>();
-
-    public Atividade() {
+    public NovaAtividadeRequestDTO() {
     }
 
-    public Atividade(Integer id, String nome, String descricao, PeriodoAtividade periodo, String cargaHorariaDiaria,
-                     String enderecoCompleto, Boolean possuiCertificacao, StatusAtividade statusAtividade) {
+    public NovaAtividadeRequestDTO(Integer id, String nome, PeriodoAtividade periodo, String cargaHorariaDiaria,
+                                   String enderecoCompleto, Boolean possuiCertificacao, String descricao,
+                                   StatusAtividade statusAtividade, LocalDateTime criadoEm) {
         this.id = id;
         this.nome = nome;
-        this.descricao = descricao;
         this.periodo = periodo;
         this.cargaHorariaDiaria = cargaHorariaDiaria;
         this.enderecoCompleto = enderecoCompleto;
         this.possuiCertificacao = possuiCertificacao;
+        this.descricao = descricao;
         this.statusAtividade = statusAtividade;
+        this.criadoEm = criadoEm;
     }
 
     public Integer getId() {
@@ -69,14 +63,6 @@ public class Atividade {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
     }
 
     public PeriodoAtividade getPeriodo() {
@@ -111,12 +97,12 @@ public class Atividade {
         this.possuiCertificacao = possuiCertificacao;
     }
 
-    public List<HistoricoAtividade> getHistoricoAtividades() {
-        return historicoAtividades;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void addHistoricoAtividades(HistoricoAtividade historicoAtividade) {
-        historicoAtividades.add(historicoAtividade);
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public StatusAtividade getStatusAtividade() {
@@ -131,17 +117,15 @@ public class Atividade {
         return criadoEm;
     }
 
-    // Salva a data atual do sistema ao criar uma atividade
-    @PrePersist
-    protected void onCreate() {
-        criadoEm = LocalDateTime.now();
+    public void setCriadoEm(LocalDateTime criadoEm) {
+        this.criadoEm = criadoEm;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Atividade atividade = (Atividade) o;
-        return Objects.equals(id, atividade.id);
+        NovaAtividadeRequestDTO that = (NovaAtividadeRequestDTO) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override
