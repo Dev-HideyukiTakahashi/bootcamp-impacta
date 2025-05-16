@@ -7,6 +7,7 @@ import br.com.impacta.boacao.exception.DatabaseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -81,4 +82,18 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(respostaErroHttp);
     }
 
+    // Erro personalizado para validation @Valid
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ValidacaoError> methodArgumentNotValidHandler(MethodArgumentNotValidException e, HttpServletRequest request) {
+        ValidacaoError validacaoError = new ValidacaoError();
+        validacaoError.setTimestamp(Instant.now());
+        validacaoError.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+        validacaoError.setError("Erro de validação");
+        validacaoError.setMessage(e.getDetailMessageCode());
+        validacaoError.setPath(request.getRequestURI());
+
+        e.getFieldErrors().forEach(error -> validacaoError.addError(error));
+
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(validacaoError);
+    }
 }
