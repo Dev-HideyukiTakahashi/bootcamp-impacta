@@ -1,41 +1,27 @@
-package br.com.impacta.boacao.dto.request;
+package br.com.impacta.boacao.dto.response;
 
 import br.com.impacta.boacao.entity.enums.PeriodoAtividade;
 import br.com.impacta.boacao.entity.enums.StatusAtividade;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class NovaAtividadeRequestDTO {
+public class AtividadeResponseDTO {
 
     private Integer id;
-
-    @NotBlank(message = "O nome é obrigatório.")
     private String nome;
-
     private PeriodoAtividade periodo;
-
-    @NotBlank(message = "A carga horária diária é obrigatória.")
     private String cargaHorariaDiaria;
-
-    @NotBlank(message = "O endereço completo é obrigatório.")
     private String enderecoCompleto;
-
-    @NotNull(message = "O campo possui certificação é obrigatório.")
     private Boolean possuiCertificacao;
-
-    @NotBlank(message = "A descrição é obrigatória.")
     private String descricao;
-
     private StatusAtividade statusAtividade;
     private LocalDateTime criadoEm;
 
-    public NovaAtividadeRequestDTO() {
+    public AtividadeResponseDTO() {
     }
 
-    public NovaAtividadeRequestDTO(Integer id, String nome, PeriodoAtividade periodo, String cargaHorariaDiaria,
+    public AtividadeResponseDTO(Integer id, String nome, PeriodoAtividade periodo, String cargaHorariaDiaria,
                                    String enderecoCompleto, Boolean possuiCertificacao, String descricao,
                                    StatusAtividade statusAtividade, LocalDateTime criadoEm) {
         this.id = id;
@@ -124,7 +110,7 @@ public class NovaAtividadeRequestDTO {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        NovaAtividadeRequestDTO that = (NovaAtividadeRequestDTO) o;
+        AtividadeResponseDTO that = (AtividadeResponseDTO) o;
         return Objects.equals(id, that.id);
     }
 

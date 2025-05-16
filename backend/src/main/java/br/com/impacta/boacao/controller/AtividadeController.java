@@ -1,8 +1,9 @@
 package br.com.impacta.boacao.controller;
 
+import br.com.impacta.boacao.dto.request.AtividadeRequestDTO;
 import br.com.impacta.boacao.dto.request.AtividadeStatusRequestDTO;
-import br.com.impacta.boacao.dto.request.NovaAtividadeRequestDTO;
 import br.com.impacta.boacao.dto.response.AtividadeOngResponseDTO;
+import br.com.impacta.boacao.dto.response.AtividadeResponseDTO;
 import br.com.impacta.boacao.dto.response.AtividadeStatusResponseDTO;
 import br.com.impacta.boacao.service.AtividadeService;
 import jakarta.validation.Valid;
@@ -42,20 +43,20 @@ public class AtividadeController {
         return ResponseEntity.ok(response);
     }
 
-//    @PutMapping(path = "/{id}")
-//    public ResponseEntity<AtividadeStatusResponseDTO> atualizar(@PathVariable Integer id,
-//                                                                      @Valid @RequestBody AtividadeStatusRequestDTO dto){
-//        logger.info("Ong começando atualização de status da atividade");
-//
-//        AtividadeStatusResponseDTO response = atividadeService.atualizarStatus(id, dto);
-//        return ResponseEntity.ok(response);
-//    }
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<AtividadeResponseDTO> atualizar(@PathVariable Integer id,
+                                                                  @Valid @RequestBody AtividadeRequestDTO dto){
+        logger.info("Ong começando atualização da atividade");
+
+        AtividadeResponseDTO response = atividadeService.atualizar(id, dto);
+        return ResponseEntity.ok(response);
+    }
 
     @PostMapping()
-    public ResponseEntity<NovaAtividadeRequestDTO> cadastrar(@Valid @RequestBody NovaAtividadeRequestDTO dto){
+    public ResponseEntity<AtividadeResponseDTO> cadastrar(@Valid @RequestBody AtividadeRequestDTO dto){
         logger.info("Iniciando cadastro de nova atividade");
 
-        NovaAtividadeRequestDTO response = atividadeService.cadastrar(dto);
+        AtividadeResponseDTO response = atividadeService.cadastrar(dto);
         return ResponseEntity.ok(response);
     }
 
