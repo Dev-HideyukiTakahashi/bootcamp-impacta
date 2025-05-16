@@ -11,6 +11,7 @@ import br.com.impacta.boacao.exception.DatabaseException;
 import br.com.impacta.boacao.exception.RecursoNaoEncontradoException;
 import br.com.impacta.boacao.mapper.AtividadeMapper;
 import br.com.impacta.boacao.repository.AtividadeRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -55,15 +56,17 @@ public class AtividadeService {
 
     @Transactional
         public AtividadeResponseDTO atualizar(Integer id, AtividadeRequestDTO dto){
-        Atividade entidade = atividadeRepository.getReferenceById(id);
-        dto.setId(entidade.getId());
-        dto.setCriadoEm(entidade.getCriadoEm());
-        System.out.println("entidade " + entidade.getCriadoEm());
-        entidade = atividadeRepository.save(AtividadeMapper.toEntity(dto));
+        try{
+            Atividade entidade = atividadeRepository.getReferenceById(id);
+            dto.setId(entidade.getId());
+            dto.setCriadoEm(entidade.getCriadoEm());
+            entidade = atividadeRepository.save(AtividadeMapper.toEntity(dto));
 
-        System.out.println("entidade " + entidade.getCriadoEm());
-        logger.info("Atividade: {}, foi atualizada", entidade.getNome());
-        return AtividadeMapper.toDTO(entidade);
+            logger.info("Atividade: {}, foi atualizada", entidade.getNome());
+            return AtividadeMapper.toDTO(entidade);
+        }catch(EntityNotFoundException e){
+            throw new RecursoNaoEncontradoException("Atividade não existe id: "+ id);
+        }
     }
 
     // annotation necessaria para propagar error do java, sem ela vai lançar erro de sql
