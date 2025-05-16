@@ -1,6 +1,7 @@
 package br.com.impacta.boacao.mapper;
 
-import br.com.impacta.boacao.dto.request.NovaAtividadeRequestDTO;
+import br.com.impacta.boacao.dto.request.AtividadeRequestDTO;
+import br.com.impacta.boacao.dto.response.AtividadeResponseDTO;
 import br.com.impacta.boacao.dto.response.AtividadeStatusResponseDTO;
 import br.com.impacta.boacao.entity.Atividade;
 
@@ -14,7 +15,7 @@ public class AtividadeMapper {
         );
     }
 
-    public static Atividade toEntity(NovaAtividadeRequestDTO dto) {
+    public static Atividade toEntity(AtividadeRequestDTO dto) {
         Atividade entidade = new Atividade();
         entidade.setId(dto.getId() == null ? null : dto.getId());
         entidade.setNome(dto.getNome());
@@ -24,13 +25,13 @@ public class AtividadeMapper {
         entidade.setEnderecoCompleto(dto.getEnderecoCompleto());
         entidade.setPossuiCertificacao(dto.getPossuiCertificacao());
         entidade.setStatusAtividade(dto.getStatusAtividade());
-
+        entidade.setCriadoEm(dto.getCriadoEm() == null ? null : dto.getCriadoEm());
         // DTO ONG TODO
         return entidade;
     }
 
-    public static NovaAtividadeRequestDTO toNovaAtividadeDTO(Atividade entidade) {
-        NovaAtividadeRequestDTO dto = new NovaAtividadeRequestDTO();
+    public static AtividadeResponseDTO toDTO(Atividade entidade) {
+        AtividadeResponseDTO dto = new AtividadeResponseDTO();
         dto.setId(entidade.getId());
         dto.setNome(entidade.getNome());
         dto.setDescricao(entidade.getDescricao());

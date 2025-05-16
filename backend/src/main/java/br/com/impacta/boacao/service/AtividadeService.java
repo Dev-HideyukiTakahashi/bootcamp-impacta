@@ -1,8 +1,9 @@
 package br.com.impacta.boacao.service;
 
+import br.com.impacta.boacao.dto.request.AtividadeRequestDTO;
 import br.com.impacta.boacao.dto.request.AtividadeStatusRequestDTO;
-import br.com.impacta.boacao.dto.request.NovaAtividadeRequestDTO;
 import br.com.impacta.boacao.dto.response.AtividadeOngResponseDTO;
+import br.com.impacta.boacao.dto.response.AtividadeResponseDTO;
 import br.com.impacta.boacao.dto.response.AtividadeStatusResponseDTO;
 import br.com.impacta.boacao.entity.Atividade;
 import br.com.impacta.boacao.entity.enums.StatusAtividade;
@@ -44,12 +45,25 @@ public class AtividadeService {
     }
 
     @Transactional
-    public NovaAtividadeRequestDTO cadastrar(NovaAtividadeRequestDTO dto){
+    public AtividadeResponseDTO cadastrar(AtividadeRequestDTO dto){
         dto.setStatusAtividade(StatusAtividade.ANDAMENTO);
         Atividade entidade = atividadeRepository.save(AtividadeMapper.toEntity(dto));
 
         logger.info("Atividade: {}, foi criada", entidade.getNome());
-        return AtividadeMapper.toNovaAtividadeDTO(entidade);
+        return AtividadeMapper.toDTO(entidade);
+    }
+
+    @Transactional
+        public AtividadeResponseDTO atualizar(Integer id, AtividadeRequestDTO dto){
+        Atividade entidade = atividadeRepository.getReferenceById(id);
+        dto.setId(entidade.getId());
+        dto.setCriadoEm(entidade.getCriadoEm());
+        System.out.println("entidade " + entidade.getCriadoEm());
+        entidade = atividadeRepository.save(AtividadeMapper.toEntity(dto));
+
+        System.out.println("entidade " + entidade.getCriadoEm());
+        logger.info("Atividade: {}, foi atualizada", entidade.getNome());
+        return AtividadeMapper.toDTO(entidade);
     }
 
     // annotation necessaria para propagar error do java, sem ela vai lançar erro de sql
