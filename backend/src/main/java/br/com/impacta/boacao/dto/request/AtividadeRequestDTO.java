@@ -15,6 +15,7 @@ public class AtividadeRequestDTO {
     @NotBlank(message = "O nome é obrigatório.")
     private String nome;
 
+    @NotNull(message = "Período é obrigatório.")
     private PeriodoAtividade periodo;
 
     @NotBlank(message = "A carga horária diária é obrigatória.")
