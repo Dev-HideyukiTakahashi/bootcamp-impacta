@@ -24,7 +24,9 @@ export class AuthService {
       .set('username', username)
       .set('password', password);
 
-    return this.http.post(`${this.API}/oauth2/token`, body.toString(), { headers });
+    return this.http.post(`${this.API}/oauth2/token`, body.toString(), {
+      headers,
+    });
   }
 
   // EMAIL COM TOKEN PARA RECUPERAR SENHA
@@ -34,7 +36,11 @@ export class AuthService {
       Authorization: 'Basic ' + btoa(`${this.clientId}:${this.clientSecret}`),
     });
 
-    return this.http.post(`${this.API}/auth/recuperar-senha`, { email }, { headers });
+    return this.http.post(
+      `${this.API}/auth/recuperar-senha`,
+      { email },
+      { headers }
+    );
   }
 
   // RESET DE SENHA
@@ -81,5 +87,18 @@ export class AuthService {
   isVoluntario(): boolean {
     if (!this.getDecodedToken()) return false;
     return this.getUserRole() === 'ROLE_VOLUNTARIO';
+  }
+
+  isLoggedIn(): boolean {
+    const token = localStorage.getItem('access_token');
+    if (!token) return false;
+
+    try {
+      const decoded: any = jwtDecode(token);
+      const currentTime = Math.floor(Date.now() / 1000);
+      return decoded.exp && decoded.exp > currentTime;
+    } catch (e) {
+      return false;
+    }
   }
 }
