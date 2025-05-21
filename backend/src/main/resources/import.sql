@@ -28,9 +28,9 @@ INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('joao.silva@email
 INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('hideyuki.takahashi@aluno.faculdadeimpacta.com.br', '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16', 1, '2023-01-25 11:30:00');
 INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('pedro.costa@email.com', '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16', 1, '2023-03-12 14:45:00');
 
-INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('João Silva', '12345678901', '(11) 98765-4321', '1990-05-20', 1);
-INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('Maria Oliveira', '23456789012', '(11) 98765-4322', '1985-08-15', 2);
-INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('Pedro Costa', '34567890123', '(11) 98765-4323', '1992-03-10', 3);
+INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('João Silva', '12345678901', '11987654321', '1990-05-20', 1);
+INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('Maria Oliveira', '23456789012', '11987654322', '1985-08-15', 2);
+INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_id) VALUES ('Pedro Costa', '34567890123', '11987654323', '1992-03-10', 3);
 
 -- -- ONGs
 -- INSERT INTO usuario (email, senha, role_id, criado_em) VALUES ('coracao.solidario@email.com', '$2a$10$qiT8Ap2EyOqpU8KN96Gt3u6sCmYxd0OqtN9HRI8marZHOrdPUPB16', 2, '2023-05-15 14:00:00');
