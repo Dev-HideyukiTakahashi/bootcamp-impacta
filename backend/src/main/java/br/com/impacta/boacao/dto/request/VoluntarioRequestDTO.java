@@ -61,14 +61,7 @@ public class VoluntarioRequestDTO {
   }
   
   // Construtor completo
-  public VoluntarioRequestDTO(
-      String nomeCompleto,
-      String cpf,
-      String telefone,
-      Date dataNascimento,
-      String email,
-      String senha
-  ) {
+  public VoluntarioRequestDTO( String nomeCompleto, String cpf, String telefone,  Date dataNascimento, String email, String senha) {
     this.nomeCompleto = nomeCompleto;
     this.cpf = cpf;
     this.telefone = telefone;
@@ -76,6 +69,4 @@ public class VoluntarioRequestDTO {
     this.email = email;
     this.senha = senha;
   }
-
-
 }

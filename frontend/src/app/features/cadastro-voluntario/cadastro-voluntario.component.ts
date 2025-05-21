@@ -19,7 +19,7 @@ export class CadastroVoluntarioComponent {
   fb = inject(FormBuilder);
   router = inject(Router)
   showModal: boolean = false;
-  voluntarioService = inject(VoluntarioService);
+  voluntarioService: VoluntarioService = inject(VoluntarioService);
 
   msg: string | null = null;
   erro: string | null = null;

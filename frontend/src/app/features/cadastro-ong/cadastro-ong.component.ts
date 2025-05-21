@@ -1,3 +1,4 @@
+
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
@@ -6,6 +7,7 @@ import { HeaderComponent } from '../../shared/components/header/header.component
 import { FooterComponent } from '../../shared/footer/footer.component';
 import { NgxMaskDirective } from 'ngx-mask';
 import { Router } from '@angular/router';
+import { OngService } from '../../service/ong.service';
 
 @Component({
   selector: 'app-cadastro-ong',
@@ -16,9 +18,10 @@ import { Router } from '@angular/router';
 })
 export class CadastroOngComponent {
   fb = inject(FormBuilder);
-  http = inject(HttpClient);
+  OngService: OngService = inject(OngService);
   router = inject(Router)
   showModal: boolean = false;
+  http = inject(HttpClient);
 
   msg: string | null = null;
   erro: string | null = null;
@@ -32,7 +35,7 @@ export class CadastroOngComponent {
     endereco: [''],
     senha: ['', [Validators.required, Validators.minLength(6)]],
     confirmarSenha: ['', Validators.required]
-  }, 
+  },
     { validators: this.senhaConfirmadaValidator() }
   );
 
@@ -58,17 +61,16 @@ export class CadastroOngComponent {
     if (this.form.invalid) return;
 
     const payload = {
-      nome: this.form.value.nome.trim(),
+      nomeOng: this.form.value.nome.trim(),
       email: this.form.value.email.trim(),
       cnpj: this.form.value.cnpj.replace(/\D/g, ''),
       telefone: this.form.value.telefone.replace(/\D/g, ''),
-      cep: this.form.value.cep,
-      endereco: this.form.value.endereco,
+      endereco: this.form.value.endereco.trim(),
+      dataNascimento: this.form.value.dataNascimento,
       senha: this.form.value.senha
     };
 
-
-    this.http.post('http://localhost:8080/ongs', payload).subscribe({
+    this.OngService.cadastrarOng(payload).subscribe({
       next: () => {
         this.msg = 'Cadastro realizado com sucesso!';
         this.erro = null;
@@ -79,7 +81,6 @@ export class CadastroOngComponent {
       },
       error: (err) => {
         this.msg = null;
-      
         if (err.status === 409) {
           this.erro = err.error?.message || 'Email ou CNPJ já cadastrado.';
         } else {
