@@ -1,0 +1,69 @@
+<app-header></app-header>
+
+<section class="wrapper">
+  <h2 class="title">Cadastrar Atividade</h2>
+
+  <!-- Mensagem de sucesso -->
+  <div *ngIf="success" class="alert alert-success">
+    Atividade cadastrada com sucesso!
+  </div>
+
+  <!-- Mensagem de erro -->
+  <div *ngIf="errorMessage" class="alert alert-error">
+    {{ errorMessage }}
+  </div>
+
+  <div class="form-card">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <label>
+        Nome da Atividade:
+        <input type="text" formControlName="nome" />
+      </label>
+
+      <div class="row">
+        <label>
+          Período:
+          <select formControlName="periodo">
+            <option value="" disabled>Selecione</option>
+            <option value="MANHA">Manhã</option>
+            <option value="TARDE">Tarde</option>
+            <option value="NOITE">Noite</option>
+          </select>
+        </label>
+        <label>
+          Carga Horária Diária:
+          <input type="text" formControlName="cargaHorariaDiaria" />
+        </label>
+      </div>
+
+      <label>
+        Endereço Completo:
+        <input type="text" formControlName="enderecoCompleto" />
+      </label>
+
+      <label>
+        Possui certificação?
+        <select formControlName="possuiCertificacao">
+          <option value="" disabled>Selecione</option>
+          <option [value]="true">Sim</option>
+          <option [value]="false">Não</option>
+        </select>
+      </label>
+
+      <label class="textarea">
+        Descrição da Atividade:
+        <textarea formControlName="descricao"></textarea>
+      </label>
+
+      <button type="submit" class="btn-submit" [disabled]="form.invalid">
+        Cadastrar
+      </button>
+    </form>
+
+    <div class="image">
+      <img src="assets/atividade.jpg" alt="Atividade ONG" />
+    </div>
+  </div>
+</section>
+
+<app-footer></app-footer>

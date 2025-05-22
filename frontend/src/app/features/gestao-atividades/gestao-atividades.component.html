@@ -1,0 +1,75 @@
+<app-header></app-header>
+
+<section class="container">
+  <h2 class="titulo">Gestão de Atividades</h2>
+
+  <div class="cards">
+    <ng-container *ngFor="let atividade of atividades">
+      <div class="card" [ngClass]="atividade.statusAtvidade.toLowerCase()">
+        <div class="card-header">
+          <h3>{{ atividade.nome }}</h3>
+        </div>
+
+        <p>👥 Voluntários: {{ atividade.voluntarios }}</p>
+        <p>⏰ {{ atividade.cargaHorariaDiaria }} - {{ atividade.periodo }}</p>
+        <p>
+          📅 {{ atividade.criadoEm | date:'dd/MM/yyyy' }} –
+          {{
+            atividade.statusAtvidade === 'ANDAMENTO'
+              ? 'Em andamento'
+              : atividade.statusAtvidade === 'CONGELADA'
+                ? 'Atividade Congelada'
+                : 'Encerrada'
+          }}
+        </p>
+        <p>{{ atividade.descricao }}</p>
+
+        <div class="acoes">
+          <!-- botões escuros com hover invertido -->
+          <button
+            class="btn-acao"
+            *ngIf="atividade.statusAtvidade === 'ANDAMENTO'"
+          >
+            Editar
+          </button>
+          <button
+            class="btn-acao"
+            *ngIf="atividade.statusAtvidade === 'ANDAMENTO'"
+          >
+            Congelar
+          </button>
+          <button
+            class="btn-acao"
+            *ngIf="atividade.statusAtvidade === 'ANDAMENTO'"
+          >
+            Buscar Voluntários
+          </button>
+
+          <!-- histórico só para encerrada -->
+          <button
+            class="btn-acao"
+            *ngIf="atividade.statusAtvidade === 'ENCERRADA'"
+          >
+            Histórico de Voluntários
+          </button>
+
+          <!-- reativar com estilo laranja -->
+          <button
+            class="btn-reativar"
+            *ngIf="atividade.statusAtvidade === 'CONGELADA'"
+          >
+            Reabrir atividade
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="nova-atividade">
+    <button [routerLink]="'/cadastro-atividade'">
+      Cadastrar Nova Atividade
+    </button>
+  </div>
+</section>
+
+<app-footer></app-footer>

@@ -1,14 +1,14 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideNgxMask } from 'ngx-mask';
+import { authInterceptor } from './core/interceptors/auth-interceptor';
 
-// Garantindo que o HttpClientModule seja provido globalmente
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(), // Fornecendo HttpClient para toda a aplicação
-    provideRouter(routes), // Fornecendo as rotas
-    provideNgxMask()
+    provideHttpClient(withInterceptors([authInterceptor])),
+    provideRouter(routes),
+    provideNgxMask(),
   ],
 };
