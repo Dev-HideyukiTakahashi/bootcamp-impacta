@@ -25,7 +25,9 @@
 
             <div class="botoes">
                 <button>Editar Perfil</button>
-                <button>Descrição Habilidades</button>
+                <a [routerLink]="'/detalhes-habilidades'">
+                    <button>Descrição Habilidades</button>
+                </a>
                 <button>Cadastrar Habilidades</button>
             </div>
 
@@ -53,8 +55,4 @@
     </div>
 </div>
 
-
-<footer>
-    <p>© 2025 BoAção. Todos os direitos reservados.</p>
-</footer>
 <app-footer></app-footer>

@@ -9,14 +9,13 @@ import { CadastroOngComponent } from './features/cadastro-ong/cadastro-ong.compo
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
-  { path: 'login', component: LoginComponent },,
   { path: 'login', component: LoginComponent },
   { path: 'cadastro-voluntario', component: CadastroVoluntarioComponent },
-  { path: 'cadastro-ong', component: CadastroOngComponent },
+  { path: 'cadastro-ong', component: CadastroOngComponent }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
 export class AppRoutingModule {}

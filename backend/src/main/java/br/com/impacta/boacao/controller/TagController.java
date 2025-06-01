@@ -36,7 +36,6 @@ public class TagController {
     public ResponseEntity<TagRequestDTO> buscarPorId(@PathVariable Integer id) {
         log.info("Iniciando busca de tag id {}.", id);
         TagRequestDTO dto = tagService.buscarPorId(id);
-
         return ResponseEntity.ok(dto);
     }
 }

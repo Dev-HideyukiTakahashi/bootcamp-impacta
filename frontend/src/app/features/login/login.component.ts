@@ -34,7 +34,7 @@ export class LoginComponent {
         localStorage.setItem('tipo_usuario', role);
 
         console.log('Tipo de usuário:', role);
-
+        console.log('Resposta do login:', response);
         //const role = this.authService.getUserRole();
 
         // redirecionar para a tela de acordo com o tipo de usuário
