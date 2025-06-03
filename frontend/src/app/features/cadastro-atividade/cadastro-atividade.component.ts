@@ -9,11 +9,13 @@ import {
   FormGroup,
 } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
-import { NgxMaskDirective } from 'ngx-mask';
 
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
+
 import { AtividadeService } from '../../service/atividade.service';
+import { TagService } from '../../service/tag.service';
+import { Tag } from '../../model/tag.model';
 
 @Component({
   selector: 'app-cadastro-atividade',
@@ -21,8 +23,7 @@ import { AtividadeService } from '../../service/atividade.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterModule,        // para [routerLink], se usar
-    NgxMaskDirective,    // se precisar de máscara (phone, etc.)
+    RouterModule,
     HeaderComponent,
     FooterComponent,
   ],
@@ -32,51 +33,66 @@ import { AtividadeService } from '../../service/atividade.service';
 export class CadastroAtividadeComponent implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
-  private service = inject(AtividadeService);
+  private atividadeService = inject(AtividadeService);
+  private tagService = inject(TagService);
 
-  // Para controlar exibição de modal de sucesso/erro
-  showModal: boolean = false;
+  form!: FormGroup;
+  tags: Tag[] = [];
+
+  showModal = false;
   msg: string | null = null;
   erro: string | null = null;
   success = false;
 
-  // O FormGroup com todos os campos
-  form!: FormGroup;
-
   ngOnInit() {
+    // 1) Inicializa o FormGroup
     this.form = this.fb.group({
-      // Campos antigos:
       nome: ['', Validators.required],
       periodo: ['', Validators.required],
-      cargaHorariaDiaria: [
-        '',
-        [Validators.required, Validators.min(1)],
-      ],
+      cargaHorariaDiaria: ['', [Validators.required, Validators.min(1)]],
       enderecoCompleto: ['', Validators.required],
       possuiCertificacao: [null, Validators.required],
       descricao: ['', Validators.required],
-
-      // ============================
-      // Campos novos (para encaixar no mesmo payload)
-      // ============================
       statusAtividade: ['', Validators.required],
       dataAtividade: ['', Validators.required],
-      idTag: ['', [Validators.required, Validators.min(1)]],
+      idTag: [null, Validators.required],
     });
+
+    // 2) Carrega as tags disponíveis
+    this.tagService.getTags().subscribe({
+      next: listaTags => {
+        this.tags = listaTags;
+        // Opcional: se quiser definir valor padrão, pode setar aqui
+        // this.form.get('idTag')!.setValue(this.tags[0].id);
+      },
+      error: err => console.error('Erro ao carregar lista de tags', err),
+    });
+  }
+
+  /**
+   * Chamado quando o usuário muda a seleção de tag.
+   * Busca o objeto Tag completo (com id e nome) e copia o nome para o campo 'nome' da atividade.
+   */
+  onTagChange(event: Event) {
+    const selectEl = event.target as HTMLSelectElement;
+    const tagIdSelecionada = Number(selectEl.value);
+    // Encontre o objeto Tag completo no array
+    const tagObj = this.tags.find(t => t.id === tagIdSelecionada);
+    if (tagObj) {
+      // Atribui o nome da tag ao campo 'nome' do formulário
+      this.form.get('nome')!.setValue(tagObj.nome);
+    } else {
+      // Se desmarcado, limpa o nome
+      this.form.get('nome')!.setValue('');
+    }
   }
 
   submit() {
     if (this.form.invalid) {
-      // marca todos como “touched” para exibir mensagens de validação
       this.form.markAllAsTouched();
       return;
     }
-
-    // Monta o payload com exatamente as chaves que o service espera
     const valorForm = this.form.value;
-
-    // Convertendo data (string do input “datetime-local”) para ISO
-    // Se seu backend aceita string ISO direta, transforme-a assim:
     const isoData = new Date(valorForm.dataAtividade).toISOString();
 
     const payload = {
@@ -86,31 +102,26 @@ export class CadastroAtividadeComponent implements OnInit {
       enderecoCompleto: valorForm.enderecoCompleto,
       possuiCertificacao: valorForm.possuiCertificacao,
       descricao: valorForm.descricao,
-      statusAtividade: valorForm.statusAtividade,      // 'ANDAMENTO' | 'ENCERRADA' | 'CONGELADA'
+      statusAtividade: valorForm.statusAtividade,
       dataAtividade: isoData,
       idTag: Number(valorForm.idTag),
     };
 
-    this.service.cadastrarAtividade(payload).subscribe({
+    this.atividadeService.cadastrarAtividade(payload).subscribe({
       next: () => {
         this.success = true;
         this.msg = 'Cadastro realizado com sucesso!';
         this.erro = null;
         this.form.reset();
         this.showModal = true;
-
-        // Se quiser redirecionar após X segundos, descomente:
-        // setTimeout(() => this.router.navigate(['/alguma-rota']), 1500);
+        setTimeout(() => this.router.navigate(['/atividades']), 1500);
       },
-      error: (err) => {
+      error: err => {
         this.msg = null;
-        if (err.status === 409) {
-          this.erro =
-            err.error?.message ||
-            'Algum dado já existe no sistema (conflito).';
-        } else {
-          this.erro = 'Erro ao cadastrar atividade.';
-        }
+        this.erro =
+          err.status === 409
+            ? err.error?.message || 'Conflito de dados.'
+            : 'Erro ao cadastrar atividade.';
         this.showModal = true;
       },
     });

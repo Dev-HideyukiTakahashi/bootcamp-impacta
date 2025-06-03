@@ -1,12 +1,39 @@
+<!-- src/app/features/cadastro-atividade/cadastro-atividade.component.html -->
+
 <app-header></app-header>
 
 <div class="container-cadastro-atividade">
   <h2>Cadastrar Nova Atividade</h2>
 
   <form [formGroup]="form" (ngSubmit)="submit()" class="form-atividade">
-    <!-- 1) Nome -->
+    <!-- 1) Campo de Seleção de TAG -->
     <div class="form-group">
-      <label for="nome">Nome:<span class="obrigatorio">*</span></label>
+      <label for="idTag">Tag:<span class="obrigatorio">*</span></label>
+      <select
+        id="idTag"
+        formControlName="idTag"
+        class="form-select"
+        (change)="onTagChange($event)"
+        w
+      >
+        <option value="" disabled>-- Escolha uma Tag --</option>
+        <option *ngFor="let tag of tags" [value]="tag.id">
+          {{ tag.nome }}
+        </option>
+      </select>
+      <div
+        *ngIf="form.get('idTag')?.invalid && form.get('idTag')?.touched"
+        class="erro-msg"
+      >
+        Escolha uma tag para a atividade.
+      </div>
+    </div>
+    <!-- 2) Campo Nome (agora será preenchido automaticamente ao mudar de tag,
+           mas o usuário ainda pode editar se quiser) -->
+    <div class="form-group">
+      <label for="nome"
+        >Nome da Atividade:<span class="obrigatorio">*</span></label
+      >
       <input
         id="nome"
         type="text"
@@ -22,6 +49,7 @@
       </div>
     </div>
 
+    <!-- 3) Campo Período -->
     <div class="form-group">
       <label for="periodo">Período:<span class="obrigatorio">*</span></label>
       <select id="periodo" formControlName="periodo" class="form-select">
@@ -34,15 +62,14 @@
         *ngIf="form.get('periodo')?.invalid && form.get('periodo')?.touched"
         class="erro-msg"
       >
-        O campo Período é obrigatório.<br />
-        Escolha uma das opções: MANHÃ, TARDE ou NOITE.
+        O campo Período é obrigatório.
       </div>
     </div>
 
-    <!-- 3) Carga Horária Diária -->
+    <!-- 4) Campo Carga Horária Diária -->
     <div class="form-group">
       <label for="cargaHorariaDiaria">
-        Carga Horária (h):<span class="obrigatorio">*</span>
+        Carga Horária Diária (h):<span class="obrigatorio">*</span>
       </label>
       <input
         id="cargaHorariaDiaria"
@@ -63,7 +90,7 @@
       </div>
     </div>
 
-    <!-- 4) Endereço Completo -->
+    <!-- 5) Campo Endereço Completo -->
     <div class="form-group">
       <label for="enderecoCompleto">
         Endereço Completo:<span class="obrigatorio">*</span>
@@ -86,7 +113,7 @@
       </div>
     </div>
 
-    <!-- 5) Possui Certificação? -->
+    <!-- 6) Possui Certificação? -->
     <div class="form-group checkbox-group">
       <input
         id="possuiCertificacao"
@@ -106,7 +133,7 @@
       </div>
     </div>
 
-    <!-- 6) Descrição -->
+    <!-- 7) Descrição -->
     <div class="form-group">
       <label for="descricao"
         >Descrição:<span class="obrigatorio">*</span></label
@@ -116,7 +143,7 @@
         rows="3"
         formControlName="descricao"
         class="form-textarea"
-        placeholder="Ex: Inspeção da saúde dos recifes..."
+        placeholder="Ex: Inspeção de recifes de coral..."
       ></textarea>
       <div
         *ngIf="form.get('descricao')?.invalid && form.get('descricao')?.touched"
@@ -126,7 +153,7 @@
       </div>
     </div>
 
-    <!-- 7) Status da Atividade -->
+    <!-- 8) Status da Atividade -->
     <div class="form-group">
       <label for="statusAtividade">
         Status da Atividade:<span class="obrigatorio">*</span>
@@ -136,7 +163,7 @@
         formControlName="statusAtividade"
         class="form-select"
       >
-        <option value="" disabled>-- Selecione --</option>
+        <option value="" disabled>-- Selecione o status --</option>
         <option value="ANDAMENTO">ANDAMENTO</option>
         <option value="ENCERRADA">ENCERRADA</option>
         <option value="CONGELADA">CONGELADA</option>
@@ -148,15 +175,15 @@
         "
         class="erro-msg"
       >
-        Selecione um status (ANDAMENTO, ENCERRADA ou CONGELADA).
+        Selecione um status válido.
       </div>
     </div>
 
-    <!-- 8) Data da Atividade -->
+    <!-- 9) Data da Atividade -->
     <div class="form-group">
-      <label for="dataAtividade">
-        Data da Atividade:<span class="obrigatorio">*</span>
-      </label>
+      <label for="dataAtividade"
+        >Data da Atividade:<span class="obrigatorio">*</span></label
+      >
       <input
         id="dataAtividade"
         type="datetime-local"
@@ -170,36 +197,17 @@
         "
         class="erro-msg"
       >
-        Informe data e hora (formato: AAAA-MM-DDThh:mm).
+        Informe data e hora da atividade.
       </div>
     </div>
 
-    <!-- 9) ID Tag -->
-    <div class="form-group">
-      <label for="idTag">ID Tag:<span class="obrigatorio">*</span></label>
-      <input
-        id="idTag"
-        type="number"
-        min="1"
-        formControlName="idTag"
-        class="form-input"
-        placeholder="Ex: 3"
-      />
-      <div
-        *ngIf="form.get('idTag')?.invalid && form.get('idTag')?.touched"
-        class="erro-msg"
-      >
-        Informe um ID Tag válido (número mínimo: 1).
-      </div>
-    </div>
-
-    <!-- Botão de Envio -->
+    <!-- 10) Botão de Envio -->
     <button type="submit" [disabled]="form.invalid" class="btn-cadastrar">
       Cadastrar
     </button>
   </form>
 
-  <!-- Modal/Feedback de Sucesso ou Erro -->
+  <!-- Modal de feedback -->
   <div *ngIf="showModal" class="modal-feedback">
     <div class="modal-content" [ngClass]="{ success: success, error: erro }">
       <p *ngIf="msg" class="msg-sucesso">{{ msg }}</p>
