@@ -1,3 +1,5 @@
+// src/app/features/cadastro-atividade/cadastro-atividade.component.ts
+
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -19,58 +21,95 @@ import { AtividadeService } from '../../service/atividade.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterModule,        // para [routerLink]
-    NgxMaskDirective,    // se precisar de máscara
+    RouterModule,        // para [routerLink], se usar
+    NgxMaskDirective,    // se precisar de máscara (phone, etc.)
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
   ],
   templateUrl: './cadastro-atividade.component.html',
   styleUrls: ['./cadastro-atividade.component.scss'],
-  hostDirectives: [],
-  // Protege rota se você usar provideRouter direto no componente (v17+)
-  // Se estiver usando app.routes.ts, basta configurar lá.
 })
 export class CadastroAtividadeComponent implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private service = inject(AtividadeService);
-  // para erro
+
+  // Para controlar exibição de modal de sucesso/erro
   showModal: boolean = false;
   msg: string | null = null;
   erro: string | null = null;
-  success = false;  form!: FormGroup;
-  errorMessage: string | null = null;
+  success = false;
+
+  // O FormGroup com todos os campos
+  form!: FormGroup;
 
   ngOnInit() {
     this.form = this.fb.group({
+      // Campos antigos:
       nome: ['', Validators.required],
       periodo: ['', Validators.required],
-      cargaHorariaDiaria: ['', Validators.required],
+      cargaHorariaDiaria: [
+        '',
+        [Validators.required, Validators.min(1)],
+      ],
       enderecoCompleto: ['', Validators.required],
       possuiCertificacao: [null, Validators.required],
       descricao: ['', Validators.required],
+
+      // ============================
+      // Campos novos (para encaixar no mesmo payload)
+      // ============================
+      statusAtividade: ['', Validators.required],
+      dataAtividade: ['', Validators.required],
+      idTag: ['', [Validators.required, Validators.min(1)]],
     });
   }
 
   submit() {
-    if (this.form.invalid) return;
-    const payload = this.form.value;
-    this.service.cadastrarAtividade(this.form.value).subscribe({
+    if (this.form.invalid) {
+      // marca todos como “touched” para exibir mensagens de validação
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    // Monta o payload com exatamente as chaves que o service espera
+    const valorForm = this.form.value;
+
+    // Convertendo data (string do input “datetime-local”) para ISO
+    // Se seu backend aceita string ISO direta, transforme-a assim:
+    const isoData = new Date(valorForm.dataAtividade).toISOString();
+
+    const payload = {
+      nome: valorForm.nome,
+      periodo: valorForm.periodo,
+      cargaHorariaDiaria: Number(valorForm.cargaHorariaDiaria),
+      enderecoCompleto: valorForm.enderecoCompleto,
+      possuiCertificacao: valorForm.possuiCertificacao,
+      descricao: valorForm.descricao,
+      statusAtividade: valorForm.statusAtividade,      // 'ANDAMENTO' | 'ENCERRADA' | 'CONGELADA'
+      dataAtividade: isoData,
+      idTag: Number(valorForm.idTag),
+    };
+
+    this.service.cadastrarAtividade(payload).subscribe({
       next: () => {
         this.success = true;
         this.msg = 'Cadastro realizado com sucesso!';
         this.erro = null;
         this.form.reset();
         this.showModal = true;
-        // opcional: navegue após X segundos:
-         setTimeout(() => this.router.navigate(['/cadastro-atividade']), 1500);
+
+        // Se quiser redirecionar após X segundos, descomente:
+        // setTimeout(() => this.router.navigate(['/alguma-rota']), 1500);
       },
-     error: (err) => {
+      error: (err) => {
         this.msg = null;
         if (err.status === 409) {
-          this.erro = err.error?.message || 'Email ou CPF já cadastrado.';
+          this.erro =
+            err.error?.message ||
+            'Algum dado já existe no sistema (conflito).';
         } else {
-          this.erro = 'Erro ao cadastrar voluntário.';
+          this.erro = 'Erro ao cadastrar atividade.';
         }
         this.showModal = true;
       },

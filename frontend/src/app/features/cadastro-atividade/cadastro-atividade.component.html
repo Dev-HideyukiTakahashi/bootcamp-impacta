@@ -1,69 +1,212 @@
 <app-header></app-header>
 
-<section class="wrapper">
-  <h2 class="title">Cadastrar Atividade</h2>
+<div class="container-cadastro-atividade">
+  <h2>Cadastrar Nova Atividade</h2>
 
-  <!-- Mensagem de sucesso -->
-  <div *ngIf="success" class="alert alert-success">
-    Atividade cadastrada com sucesso!
-  </div>
-
-  <!-- Mensagem de erro -->
-  <div *ngIf="errorMessage" class="alert alert-error">
-    {{ errorMessage }}
-  </div>
-
-  <div class="form-card">
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <label>
-        Nome da Atividade:
-        <input type="text" formControlName="nome" />
-      </label>
-
-      <div class="row">
-        <label>
-          Período:
-          <select formControlName="periodo">
-            <option value="" disabled>Selecione</option>
-            <option value="MANHA">Manhã</option>
-            <option value="TARDE">Tarde</option>
-            <option value="NOITE">Noite</option>
-          </select>
-        </label>
-        <label>
-          Carga Horária Diária:
-          <input type="text" formControlName="cargaHorariaDiaria" />
-        </label>
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-atividade">
+    <!-- 1) Nome -->
+    <div class="form-group">
+      <label for="nome">Nome:<span class="obrigatorio">*</span></label>
+      <input
+        id="nome"
+        type="text"
+        formControlName="nome"
+        class="form-input"
+        placeholder="Ex: Monitoramento de Recifes"
+      />
+      <div
+        *ngIf="form.get('nome')?.invalid && form.get('nome')?.touched"
+        class="erro-msg"
+      >
+        O campo Nome é obrigatório.
       </div>
+    </div>
 
-      <label>
-        Endereço Completo:
-        <input type="text" formControlName="enderecoCompleto" />
+    <div class="form-group">
+      <label for="periodo">Período:<span class="obrigatorio">*</span></label>
+      <select id="periodo" formControlName="periodo" class="form-select">
+        <option value="" disabled>-- Selecione o período --</option>
+        <option value="MANHA">MANHÃ</option>
+        <option value="TARDE">TARDE</option>
+        <option value="NOITE">NOITE</option>
+      </select>
+      <div
+        *ngIf="form.get('periodo')?.invalid && form.get('periodo')?.touched"
+        class="erro-msg"
+      >
+        O campo Período é obrigatório.<br />
+        Escolha uma das opções: MANHÃ, TARDE ou NOITE.
+      </div>
+    </div>
+
+    <!-- 3) Carga Horária Diária -->
+    <div class="form-group">
+      <label for="cargaHorariaDiaria">
+        Carga Horária (h):<span class="obrigatorio">*</span>
       </label>
+      <input
+        id="cargaHorariaDiaria"
+        type="number"
+        min="1"
+        formControlName="cargaHorariaDiaria"
+        class="form-input"
+        placeholder="Ex: 6"
+      />
+      <div
+        *ngIf="
+          form.get('cargaHorariaDiaria')?.invalid &&
+          form.get('cargaHorariaDiaria')?.touched
+        "
+        class="erro-msg"
+      >
+        Informe a carga horária (número mínimo: 1).
+      </div>
+    </div>
 
-      <label>
-        Possui certificação?
-        <select formControlName="possuiCertificacao">
-          <option value="" disabled>Selecione</option>
-          <option [value]="true">Sim</option>
-          <option [value]="false">Não</option>
-        </select>
+    <!-- 4) Endereço Completo -->
+    <div class="form-group">
+      <label for="enderecoCompleto">
+        Endereço Completo:<span class="obrigatorio">*</span>
       </label>
+      <input
+        id="enderecoCompleto"
+        type="text"
+        formControlName="enderecoCompleto"
+        class="form-input"
+        placeholder="Ex: Rua das Ostras, 123 – Rio de Janeiro, RJ"
+      />
+      <div
+        *ngIf="
+          form.get('enderecoCompleto')?.invalid &&
+          form.get('enderecoCompleto')?.touched
+        "
+        class="erro-msg"
+      >
+        O campo Endereço Completo é obrigatório.
+      </div>
+    </div>
 
-      <label class="textarea">
-        Descrição da Atividade:
-        <textarea formControlName="descricao"></textarea>
+    <!-- 5) Possui Certificação? -->
+    <div class="form-group checkbox-group">
+      <input
+        id="possuiCertificacao"
+        type="checkbox"
+        formControlName="possuiCertificacao"
+        class="form-checkbox"
+      />
+      <label for="possuiCertificacao">Possui Certificação?</label>
+      <div
+        *ngIf="
+          form.get('possuiCertificacao')?.invalid &&
+          form.get('possuiCertificacao')?.touched
+        "
+        class="erro-msg"
+      >
+        Informe se possui certificação.
+      </div>
+    </div>
+
+    <!-- 6) Descrição -->
+    <div class="form-group">
+      <label for="descricao"
+        >Descrição:<span class="obrigatorio">*</span></label
+      >
+      <textarea
+        id="descricao"
+        rows="3"
+        formControlName="descricao"
+        class="form-textarea"
+        placeholder="Ex: Inspeção da saúde dos recifes..."
+      ></textarea>
+      <div
+        *ngIf="form.get('descricao')?.invalid && form.get('descricao')?.touched"
+        class="erro-msg"
+      >
+        A Descrição é obrigatória.
+      </div>
+    </div>
+
+    <!-- 7) Status da Atividade -->
+    <div class="form-group">
+      <label for="statusAtividade">
+        Status da Atividade:<span class="obrigatorio">*</span>
       </label>
+      <select
+        id="statusAtividade"
+        formControlName="statusAtividade"
+        class="form-select"
+      >
+        <option value="" disabled>-- Selecione --</option>
+        <option value="ANDAMENTO">ANDAMENTO</option>
+        <option value="ENCERRADA">ENCERRADA</option>
+        <option value="CONGELADA">CONGELADA</option>
+      </select>
+      <div
+        *ngIf="
+          form.get('statusAtividade')?.invalid &&
+          form.get('statusAtividade')?.touched
+        "
+        class="erro-msg"
+      >
+        Selecione um status (ANDAMENTO, ENCERRADA ou CONGELADA).
+      </div>
+    </div>
 
-      <button type="submit" class="btn-submit" [disabled]="form.invalid">
-        Cadastrar
-      </button>
-    </form>
+    <!-- 8) Data da Atividade -->
+    <div class="form-group">
+      <label for="dataAtividade">
+        Data da Atividade:<span class="obrigatorio">*</span>
+      </label>
+      <input
+        id="dataAtividade"
+        type="datetime-local"
+        formControlName="dataAtividade"
+        class="form-input"
+      />
+      <div
+        *ngIf="
+          form.get('dataAtividade')?.invalid &&
+          form.get('dataAtividade')?.touched
+        "
+        class="erro-msg"
+      >
+        Informe data e hora (formato: AAAA-MM-DDThh:mm).
+      </div>
+    </div>
 
-    <div class="image">
-      <img src="assets/atividade.jpg" alt="Atividade ONG" />
+    <!-- 9) ID Tag -->
+    <div class="form-group">
+      <label for="idTag">ID Tag:<span class="obrigatorio">*</span></label>
+      <input
+        id="idTag"
+        type="number"
+        min="1"
+        formControlName="idTag"
+        class="form-input"
+        placeholder="Ex: 3"
+      />
+      <div
+        *ngIf="form.get('idTag')?.invalid && form.get('idTag')?.touched"
+        class="erro-msg"
+      >
+        Informe um ID Tag válido (número mínimo: 1).
+      </div>
+    </div>
+
+    <!-- Botão de Envio -->
+    <button type="submit" [disabled]="form.invalid" class="btn-cadastrar">
+      Cadastrar
+    </button>
+  </form>
+
+  <!-- Modal/Feedback de Sucesso ou Erro -->
+  <div *ngIf="showModal" class="modal-feedback">
+    <div class="modal-content" [ngClass]="{ success: success, error: erro }">
+      <p *ngIf="msg" class="msg-sucesso">{{ msg }}</p>
+      <p *ngIf="erro" class="msg-erro">{{ erro }}</p>
+      <button (click)="showModal = false" class="btn-fechar">Fechar</button>
     </div>
   </div>
-</section>
+</div>
 
 <app-footer></app-footer>

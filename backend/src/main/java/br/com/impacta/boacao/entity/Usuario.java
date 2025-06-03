@@ -15,11 +15,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
 /**
- * Entidade base para os usuários do sistema.
- * Esta classe será utilizada como superclasse para entidades específicas como
- * Voluntário e ONG, compartilhando atributos comuns.
- * Além disso, será utilizada no processo de autenticação com OAuth2,
- * integrando-se à configuração do Spring Security.
+ * Entidade base para os usuários do sistema. Esta classe será utilizada como
+ * superclasse para entidades específicas como Voluntário e ONG, compartilhando
+ * atributos comuns. Além disso, será utilizada no processo de autenticação com
+ * OAuth2, integrando-se à configuração do Spring Security.
  */
 @Entity
 public class Usuario implements UserDetails {
@@ -109,13 +108,13 @@ public class Usuario implements UserDetails {
     }
 
     /**
-     * Verifica se o usuário possui o papel (role) especificado.
-     * Este método verifica se o papel do usuário corresponde ao papel fornecido
-     * como parâmetro.
-     * 
+     * Verifica se o usuário possui o papel (role) especificado. Este método
+     * verifica se o papel do usuário corresponde ao papel fornecido como
+     * parâmetro.
+     *
      * @param roleName o nome do papel a ser verificado (ex: "ROLE_VOLUNTARIO")
-     * @return true se o usuário possui o papel informado, ou false se o papel não
-     *         for encontrado
+     * @return true se o usuário possui o papel informado, ou false se o papel
+     * não for encontrado
      */
     public boolean hasRole(String roleName) {
         if (role != null && roleName.equals(role.getAuthority())) {
@@ -134,15 +133,19 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         Usuario other = (Usuario) obj;
-        if (id != other.id)
+        if (id != other.id) {
             return false;
+        }
         return true;
     }
 }

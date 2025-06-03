@@ -1,126 +1,181 @@
-/* Container geral */
-.container {
-  padding: 2rem;
+/* Container que engloba toda a página de Gestão */
+.container-gestao-atividades {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  background-color: #f0f2f5; /* fundo claro */
+}
 
-  .titulo {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    font-size: 1.75rem;
-    color: #212121;
-  }
+/* Título principal */
+.titulo-pagina {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 24px;
+  color: #333;
+}
 
-  .cards {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    justify-content: center;
+/* Wrapper que organiza os cards em grid responsiva */
+.cards-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
 
-    .card {
-      background: #fff;
-      border-radius: 10px;
-      padding: 1.25rem;
-      width: 300px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-      transition: transform 0.2s, box-shadow 0.2s;
-      font-size: 0.875rem;
-      color: #333;
+/* Cada card de atividade */
+.card-atividade {
+  position: relative;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: background-color 0.2s ease;
+}
 
-      &:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-      }
+.card-atividade.card-congelada {
+  background-color: #e0e0e0; /* cinza claro quando congelada */
+}
 
-      .card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 0.75rem;
+/* Botão “X” no canto superior direito do card */
+.btn-close-card {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #999;
+}
+.btn-close-card:hover {
+  color: #333;
+}
 
-        h3 {
-          margin: 0;
-          font-size: 1.1rem;
-        }
+/* Título dentro do card */
+.card-titulo {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+  color: #222;
+}
 
-        button {
-          background: transparent;
-          border: none;
-          font-size: 1rem;
-          cursor: pointer;
-          color: #666;
-          transition: color 0.2s;
-          &:hover {
-            color: #000;
-          }
-        }
-      }
+/* Cada linha de informação (ícone + texto) */
+.info-linha {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  color: #555;
+  font-size: 0.95rem;
+}
 
-      p {
-        margin: 0.4rem 0;
-        line-height: 1.3;
-      }
+.info-linha .icone {
+  margin-right: 6px;
+  color: #444;
+}
 
-      .acoes {
-        display: flex;
-        gap: 0.5rem;
-        margin-top: 1rem;
+/* Descrição do card */
+.card-descricao {
+  flex-grow: 1;
+  margin: 12px 0;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  color: #444;
+}
 
-        /* Editar / Congelar / Buscar Voluntários */
-        .btn-acao {
-          background-color: #1c1c4b;     /* cor do footer */
-          color: #fff;
-          border: 1px solid #1c1c4b;
-          border-radius: 20px;
-          padding: 0.4rem 0.9rem;
-          font-size: 0.8rem;
-          cursor: pointer;
-          transition: background-color 0.2s, color 0.2s;
+/* Os diferentes estados do status (cores) */
+.status-andamento {
+  color: #007bff;   /* azul */
+}
+.status-encerrada {
+  color: #28a745;   /* verde */
+}
+.status-congelada {
+  color: #dc3545;   /* vermelho */
+}
 
-          &:hover {
-            background-color: #fff;
-            color: #1c1c4b;
-          }
-        }
+/* Área dos botões de ação */
+.botoes-acao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
 
-        /* Reabrir atividade */
-        .btn-reativar {
-          background-color: #ff8a5b;     /* laranja suave */
-          color: #fff;
-          border: 1px solid #ff8a5b;
-          border-radius: 20px;
-          padding: 0.4rem 0.9rem;
-          font-size: 0.8rem;
-          cursor: pointer;
-          transition: background-color 0.2s;
+/* Estilo base para todos os botões internos do card */
+.btn-acao {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #fff;
+  transition: background-color 0.2s ease;
+}
 
-          &:hover {
-            background-color: #e5794a;
-          }
-        }
-      }
-    }
-  }
+/* Cores específicas para cada ação */
+.btn-editar {
+  background-color: #343a40; /* cinza escuro */
+}
+.btn-editar:hover {
+  background-color: #23272b;
+}
 
-  /* Botão “Nova atividade” */
-  .nova-atividade {
-    display: flex;
-    justify-content: center;
-    margin-top: 2rem;
+.btn-congelar {
+  background-color: #dc3545; /* vermelho */
+}
+.btn-congelar:hover {
+  background-color: #c82333;
+}
 
-    button {
-      background-color: #fff;
-      color: #1c1c4b;
-      border: 2px solid #1c1c4b;      /* cor do footer */
-      border-radius: 9999px;          /* pill-shape */
-      padding: 0.75rem 2.5rem;
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background-color 0.2s, color 0.2s;
+.btn-reabrir {
+  background-color: #28a745; /* verde */
+}
+.btn-reabrir:hover {
+  background-color: #218838;
+}
 
-      &:hover {
-        background-color: #1c1c4b;
-        color: #fff;
-      }
-    }
-  }
+.btn-buscar-voluntarios {
+  background-color: #17a2b8; /* azul claro */
+}
+.btn-buscar-voluntarios:hover {
+  background-color: #138496;
+}
+
+.btn-historico-voluntarios {
+  background-color: #6c757d; /* cinza médio */
+}
+.btn-historico-voluntarios:hover {
+  background-color: #5a6268;
+}
+
+/* Botão “Nova Atividade” */
+.wrapper-nova-atividade {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.btn-nova-atividade {
+  padding: 10px 30px;
+  font-size: 1rem;
+  background-color: transparent;
+  border: 2px solid #343a40;
+  border-radius: 25px;
+  color: #343a40;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+.btn-nova-atividade:hover {
+  background-color: #343a40;
+  color: #fff;
+}
+
+/* Mensagem quando não há atividades */
+.nenhuma-atividade {
+  text-align: center;
+  color: #777;
+  font-style: italic;
+  padding: 20px;
 }

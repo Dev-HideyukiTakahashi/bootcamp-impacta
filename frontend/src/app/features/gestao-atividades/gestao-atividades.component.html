@@ -1,75 +1,95 @@
 <app-header></app-header>
 
-<section class="container">
-  <h2 class="titulo">Gestão de Atividades</h2>
+<div class="container-gestao-atividades">
+  <h2 class="titulo-pagina">Gestão de Atividades</h2>
 
-  <div class="cards">
-    <ng-container *ngFor="let atividade of atividades">
-      <div class="card" [ngClass]="atividade.statusAtvidade.toLowerCase()">
-        <div class="card-header">
-          <h3>{{ atividade.nome }}</h3>
-        </div>
+  <div class="cards-wrapper">
+    <div
+      *ngFor="let atividade of atividades"
+      class="card-atividade"
+      [ngClass]="{ 'card-congelada': atividade.statusAtividade === 'CONGELADA' }"
+    >
+      <!-- "X" para fechar (se quiser manter) -->
+      <button class="btn-close-card" title="Fechar">✕</button>
 
-        <p>👥 Voluntários: {{ atividade.voluntarios }}</p>
-        <p>⏰ {{ atividade.cargaHorariaDiaria }} - {{ atividade.periodo }}</p>
-        <p>
-          📅 {{ atividade.criadoEm | date:'dd/MM/yyyy' }} –
-          {{
-            atividade.statusAtvidade === 'ANDAMENTO'
-              ? 'Em andamento'
-              : atividade.statusAtvidade === 'CONGELADA'
-                ? 'Atividade Congelada'
-                : 'Encerrada'
-          }}
-        </p>
-        <p>{{ atividade.descricao }}</p>
+      <h3 class="card-titulo">{{ atividade.nome }}</h3>
 
-        <div class="acoes">
-          <!-- botões escuros com hover invertido -->
-          <button
-            class="btn-acao"
-            *ngIf="atividade.statusAtvidade === 'ANDAMENTO'"
+      <!-- Voluntários (aqui usei placeholder voluntariosCount, se existir em suas atividades) -->
+      <div class="info-linha">
+        <span class="icone"><i class="fa fa-user-friends"></i></span>
+        <span>Voluntários: {{ atividade.voluntariosCount ?? 0 }}</span>
+      </div>
+
+      <!-- Carga horária e período -->
+      <div class="info-linha">
+        <span class="icone"><i class="fa fa-clock"></i></span>
+        <span>{{ atividade.cargaHorariaDiaria }} horas por dia – {{ atividade.periodo }}</span>
+      </div>
+
+      <!-- Data e status -->
+      <div class="info-linha">
+        <span class="icone"><i class="fa fa-calendar-alt"></i></span>
+        <span>
+          {{ atividade.dataAtividade | date: 'dd/MM/yyyy' }} –
+          <strong
+            [ngClass]="{
+              'status-andamento': atividade.statusAtividade === 'ANDAMENTO',
+              'status-encerrada': atividade.statusAtividade === 'ENCERRADA',
+              'status-congelada': atividade.statusAtividade === 'CONGELADA'
+            }"
           >
+            {{ labelStatus(atividade.statusAtividade) }}
+          </strong>
+        </span>
+      </div>
+
+      <!-- Descrição -->
+      <p class="card-descricao">
+        {{ atividade.descricao }}
+      </p>
+
+      <!-- ===== BOTÕES DE AÇÃO: exibidos conforme statusAtividade ===== -->
+      <div class="botoes-acao">
+        <!-- Se estiver em ANDAMENTO: Editar, Congelar e Buscar Voluntários -->
+        <ng-container *ngIf="atividade.statusAtividade === 'ANDAMENTO'">
+          <button (click)="editarAtividade(atividade)" class="btn-acao btn-editar">
             Editar
           </button>
-          <button
-            class="btn-acao"
-            *ngIf="atividade.statusAtvidade === 'ANDAMENTO'"
-          >
+          <button (click)="congelarAtividade(atividade)" class="btn-acao btn-congelar">
             Congelar
           </button>
-          <button
-            class="btn-acao"
-            *ngIf="atividade.statusAtvidade === 'ANDAMENTO'"
-          >
+          <button (click)="buscarVoluntarios(atividade)" class="btn-acao btn-buscar-voluntarios">
             Buscar Voluntários
           </button>
+        </ng-container>
 
-          <!-- histórico só para encerrada -->
-          <button
-            class="btn-acao"
-            *ngIf="atividade.statusAtvidade === 'ENCERRADA'"
-          >
+        <!-- Se estiver CONGELADA: apenas Reabrir -->
+        <ng-container *ngIf="atividade.statusAtividade === 'CONGELADA'">
+          <button (click)="reabrirAtividade(atividade)" class="btn-acao btn-reabrir">
+            Reabrir Atividade
+          </button>
+        </ng-container>
+
+        <!-- Se estiver ENCERRADA: apenas Histórico de Voluntários -->
+        <ng-container *ngIf="atividade.statusAtividade === 'ENCERRADA'">
+          <button (click)="historicoVoluntarios(atividade)" class="btn-acao btn-historico-voluntarios">
             Histórico de Voluntários
           </button>
-
-          <!-- reativar com estilo laranja -->
-          <button
-            class="btn-reativar"
-            *ngIf="atividade.statusAtvidade === 'CONGELADA'"
-          >
-            Reabrir atividade
-          </button>
-        </div>
+        </ng-container>
       </div>
-    </ng-container>
+      <!-- ================================================================= -->
+    </div>
+
+    <!-- Caso não haja nenhuma atividade -->
+    <div *ngIf="atividades.length === 0" class="nenhuma-atividade">
+      Nenhuma atividade cadastrada.
+    </div>
   </div>
 
-  <div class="nova-atividade">
-    <button [routerLink]="'/cadastro-atividade'">
-      Cadastrar Nova Atividade
-    </button>
+  <!-- Botão “Nova Atividade” centralizado abaixo dos cards -->
+  <div class="wrapper-nova-atividade">
+    <button class="btn-nova-atividade" (click)="novaAtividade()">Nova Atividade</button>
   </div>
-</section>
+</div>
 
 <app-footer></app-footer>

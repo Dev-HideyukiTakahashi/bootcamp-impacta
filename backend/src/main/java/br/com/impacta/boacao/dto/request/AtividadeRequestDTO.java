@@ -1,12 +1,13 @@
 package br.com.impacta.boacao.dto.request;
 
-import br.com.impacta.boacao.entity.enums.PeriodoAtividade;
-import br.com.impacta.boacao.entity.enums.StatusAtividade;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
+
+import br.com.impacta.boacao.entity.enums.PeriodoAtividade;
+import br.com.impacta.boacao.entity.enums.StatusAtividade;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class AtividadeRequestDTO {
 
@@ -31,14 +32,15 @@ public class AtividadeRequestDTO {
     private String descricao;
 
     private StatusAtividade statusAtividade;
-    private LocalDateTime criadoEm;
 
-    public AtividadeRequestDTO() {
-    }
+    @NotNull(message = "A data da atividade é obrigatória.")
+    @FutureOrPresent(message = "Data da atividade não pode ser no passado.")
+    private LocalDateTime dataAtividade;
 
-    public AtividadeRequestDTO(Integer id, String nome, PeriodoAtividade periodo, String cargaHorariaDiaria,
-                                   String enderecoCompleto, Boolean possuiCertificacao, String descricao,
-                                   StatusAtividade statusAtividade, LocalDateTime criadoEm) {
+    private Integer idTag;
+
+    // Construtor padrão necessário para o Jacks
+    public AtividadeRequestDTO(Integer id, String nome, PeriodoAtividade periodo, String cargaHorariaDiaria, String enderecoCompleto, Boolean possuiCertificacao, String descricao, StatusAtividade statusAtividade, LocalDateTime dataAtividade, Integer idOng, Integer idTag) {
         this.id = id;
         this.nome = nome;
         this.periodo = periodo;
@@ -47,7 +49,27 @@ public class AtividadeRequestDTO {
         this.possuiCertificacao = possuiCertificacao;
         this.descricao = descricao;
         this.statusAtividade = statusAtividade;
-        this.criadoEm = criadoEm;
+        this.dataAtividade = dataAtividade;
+        // this.idOng = idOng;
+        this.idTag = idTag;
+    }
+
+    public AtividadeRequestDTO() {
+    }
+
+    public AtividadeRequestDTO(Integer id, String nome, PeriodoAtividade periodo, String cargaHorariaDiaria,
+            String enderecoCompleto, Boolean possuiCertificacao, String descricao,
+            StatusAtividade statusAtividade, LocalDateTime dataAtividade, Integer idOng) {
+        this.id = id;
+        this.nome = nome;
+        this.periodo = periodo;
+        this.cargaHorariaDiaria = cargaHorariaDiaria;
+        this.enderecoCompleto = enderecoCompleto;
+        this.possuiCertificacao = possuiCertificacao;
+        this.descricao = descricao;
+        this.statusAtividade = statusAtividade;
+        this.dataAtividade = dataAtividade;
+        //this.idOng = idOng; // Inicializa com null, será setado posteriormente
     }
 
     public Integer getId() {
@@ -114,17 +136,27 @@ public class AtividadeRequestDTO {
         this.statusAtividade = statusAtividade;
     }
 
-    public LocalDateTime getCriadoEm() {
-        return criadoEm;
+    public LocalDateTime getDataAtividade() {
+        return dataAtividade;
     }
 
-    public void setCriadoEm(LocalDateTime criadoEm) {
-        this.criadoEm = criadoEm;
+    public void setDataAtividade(LocalDateTime dataAtividade) {
+        this.dataAtividade = dataAtividade;
+    }
+
+    public Integer getIdTag() {
+        return idTag;
+    }
+
+    public void setIdTag(Integer idTag) {
+        this.idTag = idTag;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         AtividadeRequestDTO that = (AtividadeRequestDTO) o;
         return Objects.equals(id, that.id);
     }
