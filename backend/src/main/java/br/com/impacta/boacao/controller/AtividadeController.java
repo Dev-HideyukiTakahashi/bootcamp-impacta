@@ -1,12 +1,13 @@
 package br.com.impacta.boacao.controller;
 
-
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.impacta.boacao.dto.request.AtividadeRequestDTO;
 import br.com.impacta.boacao.dto.response.AtividadeResponseDTO;
+import br.com.impacta.boacao.dto.response.AtividadeStatusResponseDTO;
+import br.com.impacta.boacao.entity.enums.StatusAtividade;
 import br.com.impacta.boacao.service.AtividadeService;
 import jakarta.validation.Valid;
 
@@ -38,15 +41,58 @@ public class AtividadeController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * PATCH /api/atividades/{id}/status/{novoStatus}
+     *
+     * Exemplo de chamada no Postman: PATCH
+     * http://localhost:8080/api/atividades/12/status/CONGELADA
+     *
+     * Isso fará com que o service valide e altere apenas o campo
+     * `statusAtividade` na entidade.
+     *
+     * @param id o ID da atividade que queremos atualizar
+     * @param novoStatus o novo status (string que bate com o enum
+     * StatusAtividade)
+     * @return 200 OK + a própria entidade Atividade (com status alterado) em
+     * caso de sucesso, 404 Not Found se o ID não existir, 409 Conflict se a
+     * transição de status não for permitida, 400 Bad Request se `novoStatus`
+     * não for um valor válido do enum.
+     */
+    @PatchMapping("/{id}/status/{novoStatus}")
+    public ResponseEntity<?> atualizarStatus(
+            @PathVariable Integer id,
+            @PathVariable String novoStatus
+    ) {
+        StatusAtividade statusEnum;
 
-    /*   @PutMapping(path = "/{id}/status")
-    public ResponseEntity<AtividadeStatusResponseDTO> atualizarStatus(@PathVariable Integer id,
-                                                                      @Valid @RequestBody AtividadeStatusRequestDTO dto){
-        logger.info("Ong começando atualização de status da atividade");
+        // 1) Converte a string para o enum (pode lançar IllegalArgumentException)
+        try {
+            statusEnum = StatusAtividade.valueOf(novoStatus);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Status inválido. Use: ANDAMENTO ou CONGELADA.");
+        }
 
-        AtividadeStatusResponseDTO response = AtividadeServiceImpl.atualizarStatus(id, dto);
-        return ResponseEntity.ok(response);
-    }*/
+        // 2) Chama o service que já faz a validação de transição e salva no banco
+        try {
+            AtividadeStatusResponseDTO dto = atividadeService.atualizarStatus(id, statusEnum);
+            return ResponseEntity.ok(dto);
+
+        } catch (IllegalArgumentException ex) {
+            // Provém de: “Atividade não encontrada com id: X”
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Atividade não encontrada com id: " + id);
+
+        } catch (IllegalStateException ex) {
+            // Provém de: “Transição de status não permitida: Y → Z”
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body("Transição não permitida: " + ex.getMessage());
+        }
+    }
+
     @PutMapping(path = "/{id}")
     public ResponseEntity<AtividadeResponseDTO> atualizar(@PathVariable Integer id,
             @Valid @RequestBody AtividadeRequestDTO dto) {

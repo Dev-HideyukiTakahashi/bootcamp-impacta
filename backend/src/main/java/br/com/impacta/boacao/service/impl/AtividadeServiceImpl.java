@@ -3,13 +3,15 @@ package br.com.impacta.boacao.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,20 +19,18 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.impacta.boacao.dto.request.AtividadeRequestDTO;
 import br.com.impacta.boacao.dto.response.AtividadeResponseDTO;
+import br.com.impacta.boacao.dto.response.AtividadeStatusResponseDTO;
 import br.com.impacta.boacao.entity.Atividade;
 import br.com.impacta.boacao.entity.Ong;
 import br.com.impacta.boacao.entity.Tag;
 import br.com.impacta.boacao.entity.Usuario;
+import br.com.impacta.boacao.entity.enums.StatusAtividade;
 import br.com.impacta.boacao.exception.RecursoNaoEncontradoException;
 import br.com.impacta.boacao.mapper.AtividadeMapper;
 import br.com.impacta.boacao.repository.AtividadeRepository;
 import br.com.impacta.boacao.repository.OngRepository;
 import br.com.impacta.boacao.repository.TagRepository;
 import br.com.impacta.boacao.repository.UsuarioRepository;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Service
 public class AtividadeServiceImpl implements br.com.impacta.boacao.service.AtividadeService {
@@ -200,4 +200,55 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
         log.debug("Entidade atualizada mapeada para DTO de resposta: {}", resp);
         return resp;
     }
+
+    /**
+     * Atualiza somente o campo statusAtividade de uma Atividade. Permite apenas
+     * ANDAMENTO → CONGELADA ou CONGELADA → ANDAMENTO. Caso contrário, lança
+     * IllegalStateException.
+     */
+    @Override
+    @Transactional
+    public AtividadeStatusResponseDTO atualizarStatus(Integer id, StatusAtividade novoStatus) {
+        // 1) Busca a atividade pelo ID
+        Optional<Atividade> opt = atividadeRepository.findById(id);
+        if (opt.isEmpty()) {
+            throw new IllegalArgumentException("Atividade não encontrada com id: " + id);
+        }
+
+        Integer idOng = getIdUsuarioLogado();
+        log.info("ID da ONG logada: {}", idOng);
+
+        // Verifica se a atividade existe e pertence à ONG logada
+        Atividade existing = atividadeRepository
+                .findByIdAndOngId(id, idOng)
+                .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Atividade não encontrada."
+        ));
+
+        Atividade atividade = opt.get();
+        StatusAtividade atual = atividade.getStatusAtividade();
+
+        // 2) Valida apenas ANDAMENTO→CONGELADA e CONGELADA→ANDAMENTO
+        if (
+                (atual == StatusAtividade.ANDAMENTO && novoStatus == StatusAtividade.CONGELADA) 
+                || (atual == StatusAtividade.CONGELADA && novoStatus == StatusAtividade.ANDAMENTO)
+                || atual == StatusAtividade.ANDAMENTO && novoStatus == StatusAtividade.ENCERRADA) {
+            atividade.setStatusAtividade(novoStatus);
+        } 
+        else {
+            throw new IllegalStateException(
+                "Transição de status não permitida: " 
+                + atual + " → " + novoStatus
+            );
+        }
+
+        // 3) Salva a mudança no repositório
+        Atividade atualizado = atividadeRepository.save(atividade);
+
+        // 4) Converte a entidade salva para um DTO que contenha apenas {id, statusAtividade}
+        return AtividadeMapper.toStatusResponseDTO(atualizado);
+    }
 }
+
+

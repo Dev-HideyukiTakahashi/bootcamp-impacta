@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.impacta.boacao.entity.Atividade;
+import br.com.impacta.boacao.entity.enums.StatusAtividade;
 
 public interface AtividadeRepository extends JpaRepository<Atividade, Integer> {
 
@@ -16,6 +17,10 @@ public interface AtividadeRepository extends JpaRepository<Atividade, Integer> {
     Optional<Atividade> findByIdAndOngId(Integer id, Integer ongId);
 
     List<Atividade> findAll_ByOngId(Integer ongId);
+
+    // PARA ACHAR UMA ATIVIDADE PELO ID
+    Optional<Atividade> findById(Integer id);
+    List<Atividade> findByStatusAtividade(StatusAtividade status);
 
 }
 /* 

@@ -5,14 +5,29 @@ import java.util.List;
 
 import br.com.impacta.boacao.dto.request.AtividadeRequestDTO;
 import br.com.impacta.boacao.dto.response.AtividadeResponseDTO;
+import br.com.impacta.boacao.dto.response.AtividadeStatusResponseDTO;
+import br.com.impacta.boacao.entity.enums.StatusAtividade;
+
 public interface AtividadeService {
 
-    /** Cadastra uma nova atividade associada à ONG logada */
+    /**
+     * Cadastra uma nova atividade associada à ONG logada
+     */
     AtividadeResponseDTO cadastrar(AtividadeRequestDTO dto);
 
     //Lista todas as atividades da ONG logada, paginadas */
     List<AtividadeResponseDTO> buscarTodas();
 
-    /** Atualiza a atividade (somente se pertencer à ONG logada) */
+    /**
+     * Atualiza a atividade (somente se pertencer à ONG logada)
+     */
     AtividadeResponseDTO atualizar(Integer id, AtividadeRequestDTO dto);
+
+    /**
+     * Atualiza apenas o campo statusAtividade de uma Atividade,
+     * retornando somente { id, statusAtividade }.
+     * Permite apenas ANDAMENTO→CONGELADA e CONGELADA→ANDAMENTO.
+     */
+    AtividadeStatusResponseDTO atualizarStatus(Integer id, StatusAtividade novoStatus);
+
 }

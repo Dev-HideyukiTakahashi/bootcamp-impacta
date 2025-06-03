@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import br.com.impacta.boacao.entity.enums.PeriodoAtividade;
 import br.com.impacta.boacao.entity.enums.StatusAtividade;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -30,8 +31,11 @@ public class Atividade {
     private String cargaHorariaDiaria;
     private String enderecoCompleto;
     private Boolean possuiCertificacao;
+
     @Enumerated(EnumType.STRING)
+    @Column(name = "status_atividade", nullable = false, length = 20)
     private StatusAtividade statusAtividade;
+    
     private LocalDateTime criadoEm;
     private LocalDateTime dataAtividade;
     private String titulo;
