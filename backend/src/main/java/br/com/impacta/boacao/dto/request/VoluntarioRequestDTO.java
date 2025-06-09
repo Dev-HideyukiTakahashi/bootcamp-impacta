@@ -1,17 +1,32 @@
 package br.com.impacta.boacao.dto.request;
-import java.util.Date;
+import java.time.LocalDate;
 
-//import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+
+
 public class VoluntarioRequestDTO {
   
+  @NotBlank
   private String nomeCompleto;
+
+  @NotBlank
   private String cpf;
+
+  @NotBlank
   private String telefone;
-  private Date dataNascimento;
+
+  @NotNull
+  private LocalDate dataNascimento;
+
+  @NotBlank
   private String email;
+
+  @NotBlank
   private String senha;
 
-
+  @NotNull
+  private EnderecoRequestDTO endereco;
   
   public String getNomeCompleto() {
     return nomeCompleto;
@@ -37,11 +52,11 @@ public class VoluntarioRequestDTO {
     this.telefone = telefone;
   }
 
-  public Date getDataNascimento() {
+  public LocalDate getDataNascimento() {
     return dataNascimento;
   }
 
-  public void setDataNascimento(Date dataNascimento) {
+  public void setDataNascimento(LocalDate dataNascimento) {
     this.dataNascimento = dataNascimento;
   }
   
@@ -60,22 +75,30 @@ public class VoluntarioRequestDTO {
     this.senha = senha;
   }
   
+    public EnderecoRequestDTO getEndereco() {
+    return endereco;
+  }
+
+  public void setEndereco(EnderecoRequestDTO endereco) {
+    this.endereco = endereco;
+  }
+
   // Construtor completo
   public VoluntarioRequestDTO(
       String nomeCompleto,
       String cpf,
       String telefone,
-      Date dataNascimento,
+      LocalDate dataNascimento,
       String email,
-      String senha
-  ) {
+      String senha,
+      EnderecoRequestDTO endereco) {
     this.nomeCompleto = nomeCompleto;
     this.cpf = cpf;
     this.telefone = telefone;
     this.dataNascimento = dataNascimento;
     this.email = email;
     this.senha = senha;
+    this.endereco = endereco;
   }
-
 
 }

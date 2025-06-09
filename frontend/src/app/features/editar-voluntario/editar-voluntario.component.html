@@ -1,0 +1,122 @@
+<app-header/>
+
+<section class="perfil-completo">
+  <h2>Alterar Cadastro Voluntário</h2>
+
+  <form [formGroup]="perfilForm" (ngSubmit)="salvar()">
+    <div class="dados-fixos">
+      <p><strong>Nome Completo:</strong> {{ perfil?.nomeCompleto }}</p>
+      <p><strong>CPF:</strong> {{ formatarCPF(perfil?.cpf) }}</p>
+      <p><strong>Data de Nascimento:</strong> {{ perfil?.dataNascimento | date: 'dd/MM/yyyy' }}</p>
+      <p><strong>Email:</strong> {{ perfil?.email }}</p>
+    </div>
+
+    <label>
+      <strong>Telefone:</strong>
+      <input type="text" formControlName="telefone" class="input-m" mask="(00) 00000-0000"
+        [class.is-invalid]="perfilForm.get('telefone')?.invalid && perfilForm.get('telefone')?.touched" />
+      <div class="mensagem-erro" *ngIf="perfilForm.get('telefone')?.invalid && perfilForm.get('telefone')?.touched">
+        <span *ngIf="perfilForm.get('telefone')?.errors?.['required']">
+          Telefone é obrigatório.
+        </span>
+        <span *ngIf="perfilForm.get('telefone')?.errors?.['pattern']">
+          Formato inválido.
+        </span>
+      </div>
+    </label>
+
+
+    <label>
+      <strong>CEP:</strong>
+      <input
+        type="text"
+        formControlName="cep"
+        class="input-ms"
+        mask="00000-000"
+        (blur)="buscarEndereco()"
+        [class.is-invalid]="perfilForm.get('cep')?.invalid && perfilForm.get('cep')?.touched"/>
+      <div class="mensagem-erro" *ngIf="perfilForm.get('cep')?.invalid && perfilForm.get('cep')?.touched">
+        <span *ngIf="perfilForm.get('cep')?.errors?.['required']">CEP é obrigatório.</span>
+        <span *ngIf="perfilForm.get('cep')?.errors?.['pattern']">Formato de CEP inválido.</span>
+        <span *ngIf="perfilForm.get('cep')?.errors?.['cepInvalido']">CEP não encontrado.</span>
+      </div>
+    </label>
+
+    <div class="endereco">
+      <p><strong>País:</strong> {{ perfilForm.get('pais')?.value }}</p>
+      <p><strong>Estado:</strong> {{ perfilForm.get('estado')?.value }}</p>
+      <p><strong>Cidade:</strong> {{ perfilForm.get('cidade')?.value }}</p>
+      <p><strong>Bairro:</strong> {{ perfilForm.get('bairro')?.value }}</p>
+      <p><strong>Rua:</strong> {{ perfilForm.get('rua')?.value }}</p>
+    </div>
+
+    <label>
+      <strong>Número:</strong>
+      <input type="text" formControlName="numero" class="input-s" (keydown)="permitirSomenteNumeros($event)" />
+      <div class="mensagem-erro" *ngIf="perfilForm.get('numero')?.invalid && perfilForm.get('numero')?.touched">
+        <span *ngIf="perfilForm.get('numero')?.errors?.['required']">Número é obrigatório.</span>
+        <span *ngIf="perfilForm.get('numero')?.errors?.['pattern']">Deve conter apenas números.</span>
+      </div>
+    </label>
+
+    <div class="alterar-senha-opcoes">
+      <span><strong>Deseja alterar a senha?</strong></span>
+
+      <label>
+        <input type="radio" formControlName="alterarSenha" value="sim" />
+        Sim
+      </label>
+
+      <label>
+        <input type="radio" formControlName="alterarSenha" value="nao" />
+        Não
+      </label>
+    </div>
+
+    <div *ngIf="perfilForm.get('alterarSenha')?.value === 'sim'" class="nova-senha-campos">
+      <label>
+        Nova Senha
+        <input
+          type="password"
+          autocomplete="new-password"
+          formControlName="senha"
+          [class.is-invalid]="perfilForm.get('senha')?.invalid && perfilForm.get('senha')?.touched"
+        />
+        <div class="mensagem-erro" *ngIf="perfilForm.get('senha')?.invalid && perfilForm.get('senha')?.touched">
+          <span *ngIf="perfilForm.get('senha')?.errors?.['required']">Senha é obrigatória.</span>
+          <span *ngIf="perfilForm.get('senha')?.errors?.['minlength']">
+            A senha deve ter no mínimo 6 caracteres.
+          </span>
+        </div>
+      </label>
+
+      <label>
+        Confirmar Nova Senha
+        <input
+          type="password"
+          autocomplete="new-password"
+          formControlName="confirmarSenha"
+          [class.is-invalid]="perfilForm.errors?.['senhasDiferentes'] && perfilForm.get('confirmarSenha')?.touched"
+        />
+        <div class="mensagem-erro" *ngIf="perfilForm.get('confirmarSenha')?.touched">
+          <span *ngIf="perfilForm.get('confirmarSenha')?.errors?.['required']">
+            Confirmação de senha é obrigatória.
+          </span>
+          <span *ngIf="perfilForm.errors?.['senhasDiferentes']">
+            As senhas não coincidem.
+          </span>
+        </div>
+      </label>
+    </div>
+
+    <button type="submit" [disabled]="perfilForm.invalid || salvarDados">
+       Salvar Alterações
+    </button>
+  </form>
+</section>
+
+<app-footer/>
+
+<app-modal-mensagem
+  (fechado)="onModalFechado()">
+</app-modal-mensagem>

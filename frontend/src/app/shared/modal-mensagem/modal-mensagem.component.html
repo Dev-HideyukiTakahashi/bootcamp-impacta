@@ -1,0 +1,14 @@
+<div *ngIf="isAberto" class="modal-overlay">
+  <div class="modal-box">
+    <!-- X só aparece em caso de erro -->
+    <button *ngIf="!isSucesso" class="btn-x" (click)="fecharModal()">×</button>
+
+    <!-- Mensagem de sucesso -->
+    <h2 *ngIf="msg" style="color: rgb(40, 167, 69);">{{ msg }}</h2>
+    <!-- Mensagem de erro -->
+    <h2 *ngIf="erro" style="color: rgb(220, 53, 69);">{{ erro }}</h2>
+
+    <!-- OK só aparece em caso de erro -->
+    <button *ngIf="!isSucesso" class="btn-close" (click)="fecharModal()">OK</button>
+  </div>
+</div>

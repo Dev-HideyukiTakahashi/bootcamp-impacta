@@ -1,13 +1,12 @@
-<app-header/>
+<app-header />
 
 <div class="container">
   <h2>Cadastro de ONG</h2>
   <form [formGroup]="form" (ngSubmit)="submit()">
-
-    <label>Nome:
-      <input type="text" formControlName="nome"/>
-      <div class="mensagem-erro" *ngIf="form.get('nome')?.invalid && form.get('nome')?.touched">
-        <span *ngIf="form.get('nome')?.errors?.['required']">Nome é obrigatório.</span>
+    <label>Nome da Entidade:
+      <input type="text" formControlName="nomeOng" />
+      <div class="mensagem-erro" *ngIf="form.get('nomeOng')?.invalid && form.get('nomeOng')?.touched">
+        <span *ngIf="form.get('nomeOng')?.errors?.['required']">Nome é obrigatório.</span>
       </div>
     </label>
 
@@ -35,17 +34,44 @@
       </div>
     </label>
 
-    <label>CEP:
-      <input type="text" formControlName="cep" (blur)="buscarEndereco()" mask="00000-000" />
-      <div class="mensagem-erro" *ngIf="form.get('cep')?.invalid && form.get('cep')?.touched">
-        <span *ngIf="form.get('cep')?.errors?.['required']">CEP é obrigatório.</span>
-        <span *ngIf="form.get('cep')?.errors?.['pattern']">Formato de CEP inválido.</span>
-      </div>
-    </label>
+    <div class="linha-form">
+      <label class="metade">País:
+        <input type="text" formControlName="pais" readonly />
+      </label>
+      <label class="metade">CEP:
+        <input type="text" formControlName="cep" (blur)="buscarEndereco()" mask="00000-000" />
+        <div class="mensagem-erro" *ngIf="form.get('cep')?.invalid && form.get('cep')?.touched">
+          <span *ngIf="form.get('cep')?.errors?.['required']">CEP é obrigatório.</span>
+          <span *ngIf="form.get('cep')?.errors?.['pattern']">Formato inválido.</span>
+          <span *ngIf="form.get('cep')?.errors?.['cepInvalido']">Digite um CEP válido.</span>
+        </div>
+      </label>
+    </div>
 
-    <label>Endereço:
-      <input type="text" formControlName="endereco" readonly />
-    </label>
+     <div class="linha-form">
+      <label class="terco">Estado:
+        <input type="text" formControlName="estado" readonly />
+      </label>
+      <label class="terco">Cidade:
+        <input type="text" formControlName="cidade" readonly />
+      </label>
+      <label class="terco">Bairro:
+        <input type="text" formControlName="bairro" readonly />
+      </label>
+    </div>
+
+    <div class="linha-form">
+      <label class="grande">Rua:
+        <input type="text" formControlName="rua" readonly />
+      </label>
+      <label class="pequeno">Número:
+        <input type="text" inputmode="numeric" formControlName="numero" (keydown)="permitirSomenteNumeros($event)" />
+        <div class="mensagem-erro" *ngIf="form.get('numero')?.invalid && form.get('numero')?.touched">
+          <span *ngIf="form.get('numero')?.errors?.['required']">Número é obrigatório.</span>
+          <span *ngIf="form.get('numero')?.errors?.['pattern']">Deve conter apenas números.</span>
+        </div>
+      </label>
+    </div>
 
     <label>Senha:
       <input type="password" autocomplete="new-password" formControlName="senha" />
@@ -63,27 +89,17 @@
     </label>
 
     <button type="submit" [disabled]="form.invalid" class="btn-cadastrar">Cadastrar</button>
-
   </form>
 
   <div class="login-redirect">
-    <p>Já possui cadastro?<br> 
-      <button routerLink="/login">ENTRAR</button>
+    <p>Já possui cadastro?<br />
+      <a routerLink="/login" class="btn-link">ENTRAR</a>
     </p>
   </div>
 </div>
 
-<app-footer/>
+<app-footer />
 
-<!-- Modal de Sucesso/Erro -->
-<div *ngIf="showModal" class="modal-overlay">
-  <div class="modal-box">
- 
-    <h2 *ngIf="msg" style="color: green;">{{ msg }}</h2>
-    <h2 *ngIf="erro" style="color: black;">{{ erro }}</h2>
-
-    <button class="btn-x" *ngIf="erro" (click)="fecharModal()">x</button>
-    
-    <button type="button" class="btn-close" *ngIf="erro" (click)="fecharModal()">OK</button>
-  </div>
-</div>
+<app-modal-mensagem
+  (fechado)="onModalFechado()">
+</app-modal-mensagem>
