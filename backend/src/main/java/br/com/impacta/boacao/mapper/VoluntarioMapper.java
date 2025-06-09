@@ -17,8 +17,8 @@ public class VoluntarioMapper {
 
   public static VoluntarioResponseDTO toResponse(Voluntario v) {
     return new VoluntarioResponseDTO(
-        v.getId(),
-        v.getNomeCompleto()
+      v.getId(),
+      v.getNomeCompleto()
     );
   }
 }

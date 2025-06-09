@@ -21,7 +21,6 @@ public class VoluntarioResponseDTO {
     this.nomeCompleto = nomeCompleto;
   }
 
-
   public VoluntarioResponseDTO(String nomeCompleto){
     this.nomeCompleto = nomeCompleto;
   }

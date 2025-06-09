@@ -67,7 +67,7 @@
   </form>
 
   <div class="login-redirect">
-    <p>Já possui cadastro?<br> 
+    <p>Já possui cadastro?<br>
       <button routerLink="/login">ENTRAR</button>
     </p>
   </div>
@@ -78,12 +78,12 @@
 <!-- Modal de Sucesso/Erro -->
 <div *ngIf="showModal" class="modal-overlay">
   <div class="modal-box">
- 
+
     <h2 *ngIf="msg" style="color: green;">{{ msg }}</h2>
     <h2 *ngIf="erro" style="color: black;">{{ erro }}</h2>
 
     <button class="btn-x" *ngIf="erro" (click)="fecharModal()">x</button>
-    
+
     <button type="button" class="btn-close" *ngIf="erro" (click)="fecharModal()">OK</button>
   </div>
 </div>
