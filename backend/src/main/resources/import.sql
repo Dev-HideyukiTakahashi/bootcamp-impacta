@@ -65,12 +65,12 @@ INSERT INTO avaliacao (is_avaliado, estrelas, feedback, ong_id) VALUES (0, 0, ''
 INSERT INTO avaliacao (is_avaliado, estrelas, feedback, ong_id) VALUES (1, 3, 'Ajudinha Top!!', 3);
 
 -- Inserindo Histórico de Atividade
-INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura, avaliacao_id) VALUES (1, 1, '2024-04-01', 1, 'REALIZADO', 1);
-INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura, avaliacao_id) VALUES (1, 4, '2025-06-01', 0, 'APROVADO', 2);
-INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura) VALUES (2, 2, '2025-05-01', 0, 'APROVADO');
-INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura) VALUES (3, 3, '2024-05-05', 1, 'REALIZADO');
-INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura) VALUES (2, 5, '2024-07-01', 1, 'REALIZADO');
-INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura, avaliacao_id) VALUES (2, 1, '2024-04-01', 1, 'REALIZADO', 3);
+INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura, avaliacao_id, encerrado_em) VALUES (1, 1, '2024-04-01', 1, 'REALIZADO', 1, '2024-06-01');
+INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura, avaliacao_id, encerrado_em) VALUES (1, 4, '2025-06-01', 0, 'APROVADO', 2, '2024-09-01');
+INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura, encerrado_em) VALUES (2, 2, '2025-05-01', 0, 'APROVADO', null);
+INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura, encerrado_em) VALUES (3, 3, '2024-05-05', 1, 'REALIZADO',null);
+INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura, encerrado_em) VALUES (2, 5, '2024-07-01', 1, 'REALIZADO', null);
+INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura, avaliacao_id, encerrado_em) VALUES (2, 1, '2024-04-01', 1, 'REALIZADO', 3, '2024-06-01');
 
 
 

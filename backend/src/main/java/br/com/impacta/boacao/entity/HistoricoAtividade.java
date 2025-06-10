@@ -1,5 +1,6 @@
 package br.com.impacta.boacao.entity;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
@@ -21,6 +22,7 @@ public class HistoricoAtividade {
     private Integer id;
     private Date dataInscricao;
     private boolean certificado;
+    private LocalDate encerradoEm;
 
     @Enumerated(EnumType.STRING)
     private StatusCandidatura statusCandidatura;
@@ -37,11 +39,12 @@ public class HistoricoAtividade {
     public HistoricoAtividade() {
     }
 
-    public HistoricoAtividade(Integer id, Date dataInscricao, boolean certificado, StatusCandidatura statusCandidatura,
-            Avaliacao avaliacao, Voluntario voluntario, Atividade atividade) {
+    public HistoricoAtividade(Integer id, Date dataInscricao, boolean certificado, LocalDate encerradoEm,
+            StatusCandidatura statusCandidatura, Avaliacao avaliacao, Voluntario voluntario, Atividade atividade) {
         this.id = id;
         this.dataInscricao = dataInscricao;
         this.certificado = certificado;
+        this.encerradoEm = encerradoEm;
         this.statusCandidatura = statusCandidatura;
         this.avaliacao = avaliacao;
         this.voluntario = voluntario;
@@ -104,6 +107,14 @@ public class HistoricoAtividade {
         this.avaliacao = avaliacao;
     }
 
+    public LocalDate getEncerradoEm() {
+        return encerradoEm;
+    }
+
+    public void setEncerradoEm(LocalDate encerradoEm) {
+        this.encerradoEm = encerradoEm;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass())
@@ -116,4 +127,5 @@ public class HistoricoAtividade {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
 }
