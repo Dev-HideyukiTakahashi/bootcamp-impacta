@@ -1,10 +1,17 @@
 package br.com.impacta.boacao.entity;
 
-import br.com.impacta.boacao.entity.enums.StatusCandidatura;
-import jakarta.persistence.*;
-
 import java.util.Date;
 import java.util.Objects;
+
+import br.com.impacta.boacao.entity.enums.StatusCandidatura;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class HistoricoAtividade {
@@ -18,6 +25,9 @@ public class HistoricoAtividade {
     @Enumerated(EnumType.STRING)
     private StatusCandidatura statusCandidatura;
 
+    @OneToOne
+    private Avaliacao avaliacao;
+
     @ManyToOne
     private Voluntario voluntario;
 
@@ -27,11 +37,13 @@ public class HistoricoAtividade {
     public HistoricoAtividade() {
     }
 
-    public HistoricoAtividade(Integer id, Date dataInscricao, boolean certificado, StatusCandidatura statusCandidatura, Voluntario voluntario, Atividade atividade) {
+    public HistoricoAtividade(Integer id, Date dataInscricao, boolean certificado, StatusCandidatura statusCandidatura,
+            Avaliacao avaliacao, Voluntario voluntario, Atividade atividade) {
         this.id = id;
         this.dataInscricao = dataInscricao;
         this.certificado = certificado;
         this.statusCandidatura = statusCandidatura;
+        this.avaliacao = avaliacao;
         this.voluntario = voluntario;
         this.atividade = atividade;
     }
@@ -84,9 +96,18 @@ public class HistoricoAtividade {
         this.atividade = atividade;
     }
 
+    public Avaliacao getAvaliacao() {
+        return avaliacao;
+    }
+
+    public void setAvaliacao(Avaliacao avaliacao) {
+        this.avaliacao = avaliacao;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass())
+            return false;
         HistoricoAtividade that = (HistoricoAtividade) o;
         return Objects.equals(id, that.id);
     }

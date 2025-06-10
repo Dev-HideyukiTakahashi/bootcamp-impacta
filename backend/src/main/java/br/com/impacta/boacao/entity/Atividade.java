@@ -1,13 +1,21 @@
 package br.com.impacta.boacao.entity;
 
-import br.com.impacta.boacao.entity.enums.PeriodoAtividade;
-import br.com.impacta.boacao.entity.enums.StatusAtividade;
-import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import br.com.impacta.boacao.entity.enums.PeriodoAtividade;
+import br.com.impacta.boacao.entity.enums.StatusAtividade;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 
 @Entity
 public class Atividade {
@@ -33,9 +41,8 @@ public class Atividade {
     private StatusAtividade statusAtividade;
     private LocalDateTime criadoEm;
 
-    // TODO
-    // @ManyToOne
-    // private Ong ong;
+    @ManyToOne
+    private Ong ong;
 
     @OneToMany(mappedBy = "atividade")
     private final List<HistoricoAtividade> historicoAtividades = new ArrayList<>();
@@ -44,7 +51,9 @@ public class Atividade {
     }
 
     public Atividade(Integer id, String nome, String descricao, PeriodoAtividade periodo, String cargaHorariaDiaria,
-                     String enderecoCompleto, Boolean possuiCertificacao, StatusAtividade statusAtividade) {
+            String enderecoCompleto, Boolean possuiCertificacao, StatusAtividade statusAtividade,
+            LocalDateTime criadoEm,
+            Ong ong) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -53,6 +62,8 @@ public class Atividade {
         this.enderecoCompleto = enderecoCompleto;
         this.possuiCertificacao = possuiCertificacao;
         this.statusAtividade = statusAtividade;
+        this.criadoEm = criadoEm;
+        this.ong = ong;
     }
 
     public Integer getId() {
@@ -141,9 +152,18 @@ public class Atividade {
         criadoEm = LocalDateTime.now();
     }
 
+    public Ong getOng() {
+        return ong;
+    }
+
+    public void setOng(Ong ong) {
+        this.ong = ong;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Atividade atividade = (Atividade) o;
         return Objects.equals(id, atividade.id);
     }
@@ -152,4 +172,5 @@ public class Atividade {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
 }
