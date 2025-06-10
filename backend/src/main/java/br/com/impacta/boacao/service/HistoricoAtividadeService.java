@@ -1,5 +1,7 @@
 package br.com.impacta.boacao.service;
 
+import java.time.LocalDate;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,5 +28,12 @@ public class HistoricoAtividadeService {
         Usuario usuario = usuarioService.getUsuarioAutenticado();
 
         return historicoAtividadeRepository.buscarTodosPorId(usuario.getId(), pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<HistoricoAtividadeDTO> buscarTodosPorData(String data, Pageable pageable) {
+        Usuario usuario = usuarioService.getUsuarioAutenticado();
+
+        return historicoAtividadeRepository.buscarTodosPorIdEData(usuario.getId(), LocalDate.parse(data), pageable);
     }
 }
