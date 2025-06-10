@@ -1,6 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {
+  AfterViewInit,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -12,8 +19,11 @@ import {
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { NgxMaskDirective } from 'ngx-mask';
+import { Subject, takeUntil } from 'rxjs';
+import { OngService } from '../../service/ong.service';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
+import { ModalMensagemComponent } from '../../shared/modal-mensagem/modal-mensagem.component';
 
 @Component({
   selector: 'app-cadastro-ong',
@@ -30,18 +40,21 @@ import { FooterComponent } from '../../shared/footer/footer.component';
   templateUrl: './cadastro-ong.component.html',
   styleUrls: ['./cadastro-ong.component.scss'],
 })
-export class CadastroOngComponent {
-  fb = inject(FormBuilder);
-  http = inject(HttpClient);
-  router = inject(Router);
-  showModal: boolean = false;
+export class CadastroOngComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild(ModalMensagemComponent) modalMensagem!: ModalMensagemComponent;
 
-  msg: string | null = null;
-  erro: string | null = null;
+  private fb = inject(FormBuilder);
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private ongService = inject(OngService);
 
-  form: FormGroup = this.fb.group(
+  private destroy$ = new Subject<void>();
+
+  public buscandoCep = false;
+
+  public form: FormGroup = this.fb.group(
     {
-      nome: ['', Validators.required],
+      nomeOng: ['', [Validators.required]],
       email: [
         '',
         [
@@ -53,8 +66,13 @@ export class CadastroOngComponent {
       ],
       cnpj: ['', [Validators.required, Validators.pattern(/^\d{14}$/)]],
       telefone: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]],
+      pais: ['Brasil', [Validators.required]],
       cep: ['', [Validators.required, Validators.pattern(/^\d{5}-?\d{3}$/)]],
-      endereco: [''],
+      estado: ['', Validators.required],
+      cidade: ['', Validators.required],
+      bairro: ['', Validators.required],
+      rua: ['', Validators.required],
+      numero: ['', [Validators.required, Validators.pattern(/^\d{1,5}$/)]],
       senha: ['', [Validators.required, Validators.minLength(6)]],
       confirmarSenha: ['', Validators.required],
     },
@@ -168,31 +186,35 @@ export class CadastroOngComponent {
       nomeEntidade: this.form.value.nomeOng.trim(),
       cnpj: this.form.value.cnpj.replace(/\D/g, ''),
       telefone: this.form.value.telefone.replace(/\D/g, ''),
-      cep: this.form.value.cep,
-      endereco: this.form.value.endereco,
+      email: this.form.value.email.trim(),
       senha: this.form.value.senha,
+      endereco: {
+        pais: this.form.value.pais,
+        estado: this.form.value.estado,
+        cidade: this.form.value.cidade,
+        cep: this.form.value.cep.replace(/\D/g, ''),
+        rua: this.form.value.rua,
+        numero: this.form.value.numero,
+        bairro: this.form.value.bairro,
+      },
     };
 
-    this.http.post('http://localhost:8080/ongs', payload).subscribe({
-      next: () => {
-        this.msg = 'Cadastro realizado com sucesso!';
-        this.erro = null;
-        this.form.reset();
-        this.showModal = true;
-
-        setTimeout(() => this.router.navigate(['/login']), 1000);
-      },
-      error: (err) => {
-        this.msg = null;
-
-        if (err.status === 409) {
-          this.erro = err.error?.message || 'Email ou CNPJ já cadastrado.';
-        } else {
-          this.erro = 'Erro ao cadastrar ONG.';
-        }
-        this.showModal = true;
-      },
-    });
+    this.ongService
+      .cadastrarOng(payload)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.modalMensagem.abrirSucesso('Cadastro realizado com sucesso!');
+          this.form.reset();
+        },
+        error: (err: HttpErrorResponse) => {
+          const backendMsg =
+            err.error && (err.error as any).message
+              ? (err.error as any).message
+              : 'Erro ao cadastrar voluntário. Tente novamente.';
+          this.modalMensagem.abrirErro(backendMsg);
+        },
+      });
   }
 
   public onModalFechado() {
