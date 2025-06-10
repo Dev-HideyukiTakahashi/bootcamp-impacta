@@ -1,55 +1,156 @@
-
-import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { Component, inject } from '@angular/core';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { NgxMaskDirective } from 'ngx-mask';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
-import { NgxMaskDirective } from 'ngx-mask';
-import { Router } from '@angular/router';
-import { OngService } from '../../service/ong.service';
 
 @Component({
   selector: 'app-cadastro-ong',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HeaderComponent, FooterComponent, NgxMaskDirective],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    NgxMaskDirective,
+    HeaderComponent,
+    FooterComponent,
+    ModalMensagemComponent,
+  ],
   templateUrl: './cadastro-ong.component.html',
-  styleUrls: ['./cadastro-ong.component.scss']
+  styleUrls: ['./cadastro-ong.component.scss'],
 })
 export class CadastroOngComponent {
   fb = inject(FormBuilder);
-  OngService: OngService = inject(OngService);
-  router = inject(Router)
-  showModal: boolean = false;
   http = inject(HttpClient);
+  router = inject(Router);
+  showModal: boolean = false;
 
   msg: string | null = null;
   erro: string | null = null;
 
-  form: FormGroup = this.fb.group({
-    nome: ['', Validators.required],
-    email: ['', [Validators.required, Validators.pattern(/^\S[a-zA-Z0-9]+([._-][a-zA-Z0-9]+)*@([a-zA-Z0-9]+(-[a-zA-Z0-9]+)*\.)+[a-zA-Z]{2,}$/)]],
-    cnpj: ['', [Validators.required, Validators.pattern(/^\d{14}$/)]],
-    telefone: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]],
-    cep: ['', [Validators.required, Validators.pattern(/^\d{5}-?\d{3}$/)]],
-    endereco: [''],
-    senha: ['', [Validators.required, Validators.minLength(6)]],
-    confirmarSenha: ['', Validators.required]
-  },
+  form: FormGroup = this.fb.group(
+    {
+      nome: ['', Validators.required],
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(
+            /^\S[a-zA-Z0-9]+([._-][a-zA-Z0-9]+)*@([a-zA-Z0-9]+(-[a-zA-Z0-9]+)*\.)+[a-zA-Z]{2,}$/
+          ),
+        ],
+      ],
+      cnpj: ['', [Validators.required, Validators.pattern(/^\d{14}$/)]],
+      telefone: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]],
+      cep: ['', [Validators.required, Validators.pattern(/^\d{5}-?\d{3}$/)]],
+      endereco: [''],
+      senha: ['', [Validators.required, Validators.minLength(6)]],
+      confirmarSenha: ['', Validators.required],
+    },
     { validators: this.senhaConfirmadaValidator() }
   );
 
-  buscarEndereco() {
-    const cep = this.form.value.cep?.replace(/\D/g, '');
-    if (!cep || cep.length !== 8) return;
+  ngOnInit(): void {
+    this.form
+      .get('cep')!
+      .valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((valor) => {
+        const cep = (valor || '').replace(/\D/g, '');
+        this.form.patchValue(
+          { estado: '', cidade: '', bairro: '', rua: '' },
+          { emitEvent: false }
+        );
+        if (cep.length === 8) {
+          this.buscarEndereco();
+        }
+      });
+  }
 
-    this.http.get(`https://viacep.com.br/ws/${cep}/json/`).subscribe((dados: any) => {
-      if (dados?.erro) return;
-      this.form.patchValue({ endereco: `${dados.logradouro}, ${dados.bairro}, ${dados.localidade} - ${dados.uf}` });
+  ngAfterViewInit(): void {
+    this.modalMensagem.fechado
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.onModalFechado());
+  }
+
+  public buscarEndereco(): void {
+    const raw = this.form.get('cep')!.value || '';
+    const cep = raw.replace(/\D/g, '');
+    if (!/^\d{8}$/.test(cep)) {
+      this.form.get('cep')!.setErrors({ pattern: true });
+      this.form.patchValue({
+        rua: '',
+        bairro: '',
+        cidade: '',
+        estado: '',
+        numero: '',
+      });
+      return;
+    }
+
+    this.buscandoCep = true;
+    this.http.get<any>(`https://viacep.com.br/ws/${cep}/json/`).subscribe({
+      next: (dados) => {
+        if (dados.erro) {
+          this.form.get('cep')!.setErrors({ cepInvalido: true });
+          this.form.patchValue({
+            rua: '',
+            bairro: '',
+            cidade: '',
+            estado: '',
+            numero: '',
+          });
+        } else {
+          this.form.patchValue({
+            rua: dados.logradouro || '',
+            bairro: dados.bairro || '',
+            cidade: dados.localidade || '',
+            estado: dados.uf || '',
+          });
+          this.form.get('cep')!.setErrors(null);
+        }
+        this.buscandoCep = false;
+      },
+      error: () => {
+        this.form.get('cep')!.setErrors({ cepInvalido: true });
+        this.buscandoCep = false;
+      },
     });
   }
 
-  senhaConfirmadaValidator(): ValidatorFn {
+  public permitirSomenteNumeros(event: KeyboardEvent): void {
+    const teclasPermitidas = [
+      'Backspace',
+      'Tab',
+      'ArrowLeft',
+      'ArrowRight',
+      'Delete',
+    ];
+    const isNumero = /^[0-9]$/.test(event.key);
+
+    if (!isNumero && !teclasPermitidas.includes(event.key)) {
+      event.preventDefault();
+      return;
+    }
+    if (isNumero) {
+      const input = event.target as HTMLInputElement;
+      if (input.value.length >= 5) {
+        event.preventDefault();
+      }
+    }
+  }
+
+  public senhaConfirmadaValidator(): ValidatorFn {
     return (group: AbstractControl): ValidationErrors | null => {
       const senha = group.get('senha')?.value;
       const confirmar = group.get('confirmarSenha')?.value;
@@ -57,20 +158,22 @@ export class CadastroOngComponent {
     };
   }
 
-  submit() {
-    if (this.form.invalid) return;
+  public submit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
     const payload = {
-      nomeOng: this.form.value.nome.trim(),
-      email: this.form.value.email.trim(),
+      nomeEntidade: this.form.value.nomeOng.trim(),
       cnpj: this.form.value.cnpj.replace(/\D/g, ''),
       telefone: this.form.value.telefone.replace(/\D/g, ''),
-      endereco: this.form.value.endereco.trim(),
-      dataNascimento: this.form.value.dataNascimento,
-      senha: this.form.value.senha
+      cep: this.form.value.cep,
+      endereco: this.form.value.endereco,
+      senha: this.form.value.senha,
     };
 
-    this.OngService.cadastrarOng(payload).subscribe({
+    this.http.post('http://localhost:8080/ongs', payload).subscribe({
       next: () => {
         this.msg = 'Cadastro realizado com sucesso!';
         this.erro = null;
@@ -81,19 +184,25 @@ export class CadastroOngComponent {
       },
       error: (err) => {
         this.msg = null;
+
         if (err.status === 409) {
           this.erro = err.error?.message || 'Email ou CNPJ já cadastrado.';
         } else {
           this.erro = 'Erro ao cadastrar ONG.';
         }
         this.showModal = true;
-      }
+      },
     });
   }
-  fecharModal() {
-    this.showModal = false;
-    this.erro = null;
-    this.msg = null;
+
+  public onModalFechado() {
+    if (this.modalMensagem.isSucesso) {
+      this.router.navigate(['/login']);
+    }
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

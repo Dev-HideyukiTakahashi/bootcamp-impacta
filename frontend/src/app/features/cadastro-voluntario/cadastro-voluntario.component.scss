@@ -1,5 +1,5 @@
 .container {
-  max-width: 600px;
+  max-width: 1000px;
   margin-top: 3rem;
   margin-bottom: 3rem;
   padding: 2rem;
@@ -68,7 +68,7 @@
     margin: 0;
   }
 
-  button {
+  .btn-link {
     margin-top: 0.5rem;
     background: transparent;
     color: #ff6c00;
@@ -84,62 +84,30 @@
 }
 
 
-
-/* Estilos do Modal */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
+.linha-form {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  }
-
-.modal-box {
-  background: #fff;
-  padding: 1.5rem;
-  border-radius: 8px;
-  text-align: center;
-  max-width: 800px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  position: relative;
-  flex-direction: column;
-  }
-
-.btn-x{
-  position: absolute;
-  top: 1px;
-  right: 10px; 
-  background: none;
-  border: none;
-  font-size: 1.7rem; 
-  color: #333; 
-  transition: color 0.3s ease, transform 0.2s ease;
-  line-height: 1; 
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
-.btn-x:hover {
-  color: #ff6c00;
-  transform: scale(1.1); 
+.linha-form label {
+  flex: 1;
 }
 
+.linha-form .metade {
+  flex: 1 1 48%;
+}
 
-.btn-close {
-  all: unset;
-  background: #ff6c00;
-  color: white;
-  padding: 0.2rem 0.75rem;
-  font-size: 1rem;
-  cursor: pointer;
-  border-radius: 5px;
-  align-self: center;
-  }
+.linha-form .terco {
+  flex: 1 1 30%;
+}
 
-.btn-close:hover {
-  background: #e65d00;
+.linha-form .grande {
+  flex: 1 1 64%;
+}
+
+.linha-form .pequeno {
+  flex: 1 1 30%;
 }
 
 

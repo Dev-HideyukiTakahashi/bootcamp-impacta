@@ -1,25 +1,25 @@
-<app-header/>
+<app-header />
 
 <div class="container">
   <h2>Cadastro de Voluntário</h2>
-  <form [formGroup]="form" (ngSubmit)="submit()">
 
+  <form [formGroup]="form" (ngSubmit)="submit()">
     <label>Nome:
-      <input type="text" formControlName="nome" (keydown)="permitirSomenteLetras($event)"/>
-      <div class="mensagem-erro" *ngIf="form.get('nome')?.invalid && form.get('nome')?.touched">
-        <span *ngIf="form.get('nome')?.errors?.['required']">Nome é obrigatório.</span>
-        <span *ngIf="form.get('nome')?.errors?.['pattern']">O nome deve conter apenas letras.</span>
-      </div>      
-    </label>    
+      <input type="text" formControlName="nomeCompleto" (keydown)="permitirSomenteLetras($event)" />
+      <div class="mensagem-erro" *ngIf="form.get('nomeCompleto')?.invalid && form.get('nomeCompleto')?.touched">
+        <span *ngIf="form.get('nomeCompleto')?.errors?.['required']"> Nome é obrigatório.</span>
+        <span *ngIf="form.get('nomeCompleto')?.errors?.['pattern']">O nome deve conter apenas letras.</span>
+      </div>
+    </label>
 
     <label>Email:
       <input type="email" formControlName="email" />
-      <div class="mensagem-erro" *ngIf="form.get('email')?.invalid && (form.get('email')?.touched || form.get('email')?.dirty)">
+      <div class="mensagem-erro" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
         <span *ngIf="form.get('email')?.errors?.['required']">Email é obrigatório.</span>
         <span *ngIf="form.get('email')?.errors?.['pattern']">Formato de email inválido.</span>
       </div>
     </label>
-    
+
     <label>CPF:
       <input type="text" inputmode="numeric" mask="000.000.000-00" formControlName="cpf" />
       <div class="mensagem-erro" *ngIf="form.get('cpf')?.invalid && form.get('cpf')?.touched">
@@ -37,12 +37,54 @@
     </label>
 
     <label>Data de Nascimento:
-      <input type="date" formControlName="dataNascimento" />
-      <div class="mensagem-erro" *ngIf="form.get('dataNascimento')?.invalid && form.get('dataNascimento')?.touched">
-        <span *ngIf="form.get('dataNascimento')?.errors?.['required']">Data de nascimento é obrigatória.</span>
+      <input type="date" formControlName="dataNascimento" min="1907-03-04" />
+      <div class="mensagem-erro" *ngIf="form.get('dataNascimento')?.invalid &&form.get('dataNascimento')?.touched">
+        <span *ngIf="form.get('dataNascimento')?.errors?.['required']">Data é obrigatória.</span>
+        <span *ngIf="form.get('dataNascimento')?.errors?.['dataInvalida']">Data inválida.</span>
+        <span *ngIf="form.get('dataNascimento')?.errors?.['anoForaIntervalo']">Ano incorreto.</span>
         <span *ngIf="form.get('dataNascimento')?.errors?.['menorDeIdade']">Você deve ter pelo menos 18 anos.</span>
       </div>
     </label>
+
+    <div class="linha-form">
+      <label class="metade">País:
+        <input type="text" formControlName="pais" readonly />
+      </label>
+      <label class="metade">CEP:
+        <input type="text" formControlName="cep" mask="00000-000"
+          placeholder="Digite o CEP para carregar Estado, Cidade, Bairro e Rua" (blur)="buscarEndereco()" />
+        <div class="mensagem-erro" *ngIf="(form.get('cep')?.invalid && form.get('cep')?.touched)">
+          <span *ngIf="form.get('cep')?.errors?.['required']">CEP é obrigatório.</span>
+          <span *ngIf="form.get('cep')?.errors?.['pattern']">Formato inválido.</span>
+          <span *ngIf="form.get('cep')?.errors?.['cepInvalido']">Digite um CEP válido.</span>
+        </div>
+      </label>
+    </div>
+
+    <div class="linha-form">
+      <label class="terco">Estado:
+        <input type="text" formControlName="estado" readonly />
+      </label>
+      <label class="terco">Cidade:
+        <input type="text" formControlName="cidade" readonly />
+      </label>
+      <label class="terco">Bairro:
+        <input type="text" formControlName="bairro" readonly />
+      </label>
+    </div>
+
+    <div class="linha-form">
+      <label class="grande">Rua:
+        <input type="text" formControlName="rua" readonly />
+      </label>
+      <label class="pequeno">Número:
+        <input type="text" inputmode="numeric" formControlName="numero" (keydown)="permitirSomenteNumeros($event)" />
+        <div class="mensagem-erro" *ngIf="form.get('numero')?.invalid && form.get('numero')?.touched">
+          <span *ngIf="form.get('numero')?.errors?.['required']">Número é obrigatório.</span>
+          <span *ngIf="form.get('numero')?.errors?.['pattern']">Deve conter apenas números.</span>
+        </div>
+      </label>
+    </div>
 
     <label>Senha:
       <input type="password" autocomplete="new-password" formControlName="senha" />
@@ -54,33 +96,23 @@
 
     <label>Confirmar Senha:
       <input type="password" autocomplete="new-password" formControlName="confirmarSenha" />
-      <div class="mensagem-erro" *ngIf="form.get('confirmarSenha')?.touched && form.errors?.['senhasDiferentes']">
+      <div class="mensagem-erro" *ngIf="form.get('confirmarSenha')?.touched &&form.errors?.['senhasDiferentes']">
         As senhas não coincidem.
       </div>
     </label>
 
-    <button type="submit" class="btn-submit" [disabled]="form.invalid">Cadastrar</button>
-
+    <button type="submit" class="btn-submit" [disabled]="form.invalid"> Cadastrar</button>
   </form>
-  
+
   <div class="login-redirect">
-    <p>Já possui cadastro?<br> 
-      <button routerLink="/login">ENTRAR</button>
+    <p>Já possui cadastro?<br />
+      <a routerLink="/login" class="btn-link">ENTRAR</a>
     </p>
-  </div>  
+  </div>
 </div>
 
 <app-footer />
 
-<!-- Modal de Sucesso/Erro -->
-<div *ngIf="showModal" class="modal-overlay">
-  <div class="modal-box">
- 
-    <h2 *ngIf="msg" style="color: green;">{{ msg }}</h2>
-    <h2 *ngIf="erro" style="color: black;">{{ erro }}</h2>
-    
-    <button class="btn-x" *ngIf="erro" (click)="fecharModal()">x</button>
-
-    <button type="button" class="btn-close" *ngIf="erro" (click)="fecharModal()">OK</button>
-  </div>
-</div>
+<app-modal-mensagem
+  (fechado)="onModalFechado()">
+</app-modal-mensagem>
