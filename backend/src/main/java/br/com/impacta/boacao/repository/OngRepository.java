@@ -1,9 +1,12 @@
 package br.com.impacta.boacao.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.impacta.boacao.entity.Ong;
 
 public interface OngRepository extends JpaRepository<Ong, Integer> {
-  boolean existsByCnpj(String cnpj);
+    boolean existsByCnpj(String cnpj);
+    Optional<Ong> findByUsuarioEmail(String email);
 }

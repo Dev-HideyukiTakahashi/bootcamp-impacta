@@ -7,12 +7,19 @@ info:
     name: MIT License
     url: https://opensource.org/licenses/MIT
 
+tags:
+  - name: Tags
+    description: Endpoints para gerenciamento de tags de atividades
+  - name: Atividades
+    description: Endpoints para gerenciamento de atividades
+
 paths:
   # ==========================================
   # Endpoints de Tags
   # ==========================================
   /tags:
     get:
+      tags: [Tags]
       summary: Buscar todas as Tags
       description: Retorna todas as Tags de atividades
       responses:
@@ -52,6 +59,7 @@ paths:
                     path: "/tags"
   /tags/{id}:
     get:
+      tags: [Tags]
       summary: Buscar uma Tag pelo ID
       description: Retorna a Tag de uma atividade específica com base no ID fornecido.
       parameters:
@@ -121,6 +129,166 @@ paths:
                     message: "Erro ao processar a solicitação. Falha ao conectar com o banco de dados."
                     path: "/tags/1"
 
+    # ==========================================
+    # Endpoints de Atividades
+    # ==========================================
+
+  /api/atividades:
+    get:
+      tags: [Atividades]
+      summary: Buscar todas as atividades
+      description: Retorna uma lista paginada de atividades vinculadas a uma ONG.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Número da página (começa em 0)
+        - in: query
+          name: size
+          schema:
+            type: integer
+          description: Tamanho da página
+        - in: query
+          name: sort
+          schema:
+            type: string
+            description: "Campo para ordenação (ex: nome,asc)"
+      responses:
+        "200":
+          description: Lista de atividades retornada com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AtividadeOngResponseDTO"
+                  totalPages:
+                    type: integer
+                  totalElements:
+                    type: integer
+                  size:
+                    type: integer
+                  number:
+                    type: integer
+        "401":
+          description: Não autorizado.
+        "500":
+          description: Erro interno no servidor.
+
+    post:
+      tags: [Atividades]
+      summary: Cadastrar nova atividade
+      description: Cadastra uma nova atividade para a ONG autenticada.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AtividadeRequestDTO"
+      responses:
+        "200":
+          description: Atividade criada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AtividadeResponseDTO"
+        "401":
+          description: Não autorizado.
+        "422":
+          description: Dados inválidos.
+        "500":
+          description: Erro interno no servidor.
+
+  /api/atividades/{id}:
+    put:
+      tags: [Atividades]
+      summary: Atualizar atividade existente
+      description: Atualiza os dados de uma atividade específica.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AtividadeRequestDTO"
+      responses:
+        "200":
+          description: Atividade atualizada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AtividadeResponseDTO"
+        "401":
+          description: Não autorizado.
+        "404":
+          description: Atividade não encontrada.
+        "422":
+          description: Dados inválidos.
+        "500":
+          description: Erro interno.
+
+    delete:
+      tags: [Atividades]
+      summary: Deletar uma atividade
+      description: Remove uma atividade com base no ID fornecido.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Atividade deletada com sucesso.
+        "401":
+          description: Não autorizado.
+        "404":
+          description: Atividade não encontrada.
+        "500":
+          description: Erro interno.
+
+  /api/atividades/{id}/status:
+    put:
+      tags: [Atividades]
+      summary: Atualizar status de uma atividade
+      description: Altera o status de uma atividade com base no ID e no novo status informado.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AtividadeStatusRequestDTO"
+      responses:
+        "200":
+          description: Status atualizado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AtividadeStatusResponseDTO"
+        "400":
+          description: Dados inválidos.
+        "401":
+          description: Não autorizado.
+        "404":
+          description: Atividade não encontrada.
+        "500":
+          description: Erro interno.
+
   # ==========================================
   # Schemas
   # ==========================================
@@ -135,3 +303,88 @@ components:
         nome:
           type: string
           example: "Administração e Gestão"
+
+    AtividadeOngResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        descricao:
+          type: string
+        status:
+          type: string
+        criadoEm:
+          type: string
+          format: date-time
+        # Adicione os demais campos conforme seu DTO
+
+    AtividadeResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        descricao:
+          type: string
+        status:
+          type: string
+        # Adicione outros campos conforme necessário
+
+    AtividadeStatusRequestDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        statusAtividade:
+          type: string
+          enum:
+            - ATIVA
+            - INATIVA
+            - CANCELADA
+
+    AtividadeStatusResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        statusAtividade:
+          type: string
+          enum:
+            - ATIVA
+            - INATIVA
+            - CANCELADA
+
+    AtividadeRequestDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        periodo:
+          type: string
+          enum:
+            - MANHA
+            - TARDE
+            - NOITE
+            - INTEGRAL
+        cargaHorariaDiaria:
+          type: string
+        enderecoCompleto:
+          type: string
+        possuiCertificacao:
+          type: boolean
+        descricao:
+          type: string
+        statusAtividade:
+          type: string
+          enum:
+            - ATIVA
+            - INATIVA
+            - CANCELADA
+        criadoEm:
+          type: string
+          format: date-time

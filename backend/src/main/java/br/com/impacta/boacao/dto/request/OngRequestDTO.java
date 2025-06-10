@@ -1,32 +1,34 @@
 package br.com.impacta.boacao.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class OngRequestDTO {
-  private String nomeOng;
+
+  @NotBlank
+  private String nomeEntidade;
+
+  @NotBlank
   private String cnpj;
+
+  @NotBlank
   private String telefone;
-  private String endereco;
- // private String cep;
+
+  @NotBlank
   private String email;
+
+  @NotBlank
   private String senha;
 
-  // Construtor
-  public OngRequestDTO(String nomeOng, String cnpj, String telefone, String endereco, String email, String senha) {
-    this.nomeOng = nomeOng;
-    this.cnpj = cnpj;
-    this.telefone = telefone;
-    this.endereco = endereco;
-    //this.cep = cep;
-    this.email = email;
-    this.senha = senha;
+  @NotNull
+  private EnderecoRequestDTO endereco;
+
+  public String getNomeEntidade() {
+    return nomeEntidade;
   }
 
-  // Getters e Setters
-  public String getNomeOng() {
-    return nomeOng;
-  }
-
-  public void setNomeOng(String nomeOng) {
-    this.nomeOng = nomeOng;
+  public void setNomeEntidade(String nomeEntidade) {
+    this.nomeEntidade = nomeEntidade;
   }
 
   public String getCnpj() {
@@ -45,22 +47,6 @@ public class OngRequestDTO {
     this.telefone = telefone;
   }
 
-  public String getEndereco() {
-    return endereco;
-  }
-
-  public void setEndereco(String endereco) {
-    this.endereco = endereco;
-  }
-/* 
-  public String getCep() {
-    return cep;
-  }
-
-  public void setCep(String cep) {
-    this.cep = cep;
-  }
-*/
   public String getEmail() {
     return email;
   }
@@ -76,4 +62,27 @@ public class OngRequestDTO {
   public void setSenha(String senha) {
     this.senha = senha;
   }
+
+  public EnderecoRequestDTO getEndereco() {
+    return endereco;
+  }
+
+  public void setEndereco(EnderecoRequestDTO endereco) {
+    this.endereco = endereco;
+  }
+
+  // Construtor completo
+  public OngRequestDTO(
+      String nomeEntidade,
+      String cnpj,
+      String email,
+      String senha,
+      EnderecoRequestDTO endereco) {
+    this.nomeEntidade = nomeEntidade;
+    this.cnpj = cnpj;
+    this.email = email;
+    this.senha = senha;
+    this.endereco = endereco;
+  }
+
 }

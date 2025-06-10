@@ -60,27 +60,6 @@ INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_i
 -- ('Brasil', 'BA', 'Salvador', '40000-000', 'Avenida da Bahia', '321', 'Barra', 14),
 -- ('Brasil', 'PR', 'Curitiba', '80000-000', 'Rua XV de Novembro', '654', 'Centro', 15);
 
--- -- Associando ROLE_VOLUNTARIO aos usuários de 1 a 10
--- INSERT INTO usuario_role (usuario_id, role_id) VALUES
--- (1, 1),
--- (2, 1),
--- (3, 1),
--- (4, 1),
--- (5, 1),
--- (6, 1),
--- (7, 1),
--- (8, 1),
--- (9, 1),
--- (10, 1);
-
--- -- Associando ROLE_ONG aos usuários de 11 a 15
--- INSERT INTO usuario_role (usuario_id, role_id) VALUES
---   (11, 2),
---   (12, 2),
---   (13, 2),
---   (14, 2),
---   (15, 2);
-
 -- -- Associando endereços aos usuários (Voluntários e ONGs)
 --   UPDATE usuario SET endereco_id = 1 WHERE id = 1;
 --   UPDATE usuario SET endereco_id = 2 WHERE id = 2;
@@ -99,38 +78,21 @@ INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_i
 --   UPDATE usuario SET endereco_id = 15 WHERE id = 15;
 
 -- -- Inserindo Atividades
--- INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, ong_id) VALUES
---   ('Curso de Programação', 'Curso de programação para iniciantes', 'Tarde', '4 horas', 'Rua A, 10 - São Paulo', true, 1);
--- INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, ong_id) VALUES
---   ('Ação Social', 'Distribuição de alimentos para moradores de rua', 'Manhã', '3 horas', 'Rua B, 15 - Rio de Janeiro', false, 2);
--- INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, ong_id) VALUES
---   ('Plantio de Árvores', 'Atividade de plantio de árvores em áreas urbanas', 'Manhã', '5 horas', 'Rua C, 20 - Belo Horizonte', true, 3);
--- INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, ong_id) VALUES
---   ('Oficina de Artes', 'Oficina de pintura e escultura para crianças', 'Tarde', '2 horas', 'Rua D, 25 - Curitiba', false, 4);
--- INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, ong_id) VALUES
---   ('Aulas de Idiomas', 'Aulas de inglês para pessoas em situação de vulnerabilidade', 'Noite', '3 horas', 'Rua E, 30 - Salvador', true, 5);
+-- TODO Inserir ONG ID
+INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em) VALUES ('Curso de Programação', 'Curso de programação para iniciantes', 'TARDE', '4 horas', 'Rua A, 10 - São Paulo', 1, 'ANDAMENTO', '2025-05-28');
+INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em) VALUES ('Ação Social', 'Distribuição de alimentos para moradores de rua', 'MANHA', '3 horas', 'Rua B, 15 - Rio de Janeiro', 0, 'ANDAMENTO', '2025-02-18');
+INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em) VALUES ('Plantio de Árvores', 'Atividade de plantio de árvores em áreas urbanas', 'MANHA', '5 horas', 'Rua C, 20 - Belo Horizonte', 1, 'ENCERRADA', '2024-06-20');
+INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em) VALUES ('Oficina de Artes', 'Oficina de pintura e escultura para crianças', 'TARDE', '2 horas', 'Rua D, 25 - Curitiba', 0, 'ANDAMENTO','2024-11-11');
+INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em) VALUES ('Aulas de Idiomas', 'Aulas de inglês para pessoas em situação de vulnerabilidade', 'NOITE', '3 horas', 'Rua E, 30 - Salvador', 1, 'CONGELADA', '2024-01-10');
 
--- -- Inserindo Histórico de Atividade
--- INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura) VALUES
---   (1, 1, '2024-04-01', true, 'REALIZADO');
--- INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura) VALUES
---   (2, 2, '2025-05-01', false, 'APROVADO');
--- INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura) VALUES
---   (3, 3, '2024-05-05', true, 'REALIZADO');
--- INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura) VALUES
---   (4, 4, '2025-06-01', false, 'APROVADO');
--- INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura) VALUES
---   (5, 5, '2024-07-01', true, 'APROVADO');
--- INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura) VALUES
---   (6, 1, '2024-04-01', true, 'REALIZADO');
--- INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura) VALUES
---   (7, 2, '2025-05-01', false, 'APROVADO');
--- INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura) VALUES
---   (8, 3, '2025-05-05', false, 'PENDENTE');
--- INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura) VALUES
---   (9, 4, '2025-06-01', false, 'APROVADO');
--- INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura) VALUES
---   (10, 5, '2024-07-01', true, 'APROVADO');
+-- Inserindo Histórico de Atividade
+INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura) VALUES (1, 1, '2024-04-01', 1, 'REALIZADO');
+INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura) VALUES (2, 2, '2025-05-01', 0, 'APROVADO');
+INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura) VALUES (3, 3, '2024-05-05', 1, 'REALIZADO');
+INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura) VALUES (1, 4, '2025-06-01', 0, 'APROVADO');
+INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura) VALUES (2, 5, '2024-07-01', 1, 'REALIZADO');
+INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura) VALUES (2, 1, '2024-04-01', 1, 'REALIZADO');
+
 
 -- -- Inserindo Avaliações
 -- INSERT INTO avaliacao (id, voluntario_id, ong_id, feedback, estrelas, is_avaliado) VALUES (1, 1, 1, 'Ótima experiência, aprendi muito com João.', 5, true);
