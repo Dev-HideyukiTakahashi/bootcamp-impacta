@@ -49,7 +49,8 @@ public class ResourceServerConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         // Permite acesso a documentação Swagger
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/openapi.yaml").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/openapi.yaml")
+                        .permitAll()
                         // Permite acesso aos endpoints de autenticação
                         .requestMatchers("/auth/**").permitAll()
                         // permite acesso ao cad de voluntarios

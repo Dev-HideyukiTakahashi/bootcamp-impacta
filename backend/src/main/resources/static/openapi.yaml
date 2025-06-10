@@ -290,6 +290,115 @@ paths:
           description: Erro interno.
 
   # ==========================================
+  # Endpoints de Histórico de Atividades
+  # ==========================================
+  /api/historico-atividades:
+    get:
+      tags: [Histórico de Atividades]
+      summary: Buscar histórico de atividades por ID do usuário
+      description: Retorna uma lista paginada do histórico de atividades de um usuário.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 0
+          description: Número da página (começa em 0)
+        - in: query
+          name: size
+          schema:
+            type: integer
+            default: 10
+          description: Tamanho da página
+        - in: query
+          name: sort
+          schema:
+            type: string
+            description: "Campo para ordenação (ex: dataInscricao,desc)"
+      responses:
+        "200":
+          description: Histórico de atividades retornado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/HistoricoAtividadeDTO"
+                  totalPages:
+                    type: integer
+                  totalElements:
+                    type: integer
+                  size:
+                    type: integer
+                  number:
+                    type: integer
+        "401":
+          description: Não autorizado.
+        "500":
+          description: Erro interno no servidor.
+
+  /api/historico-atividades/data:
+    get:
+      tags: [Histórico de Atividades]
+      summary: Buscar histórico de atividades por data de encerramento
+      description: Retorna uma lista paginada do histórico de atividades encerradas em uma data específica, para o usuário autenticado.
+      parameters:
+        - in: query
+          name: data
+          schema:
+            type: string
+            format: date
+            example: "2024-06-01" # Ou "01-06-2024" se você for usar o pattern no @DateTimeFormat
+          required: true
+          description: Data de encerramento no formato DD-MM-YYYY ou YYYY-MM-DD.
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 0
+          description: Número da página (começa em 0)
+        - in: query
+          name: size
+          schema:
+            type: integer
+            default: 10
+          description: Tamanho da página
+        - in: query
+          name: sort
+          schema:
+            type: string
+            description: "Campo para ordenação (ex: dataInscricao,desc)"
+      responses:
+        "200":
+          description: Histórico de atividades retornado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/HistoricoAtividadeDTO"
+                  totalPages:
+                    type: integer
+                  totalElements:
+                    type: integer
+                  size:
+                    type: integer
+                  number:
+                    type: integer
+        "400":
+          description: Formato de data inválido.
+        "401":
+          description: Não autorizado.
+        "500":
+          description: Erro interno no servidor.
+
+  # ==========================================
   # Schemas
   # ==========================================
 components:
@@ -388,3 +497,44 @@ components:
         criadoEm:
           type: string
           format: date-time
+
+    HistoricoAtividadeDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        descricao:
+          type: string
+          example: "Auxiliar na limpeza de uma ONG local"
+        cargaHorariaDiaria:
+          type: string
+          example: "4 horas"
+        periodo:
+          type: string
+          enum:
+            - MANHA
+            - TARDE
+            - NOITE
+            - INTEGRAL
+          example: "TARDE"
+        dataInscricao:
+          type: string
+          format: date-time
+          example: "2023-01-15T10:00:00Z"
+        estrelas:
+          type: integer
+          example: 5
+        certificado:
+          type: boolean
+          example: true
+        ong:
+          type: string
+          example: "ONG Amigos dos Animais"
+        feedback:
+          type: string
+          example: "Experiência muito gratificante!"
+        encerradoEm:
+          type: string
+          format: date
+          example: "2024-06-01"
