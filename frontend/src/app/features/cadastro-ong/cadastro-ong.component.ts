@@ -66,8 +66,13 @@ export class CadastroOngComponent implements OnInit, AfterViewInit, OnDestroy {
       ],
       cnpj: ['', [Validators.required, Validators.pattern(/^\d{14}$/)]],
       telefone: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]],
+      pais: ['Brasil', [Validators.required]],
       cep: ['', [Validators.required, Validators.pattern(/^\d{5}-?\d{3}$/)]],
-      endereco: [''],
+      estado: ['', Validators.required],
+      cidade: ['', Validators.required],
+      bairro: ['', Validators.required],
+      rua: ['', Validators.required],
+      numero: ['', [Validators.required, Validators.pattern(/^\d{1,5}$/)]],
       senha: ['', [Validators.required, Validators.minLength(6)]],
       confirmarSenha: ['', Validators.required],
     },
@@ -181,43 +186,19 @@ export class CadastroOngComponent implements OnInit, AfterViewInit, OnDestroy {
       nomeEntidade: this.form.value.nomeOng.trim(),
       cnpj: this.form.value.cnpj.replace(/\D/g, ''),
       telefone: this.form.value.telefone.replace(/\D/g, ''),
-      cep: this.form.value.cep,
-      endereco: this.form.value.endereco,
+      email: this.form.value.email.trim(),
       senha: this.form.value.senha,
+      endereco: {
+        pais: this.form.value.pais,
+        estado: this.form.value.estado,
+        cidade: this.form.value.cidade,
+        cep: this.form.value.cep.replace(/\D/g, ''),
+        rua: this.form.value.rua,
+        numero: this.form.value.numero,
+        bairro: this.form.value.bairro,
+      },
     };
 
-    this.http.post('http://localhost:8080/ongs', payload).subscribe({
-      next: () => {
-        this.msg = 'Cadastro realizado com sucesso!';
-        this.erro = null;
-        this.form.reset();
-        this.showModal = true;
-
-        setTimeout(() => this.router.navigate(['/login']), 1000);
-      },
-      error: (err) => {
-        this.msg = null;
-
-        if (err.status === 409) {
-          this.erro = err.error?.message || 'Email ou CNPJ já cadastrado.';
-        } else {
-          this.erro = 'Erro ao cadastrar ONG.';
-        }
-        this.showModal = true;
-      },
-    });
-  }
-
-  public onModalFechado() {
-    if (this.modalMensagem.isSucesso) {
-      this.router.navigate(['/login']);
-    }
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
     this.ongService
       .cadastrarOng(payload)
       .pipe(takeUntil(this.destroy$))
