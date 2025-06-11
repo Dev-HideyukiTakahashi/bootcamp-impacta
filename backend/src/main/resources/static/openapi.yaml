@@ -12,6 +12,10 @@ tags:
     description: Endpoints para gerenciamento de tags de atividades
   - name: Atividades
     description: Endpoints para gerenciamento de atividades
+  - name: ONGs
+    description: Endpoints para gerenciamento de Organizações Não Governamentais (ONGs)
+  - name: Histórico de Atividades
+    description: Endpoints para histórico de atividades de voluntários
 
 paths:
   # ==========================================
@@ -129,9 +133,9 @@ paths:
                     message: "Erro ao processar a solicitação. Falha ao conectar com o banco de dados."
                     path: "/tags/1"
 
-    # ==========================================
-    # Endpoints de Atividades
-    # ==========================================
+  # ==========================================
+  # Endpoints de Atividades
+  # ==========================================
 
   /api/atividades:
     get:
@@ -351,9 +355,9 @@ paths:
           schema:
             type: string
             format: date
-            example: "2024-06-01" # Ou "01-06-2024" se você for usar o pattern no @DateTimeFormat
+            example: "2024-06-01" 
           required: true
-          description: Data de encerramento no formato DD-MM-YYYY ou YYYY-MM-DD.
+          description: Data de encerramento no formato YYYY-MM-DD.
         - in: query
           name: page
           schema:
@@ -397,10 +401,217 @@ paths:
           description: Não autorizado.
         "500":
           description: Erro interno no servidor.
+  
+  # ==========================================
+  # Endpoints de ONGs
+  # ==========================================
+  /api/ong/cadastrar:
+    post:
+      tags: [ONGs]
+      summary: Cadastrar nova ONG
+      description: Registra uma nova ONG no sistema.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OngRequestDTO"
+      responses:
+        "201":
+          description: ONG criada com sucesso.
+          headers:
+            Location:
+              description: URI do recurso criado.
+              schema:
+                type: string
+                format: uri
+                example: "/api/ong"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OngResponseDTO"
+        "400":
+          description: Requisição inválida. Dados fornecidos são incorretos ou incompletos.
+        "409":
+          description: Conflito. CNPJ ou E-mail já cadastrados.
+        "500":
+          description: Erro interno no servidor.
 
-  # ==========================================
-  # Schemas
-  # ==========================================
+  /api/ong/perfil-ong:
+    get:
+      tags: [ONGs]
+      summary: Obter perfil da ONG autenticada
+      description: Retorna os detalhes do perfil da ONG atualmente autenticada.
+      responses:
+        "200":
+          description: Perfil da ONG retornado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PerfilOngResponseDTO"
+        "401":
+          description: Não autorizado.
+        "404":
+          description: Perfil da ONG não encontrado.
+        "500":
+          description: Erro interno no servidor.
+
+  /api/ong/dados-ong:
+    get:
+      tags: [ONGs]
+      summary: Obter dados completos da ONG autenticada
+      description: Retorna todos os dados da ONG atualmente autenticada, incluindo informações de contato e endereço.
+      responses:
+        "200":
+          description: Dados da ONG retornados com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DadosOngResponseDTO"
+        "401":
+          description: Não autorizado.
+        "404":
+          description: Dados da ONG não encontrados.
+        "500":
+          description: Erro interno no servidor.
+
+  /api/ong/editar:
+    put:
+      tags: [ONGs]
+      summary: Atualizar dados da ONG autenticada
+      description: Atualiza as informações da ONG atualmente autenticada.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OngUpdateRequestDTO"
+      responses:
+        "204":
+          description: Dados da ONG atualizados com sucesso (No Content).
+        "400":
+          description: Requisição inválida.
+        "401":
+          description: Não autorizado.
+        "404":
+          description: ONG não encontrada para atualização.
+        "500":
+          description: Erro interno no servidor.
+
+  /api/ong/tag/{tag}:
+    get:
+      tags: [ONGs]
+      summary: Buscar ONGs por Tag
+      description: Retorna uma lista paginada de ONGs associadas a uma tag específica.
+      parameters:
+        - name: tag
+          in: path
+          required: true
+          description: Tag a ser utilizada na busca de ONGs.
+          schema:
+            type: string
+            example: "Educação"
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 0
+          description: Número da página (começa em 0)
+        - in: query
+          name: size
+          schema:
+            type: integer
+            default: 10
+          description: Tamanho da página
+        - in: query
+          name: sort
+          schema:
+            type: string
+            description: "Campo para ordenação (ex: nomeEntidade,asc)"
+      responses:
+        "200":
+          description: Lista de ONGs por tag retornada com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ListaOngResponse"
+                  totalPages:
+                    type: integer
+                  totalElements:
+                    type: integer
+                  size:
+                    type: integer
+                  number:
+                    type: integer
+        "401":
+          description: Não autorizado.
+        "404":
+          description: Nenhuma ONG encontrada para a tag especificada.
+        "500":
+          description: Erro interno no servidor.
+
+  /api/ong/estado/{estado}:
+    get:
+      tags: [ONGs]
+      summary: Buscar ONGs por Estado
+      description: Retorna uma lista paginada de ONGs localizadas em um estado específico.
+      parameters:
+        - name: estado
+          in: path
+          required: true
+          description: 'Estado a ser utilizado na busca de ONGs (ex: SP, RJ).'
+          schema:
+            type: string
+            example: "SP"
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 0
+          description: Número da página (começa em 0)
+        - in: query
+          name: size
+          schema:
+            type: integer
+            default: 10
+          description: Tamanho da página
+        - in: query
+          name: sort
+          schema:
+            type: string
+            description: "Campo para ordenação (ex: nomeEntidade,asc)"
+      responses:
+        "200":
+          description: Lista de ONGs por estado retornada com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ListaOngResponse"
+                  totalPages:
+                    type: integer
+                  totalElements:
+                    type: integer
+                  size:
+                    type: integer
+                  number:
+                    type: integer
+        "401":
+          description: Não autorizado.
+        "404":
+          description: Nenhuma ONG encontrada para o estado especificado.
+        "500":
+          description: Erro interno no servidor.
+
 components:
   schemas:
     TagDTO:
@@ -538,3 +749,221 @@ components:
           type: string
           format: date
           example: "2024-06-01"
+    
+    # ==========================================
+    # Schemas de ONGs
+    # ==========================================
+    OngRequestDTO:
+      type: object
+      required:
+        - nomeEntidade
+        - cnpj
+        - telefone
+        - email
+        - senha
+        - endereco
+      properties:
+        nomeEntidade:
+          type: string
+          example: "ONG Amigos do Meio Ambiente"
+        cnpj:
+          type: string
+          example: "00.000.000/0001-00"
+        telefone:
+          type: string
+          example: "(11) 98765-4321"
+        email:
+          type: string
+          format: email
+          example: "contato@ongmeioambiente.org"
+        senha:
+          type: string
+          format: password
+          example: "senhaSegura123"
+        endereco:
+          $ref: "#/components/schemas/EnderecoRequestDTO"
+
+    OngResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 101
+        nomeEntidade:
+          type: string
+          example: "ONG Amigos do Meio Ambiente"
+
+    PerfilOngResponseDTO:
+      type: object
+      properties:
+        nomeEntidade:
+          type: string
+          example: "ONG Ajudando Vidas"
+        cidade:
+          type: string
+          example: "São Paulo"
+        estado:
+          type: string
+          example: "SP"
+        cnpj:
+          type: string
+          example: "12.345.678/0001-90"
+        rua:
+          type: string
+          example: "Rua da Esperança"
+        numero:
+          type: string
+          example: "456"
+
+    DadosOngResponseDTO:
+      type: object
+      properties:
+        nomeEntidade:
+          type: string
+          example: "ONG Criança Feliz"
+        cnpj:
+          type: string
+          example: "98.765.432/0001-12"
+        email:
+          type: string
+          format: email
+          example: "info@criancafeliz.org"
+        telefone:
+          type: string
+          example: "(11) 91234-5678"
+        pais:
+          type: string
+          example: "Brasil"
+        cep:
+          type: string
+          example: "01000-000"
+        estado:
+          type: string
+          example: "SP"
+        cidade:
+          type: string
+          example: "São Paulo"
+        bairro:
+          type: string
+          example: "Centro"
+        rua:
+          type: string
+          example: "Av. Principal"
+        numero:
+          type: string
+          example: "123"
+
+    OngUpdateRequestDTO:
+      type: object
+      properties:
+        telefone:
+          type: string
+          example: "(11) 99887-7665"
+        endereco:
+          $ref: "#/components/schemas/EnderecoUpdateRequestDTO"
+        senha:
+          type: string
+          format: password
+          example: "novaSenhaSegura456"
+
+    ListaOngResponse:
+      type: object
+      properties:
+        nomeEntidade:
+          type: string
+          example: "ONG de Proteção Animal"
+        cidade:
+          type: string
+          example: "Campinas"
+        estado:
+          type: string
+          example: "SP"
+        tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/TagRequestDTO"
+        atividades:
+          type: array
+          items:
+            $ref: "#/components/schemas/AtividadeMinDTO"
+    
+    EnderecoRequestDTO:
+      type: object
+      required:
+        - pais
+        - cep
+        - estado
+        - cidade
+        - bairro
+        - rua
+        - numero
+      properties:
+        pais:
+          type: string
+          example: "Brasil"
+        cep:
+          type: string
+          example: "01001-000"
+        estado:
+          type: string
+          example: "SP"
+        cidade:
+          type: string
+          example: "São Paulo"
+        bairro:
+          type: string
+          example: "Consolação"
+        rua:
+          type: string
+          example: "Rua Augusta"
+        numero:
+          type: string
+          example: "100"
+
+    EnderecoUpdateRequestDTO:
+      type: object
+      properties:
+        pais:
+          type: string
+          example: "Brasil"
+        cep:
+          type: string
+          example: "01002-000"
+        estado:
+          type: string
+          example: "RJ"
+        cidade:
+          type: string
+          example: "Rio de Janeiro"
+        bairro:
+          type: string
+          example: "Copacabana"
+        rua:
+          type: string
+          example: "Av. Atlântica"
+        numero:
+          type: string
+          example: "500"
+
+    AtividadeMinDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 201
+        nome:
+          type: string
+          example: "Visita a Abrigos"
+        descricao:
+          type: string
+          example: "Visita periódica a abrigos de animais para auxiliar na rotina."
+
+    TagRequestDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        nome:
+          type: string
+          example: "Meio Ambiente"
