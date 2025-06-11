@@ -1,7 +1,5 @@
 package br.com.impacta.boacao.repository;
 
-import java.time.LocalDate;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -54,9 +52,10 @@ public interface HistoricoAtividadeRepository extends JpaRepository<HistoricoAti
             JOIN ha.voluntario voluntario
             JOIN voluntario.usuario usuario
             JOIN atividade.ong ong
-            WHERE ha.encerradoEm = :data
+            WHERE YEAR(ha.encerradoEm) = :ano
+            AND MONTH(ha.encerradoEm) = :mes
             AND usuario.id = :usuarioId
             """)
-    Page<HistoricoAtividadeDTO> buscarTodosPorIdEData(Integer usuarioId, LocalDate data, Pageable pageable);
+    Page<HistoricoAtividadeDTO> buscarTodosPorIdEData(Integer usuarioId, Integer ano, Integer mes, Pageable pageable);
 
 }

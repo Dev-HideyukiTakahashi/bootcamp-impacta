@@ -37,6 +37,7 @@ class HistoricoAtividadeServiceTest {
     private Pageable pageable;
     private Page<HistoricoAtividadeDTO> page;
 
+    @SuppressWarnings("unchecked")
     @BeforeEach
     void setUp() {
         usuario = new Usuario();
@@ -59,16 +60,18 @@ class HistoricoAtividadeServiceTest {
 
     @Test
     void buscarTodosPorData_DeveRetornarPageDeHistoricoAtividadeDTO_QuandoSucesso() {
-        String data = "2024-06-01";
-        LocalDate localDate = LocalDate.parse(data);
+        String encerradoEm = "2024-06-01";
+        LocalDate data = LocalDate.parse(encerradoEm);
+        Integer ano = data.getYear();
+        Integer mes = data.getMonthValue();
 
         when(usuarioService.getUsuarioAutenticado()).thenReturn(usuario);
-        when(historicoAtividadeRepository.buscarTodosPorIdEData(usuario.getId(), localDate, pageable)).thenReturn(page);
+        when(historicoAtividadeRepository.buscarTodosPorIdEData(usuario.getId(), ano, mes, pageable)).thenReturn(page);
 
-        Page<HistoricoAtividadeDTO> result = historicoAtividadeService.buscarTodosPorData(data, pageable);
+        Page<HistoricoAtividadeDTO> result = historicoAtividadeService.buscarTodosPorData(encerradoEm, pageable);
 
         assertEquals(page, result);
         verify(usuarioService, times(1)).getUsuarioAutenticado();
-        verify(historicoAtividadeRepository, times(1)).buscarTodosPorIdEData(usuario.getId(), localDate, pageable);
+        verify(historicoAtividadeRepository, times(1)).buscarTodosPorIdEData(usuario.getId(), ano, mes, pageable);
     }
 }

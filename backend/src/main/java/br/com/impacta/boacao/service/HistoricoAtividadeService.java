@@ -31,9 +31,12 @@ public class HistoricoAtividadeService {
     }
 
     @Transactional(readOnly = true)
-    public Page<HistoricoAtividadeDTO> buscarTodosPorData(String data, Pageable pageable) {
+    public Page<HistoricoAtividadeDTO> buscarTodosPorData(String encerradoEm, Pageable pageable) {
         Usuario usuario = usuarioService.getUsuarioAutenticado();
+        LocalDate data = LocalDate.parse(encerradoEm);
+        Integer ano = data.getYear();
+        Integer mes = data.getMonthValue();
 
-        return historicoAtividadeRepository.buscarTodosPorIdEData(usuario.getId(), LocalDate.parse(data), pageable);
+        return historicoAtividadeRepository.buscarTodosPorIdEData(usuario.getId(), ano, mes, pageable);
     }
 }
