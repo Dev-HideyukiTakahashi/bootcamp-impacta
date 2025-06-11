@@ -64,13 +64,18 @@ public class OngController {
     return ResponseEntity.noContent().build();
   }
 
-  @GetMapping(path = "/{tag}")
+  @GetMapping(path = "/tag/{tag}")
   public ResponseEntity<Page<ListaOngResponse>> buscarPorTag(@PathVariable String tag, Pageable pageable) {
-
     Page<ListaOngResponse> response = ongService.buscarPorTag(tag, pageable);
 
     return ResponseEntity.ok().body(response);
+  }
 
+  @GetMapping(path = "/estado/{estado}")
+  public ResponseEntity<Page<ListaOngResponse>> buscarPorEstado(@PathVariable String estado, Pageable pageable) {
+    Page<ListaOngResponse> response = ongService.buscarPorEstado(estado, pageable);
+
+    return ResponseEntity.ok().body(response);
   }
 
 }

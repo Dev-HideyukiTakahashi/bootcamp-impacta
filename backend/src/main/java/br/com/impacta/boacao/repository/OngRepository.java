@@ -18,4 +18,7 @@ public interface OngRepository extends JpaRepository<Ong, Integer> {
     @Query("SELECT o FROM Ong o JOIN o.tags t WHERE t.nome LIKE %:tag%")
     Page<Ong> buscarPorTag(String tag, Pageable pageable);
 
+    // Busca todas as ongs filtradas por ESTADO
+    @Query("SELECT o FROM Ong o JOIN o.endereco e WHERE e.estado = :estado")
+    Page<Ong> buscarPorEstado(String estado, Pageable pageable);
 }

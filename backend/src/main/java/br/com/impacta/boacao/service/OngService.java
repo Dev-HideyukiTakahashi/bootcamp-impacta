@@ -129,7 +129,6 @@ public class OngService {
 
     @Transactional(readOnly = true)
     public Page<ListaOngResponse> buscarPorTag(String tag, Pageable pageable) {
-
         Page<Ong> ongs = ongRepository.buscarPorTag(tag, pageable);
 
         return ongs.map(ong -> OngMapper.toListaDto(ong));
@@ -137,8 +136,7 @@ public class OngService {
 
     @Transactional(readOnly = true)
     public Page<ListaOngResponse> buscarPorEstado(String estado, Pageable pageable) {
-
-        Page<Ong> ongs = ongRepository.buscarPorTag(estado, pageable);
+        Page<Ong> ongs = ongRepository.buscarPorEstado(estado, pageable);
 
         return ongs.map(ong -> OngMapper.toListaDto(ong));
     }
