@@ -1,16 +1,45 @@
-// src/app/service/tag.service.ts
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Tag } from '../model/tag.model';
+import { isPlatformBrowser } from '@angular/common';
+// Interface para representar os dados da tag
+export interface TagRequestDTO {
+  id?: number;
+  nome: string;
+  // outros campos que sua tag possa ter
+}
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class TagService {
-  private baseUrl = 'http://localhost:8080/tags';
+  private apiUrl = 'http://localhost:8080/tags';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  getTags(): Observable<Tag[]> {
-    return this.http.get<Tag[]>(this.baseUrl);
+buscarTodos(): Observable<any[]> {
+    let headers = new HttpHeaders();
+
+    // Verificar se está rodando no navegador antes de acessar localStorage
+    if (isPlatformBrowser(this.platformId)) {
+      const token = localStorage.getItem('userToken');
+      if (token) {
+        headers = headers.set('Authorization', `Bearer ${token}`);
+      }
+    }
+
+    return this.http.get<TagRequestDTO[]>(this.apiUrl, { headers });
+  }
+  platformId(platformId: any) {
+    throw new Error('Method not implemented.');
+  }
+
+  buscarPorId(id: number): Observable<TagRequestDTO> {
+    const token = localStorage.getItem('userToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<TagRequestDTO>(`${this.apiUrl}/${id}`, { headers });
   }
 }

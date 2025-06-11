@@ -1,5 +1,6 @@
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
@@ -7,10 +8,37 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class AuthService {
   private API = 'http://localhost:8080';
+  private readonly TOKEN_KEY = 'access_token'; // Nome consistente
   clientId = 'myclientid'; // colocar em variavel de ambiente
   clientSecret = 'myclientsecret'; // colocar em variavel de ambiente
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
+
+  getToken(): string | null {
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem(this.TOKEN_KEY);
+    }
+    return null;
+  }
+
+  setToken(token: string): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem(this.TOKEN_KEY, token);
+    }
+  }
+
+  removeToken(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem(this.TOKEN_KEY);
+    }
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
 
   // LOGIN
   login(username: string, password: string) {
@@ -59,11 +87,13 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.clear();
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.clear();
+    }
   }
 
   getDecodedToken(): any | null {
-    const token = localStorage.getItem('access_token');
+    const token = this.getToken();
     if (!token) return null;
 
     try {
@@ -87,18 +117,5 @@ export class AuthService {
   isVoluntario(): boolean {
     if (!this.getDecodedToken()) return false;
     return this.getUserRole() === 'ROLE_VOLUNTARIO';
-  }
-
-  isLoggedIn(): boolean {
-    const token = localStorage.getItem('access_token');
-    if (!token) return false;
-
-    try {
-      const decoded: any = jwtDecode(token);
-      const currentTime = Math.floor(Date.now() / 1000);
-      return decoded.exp && decoded.exp > currentTime;
-    } catch (e) {
-      return false;
-    }
   }
 }

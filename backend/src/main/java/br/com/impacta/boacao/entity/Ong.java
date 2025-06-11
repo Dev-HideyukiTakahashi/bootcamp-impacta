@@ -8,41 +8,32 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 
-/**
- * Entidade base para as ONGs do sistema.
- */
 @Entity
 public class Ong {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String nomeOng;
+    private String nomeEntidade;
     private String cnpj;
     private String telefone;
-    private String endereco;
-   // private String cep;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario_id", referencedColumnName = "id")
     private Usuario usuario;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "endereco_id")
+    private Endereco endereco;
+
     public Ong() {
     }
 
-    public Ong(int id, String nomeOng, String cnpj, String telefone, String endereco/* , String cep*/) {
+    public Ong(int id, String nomeEntidade, String cnpj, String telefone) {
         this.id = id;
-        this.nomeOng = nomeOng;
+        this.nomeEntidade = nomeEntidade;
         this.cnpj = cnpj;
         this.telefone = telefone;
-        this.endereco = endereco;
-        //this.cep = cep;
-    }
-
-    public Ong(int id, String nomeOng, String cnpj) {
-        this.id = id;
-        this.nomeOng = nomeOng;
-        this.cnpj = cnpj;
     }
 
     public int getId() {
@@ -53,12 +44,12 @@ public class Ong {
         this.id = id;
     }
 
-    public String getNomeOng() {
-        return nomeOng;
+    public String getNomeEntidade() {
+        return nomeEntidade;
     }
 
-    public void setNomeOng(String nomeOng) {
-        this.nomeOng = nomeOng;
+    public void setNomeEntidade(String nomeEntidade) {
+        this.nomeEntidade = nomeEntidade;
     }
 
     public String getCnpj() {
@@ -77,27 +68,19 @@ public class Ong {
         this.telefone = telefone;
     }
 
-    public String getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
-
-   /*  public String getCep() {
-        return cep;
-    }
-
-    public void setCep(String cep) {
-        this.cep = cep;
-    }*/
-
     public Usuario getUsuario() {
         return usuario;
     }
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
 }
