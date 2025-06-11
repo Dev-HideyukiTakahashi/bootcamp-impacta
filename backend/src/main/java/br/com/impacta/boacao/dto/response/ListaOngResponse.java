@@ -3,8 +3,7 @@ package br.com.impacta.boacao.dto.response;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.impacta.boacao.entity.Atividade;
-import br.com.impacta.boacao.entity.Tag;
+import br.com.impacta.boacao.dto.request.TagRequestDTO;
 
 public class ListaOngResponse {
 
@@ -13,17 +12,13 @@ public class ListaOngResponse {
     private String estado;
     private boolean participando;
 
-    private final List<Tag> tags = new ArrayList<>();
-    private final List<Atividade> atividades = new ArrayList<>();
+    private final List<TagRequestDTO> tags = new ArrayList<>();
+    private final List<AtividadeResponseDTO> atividades = new ArrayList<>();
 
-    public ListaOngResponse() {
-    }
-
-    public ListaOngResponse(String nomeEntidade, String cidade, String estado, boolean participando) {
+    public ListaOngResponse(String nomeEntidade, String cidade, String estado) {
         this.nomeEntidade = nomeEntidade;
         this.cidade = cidade;
         this.estado = estado;
-        this.participando = participando;
     }
 
     public String getNomeEntidade() {
@@ -58,11 +53,20 @@ public class ListaOngResponse {
         this.participando = participando;
     }
 
-    public List<Tag> getTags() {
+    public List<TagRequestDTO> getTags() {
         return tags;
     }
 
-    public List<Atividade> getAtividades() {
+    public void addTag(TagRequestDTO tagDTO) {
+        tags.add(tagDTO);
+    }
+
+    public List<AtividadeResponseDTO> getAtividades() {
         return atividades;
     }
+
+    public void addAtividade(AtividadeResponseDTO atividadeDTO) {
+        atividades.add(atividadeDTO);
+    }
+
 }

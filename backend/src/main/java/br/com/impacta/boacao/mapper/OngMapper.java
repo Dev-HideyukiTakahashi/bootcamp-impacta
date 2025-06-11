@@ -7,10 +7,13 @@ import br.com.impacta.boacao.dto.request.EnderecoUpdateRequestDTO;
 import br.com.impacta.boacao.dto.request.OngRequestDTO;
 import br.com.impacta.boacao.dto.request.OngUpdateRequestDTO;
 import br.com.impacta.boacao.dto.response.DadosOngResponseDTO;
+import br.com.impacta.boacao.dto.response.ListaOngResponse;
 import br.com.impacta.boacao.dto.response.OngResponseDTO;
 import br.com.impacta.boacao.dto.response.PerfilOngResponseDTO;
+import br.com.impacta.boacao.entity.Atividade;
 import br.com.impacta.boacao.entity.Endereco;
 import br.com.impacta.boacao.entity.Ong;
+import br.com.impacta.boacao.entity.Tag;
 
 @Component
 public class OngMapper {
@@ -100,5 +103,23 @@ public class OngMapper {
             endereco.setRua(dto.getRua());
         if (dto.getNumero() != null)
             endereco.setNumero(dto.getNumero());
+    }
+
+    public static ListaOngResponse toListaDto(Ong ong) {
+
+        ListaOngResponse dto = new ListaOngResponse(
+                ong.getNomeEntidade(),
+                ong.getEndereco().getCidade(),
+                ong.getEndereco().getEstado());
+
+        for (Tag tag : ong.getTags()) {
+            dto.addTag(TagMapper.paraDTO(tag));
+        }
+
+        for (Atividade atividade : ong.getAtividades()) {
+            dto.addAtividade(AtividadeMapper.toDTO(atividade));
+        }
+
+        return dto;
     }
 }
