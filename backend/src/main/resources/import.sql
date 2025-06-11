@@ -72,6 +72,13 @@ INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, ce
 INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura, encerrado_em) VALUES (2, 5, '2024-07-01', 1, 'REALIZADO', null);
 INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, certificado, status_candidatura, avaliacao_id, encerrado_em) VALUES (2, 1, '2024-04-01', 1, 'REALIZADO', 3, '2024-06-01');
 
+-- -- Associando ONGs com tags de atividades
+INSERT INTO ongs_tags (ong_id, tag_id) VALUES (1, (SELECT id FROM tag WHERE nome = 'Educação e Mentoria'));
+INSERT INTO ongs_tags (ong_id, tag_id) VALUES (1, (SELECT id FROM tag WHERE nome = 'Meio Ambiente e Sustentabilidade'));
+INSERT INTO ongs_tags (ong_id, tag_id) VALUES (2, (SELECT id FROM tag WHERE nome = 'Assistência Social e Comunitária'));
+INSERT INTO ongs_tags (ong_id, tag_id) VALUES (2, (SELECT id FROM tag WHERE nome = 'Cuidado com Pessoas'));
+INSERT INTO ongs_tags (ong_id, tag_id) VALUES (3, (SELECT id FROM tag WHERE nome = 'Meio Ambiente e Sustentabilidade'));
+
 
 
 
@@ -96,14 +103,3 @@ INSERT INTO historico_atividade (voluntario_id, atividade_id, data_inscricao, ce
 --   (10, (SELECT id FROM tag WHERE nome = 'Educação e Mentoria')),
 --   (10, (SELECT id FROM tag WHERE nome = 'Captação de Recursos e Marketing'));
 
--- -- Associando ONGs com tags de atividades
--- INSERT INTO ong_tag (ong_id, tag_id) VALUES
---   (1, (SELECT id FROM tag WHERE nome = 'Educação e Mentoria')),
---   (1, (SELECT id FROM tag WHERE nome = 'Meio Ambiente e Sustentabilidade')),
---   (2, (SELECT id FROM tag WHERE nome = 'Assistência Social e Comunitária')),
---   (2, (SELECT id FROM tag WHERE nome = 'Cuidado com Pessoas')),
---   (3, (SELECT id FROM tag WHERE nome = 'Meio Ambiente e Sustentabilidade')),
---   (4, (SELECT id FROM tag WHERE nome = 'Esporte, Cultura e Recreação')),
---   (4, (SELECT id FROM tag WHERE nome = 'Cuidado com Pessoas')),
---   (5, (SELECT id FROM tag WHERE nome = 'Educação e Mentoria')),
---   (5, (SELECT id FROM tag WHERE nome = 'Captação de Recursos e Marketing'));

@@ -1,9 +1,13 @@
 package br.com.impacta.boacao.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Table(name = "tag")
@@ -14,6 +18,9 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nome;
+
+    @ManyToMany(mappedBy = "tags")
+    private final Set<Ong> ongs = new HashSet<>();
 
     public Tag() {
     }
@@ -42,4 +49,9 @@ public class Tag {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    public Set<Ong> getOngs() {
+        return ongs;
+    }
+
 }
