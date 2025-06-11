@@ -1,30 +1,44 @@
 <app-header></app-header>
 
-<div class="container-fluid py-5" style="background-color:#f2f2f2;">
+<div class="container-fluid py-5" style="background-color: #f2f2f2">
   <div class="container">
     <h2 class="text-center mb-4">Descrição das Habilidades</h2>
     <div class="bg-white p-5 rounded shadow-sm">
-
       <div *ngIf="tags.length > 0; else noTags">
         <div class="row row-cols-1 row-cols-md-2 g-4">
-
           <div *ngFor="let tag of tags" class="col">
-            <div class="border rounded p-3"
-              [ngClass]="{'bg-light': !tag.isOpen, 'bg-custom-dark': tag.isOpen, 'text-black': tag.isOpen}">
-              <div class="d-flex justify-content-between align-items-center" role="button" (click)="toggle(tag)">
-
+            <div
+              class="border rounded p-3"
+              [ngClass]="{
+                'bg-light': !tag.isOpen,
+                'bg-custom-dark': tag.isOpen,
+                'text-black': tag.isOpen
+              }"
+            >
+              <div
+                class="d-flex justify-content-between align-items-center"
+                role="button"
+                (click)="toggle(tag)"
+              >
                 <h5 class="fw-bold mb-0">{{ tag.nome }}</h5>
 
                 <div *ngIf="tag.isOpen" class="form-check ms-auto me-2">
-                  <input class="form-check-input" type="checkbox" id="checkbox-{{tag.id}}" [(ngModel)]="tag.isSelected"
-                    (click)="$event.stopPropagation()">
-                  <label class="form-check-label" for="checkbox-{{tag.id}}">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="checkbox-{{ tag.id }}"
+                    [(ngModel)]="tag.isSelected"
+                    (click)="$event.stopPropagation()"
+                  />
+                  <label class="form-check-label" for="checkbox-{{ tag.id }}">
                     Selecionar
                   </label>
                 </div>
 
-                
-                <i class="bi" [ngClass]="tag.isOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                <i
+                  class="bi"
+                  [ngClass]="tag.isOpen ? 'bi-chevron-up' : 'bi-chevron-down'"
+                ></i>
               </div>
 
               <!-- A DESCRIÇÃO SÓ APARECE QUANDO tag.isOpen É TRUE -->
@@ -33,7 +47,6 @@
               </p>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -42,17 +55,15 @@
       </ng-template>
 
       <div class="text-center mt-4">
-        <div class="d-flex justify-content-center gap-3"> 
+        <div class="d-flex justify-content-center gap-3">
           <button class="btn btn-primary px-5" [routerLink]="'/meu-perfil'">
             Voltar
           </button>
-          <button class="btn btn-primary px-5"
-          (click)="adicionarHabilidades()">
+          <button class="btn btn-primary px-5" (click)="adicionarHabilidades()">
             Adicionar
           </button>
         </div>
       </div>
-
     </div>
   </div>
 </div>

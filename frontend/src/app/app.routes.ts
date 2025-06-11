@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { CadastroOngComponent } from './features/cadastro-ong/cadastro-ong.component';
 import { CadastroVoluntarioComponent } from './features/cadastro-voluntario/cadastro-voluntario.component';
+import { DetalhesHabilidadesComponent } from './features/detalhes-habilidades/detalhes-habilidades.component';
 import { EditarOngComponent } from './features/editar-ong/editar-ong.component';
 import { EditarVoluntarioComponent } from './features/editar-voluntario/editar-voluntario.component';
 import { HomeOngComponent } from './features/home-ong/home-ong.component';

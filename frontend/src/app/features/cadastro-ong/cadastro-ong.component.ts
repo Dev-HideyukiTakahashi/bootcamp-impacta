@@ -1,6 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {
+  AfterViewInit,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -12,8 +19,11 @@ import {
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { NgxMaskDirective } from 'ngx-mask';
+import { Subject, takeUntil } from 'rxjs';
+import { OngService } from '../../service/ong.service';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
+import { ModalMensagemComponent } from '../../shared/modal-mensagem/modal-mensagem.component';
 
 @Component({
   selector: 'app-cadastro-ong',
@@ -30,18 +40,21 @@ import { FooterComponent } from '../../shared/footer/footer.component';
   templateUrl: './cadastro-ong.component.html',
   styleUrls: ['./cadastro-ong.component.scss'],
 })
-export class CadastroOngComponent {
-  fb = inject(FormBuilder);
-  http = inject(HttpClient);
-  router = inject(Router);
-  showModal: boolean = false;
+export class CadastroOngComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild(ModalMensagemComponent) modalMensagem!: ModalMensagemComponent;
 
-  msg: string | null = null;
-  erro: string | null = null;
+  private fb = inject(FormBuilder);
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private ongService = inject(OngService);
 
-  form: FormGroup = this.fb.group(
+  private destroy$ = new Subject<void>();
+
+  public buscandoCep = false;
+
+  public form: FormGroup = this.fb.group(
     {
-      nome: ['', Validators.required],
+      nomeOng: ['', [Validators.required]],
       email: [
         '',
         [
@@ -193,6 +206,34 @@ export class CadastroOngComponent {
         this.showModal = true;
       },
     });
+  }
+
+  public onModalFechado() {
+    if (this.modalMensagem.isSucesso) {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+    this.ongService
+      .cadastrarOng(payload)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.modalMensagem.abrirSucesso('Cadastro realizado com sucesso!');
+          this.form.reset();
+        },
+        error: (err: HttpErrorResponse) => {
+          const backendMsg =
+            err.error && (err.error as any).message
+              ? (err.error as any).message
+              : 'Erro ao cadastrar voluntário. Tente novamente.';
+          this.modalMensagem.abrirErro(backendMsg);
+        },
+      });
   }
 
   public onModalFechado() {

@@ -2,7 +2,6 @@ package br.com.impacta.boacao.service;
 
 import java.sql.Timestamp;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -28,80 +27,7 @@ import br.com.impacta.boacao.repository.UsuarioRepository;
 public class OngService {
 
     private final OngRepository ongRepository;
-    private final RoleRepository roleRepository;<<<<<<<HEAD
-    private final PasswordEncoder passwordEncoder;
-    private final UsuarioRepository usuarioRepository;
-
-    @Autowired
-    public OngService(OngRepository ongRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder,
-            UsuarioRepository usuarioRepository) {
-        this.ongRepository = ongRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.usuarioRepository = usuarioRepository;
-    }
-
-    /**
-     * Cadastra uma nova ONG.
-     * 
-     * @param dto dados vindos da camada de API
-     * @return DTO de resposta, já com o ID gerado
-     */
-    @Transactional
-    public OngResponseDTO salvar(OngRequestDTO dto) {
-
-        // Validação de campos obrigatórios
-        if (dto.getNomeOng() == null || dto.getNomeOng().isEmpty()) {
-            throw new IllegalArgumentException("O campo nomeOng é obrigatório.");
-        }
-        if (dto.getCnpj() == null || dto.getCnpj().isEmpty()) {
-            throw new IllegalArgumentException("O campo CNPJ é obrigatório.");
-        }
-        if (dto.getTelefone() == null || dto.getTelefone().isEmpty()) {
-            throw new IllegalArgumentException("O campo telefone é obrigatório.");
-        }
-        if (dto.getEndereco() == null || dto.getEndereco().isEmpty()) {
-            throw new IllegalArgumentException("O campo endereço é obrigatório.");
-        }
-        if (dto.getEmail() == null || dto.getEmail().isEmpty()) {
-            throw new IllegalArgumentException("O campo email é obrigatório.");
-        }
-        if (dto.getSenha() == null || dto.getSenha().isEmpty()) {
-            throw new IllegalArgumentException("O campo senha é obrigatório.");
-        }
-
-        // Verificação de CNPJ duplicado
-        if (ongRepository.existsByCnpj(dto.getCnpj())) {
-            throw new IllegalArgumentException("Já existe uma ONG cadastrada com este CNPJ.");
-        }
-        // verificação do email na usuarioRepository
-        if (usuarioRepository.existsByEmail(dto.getEmail())) {
-            throw new IllegalArgumentException("Já existe um usuário cadastrado com este e-mail.");
-        }
-
-        // Buscar o Role do tipo ONG
-        Role roleOng = roleRepository.findByAuthority("ROLE_ONG")
-                .orElseThrow(() -> new IllegalArgumentException("Role ROLE_ONG não encontrada"));
-
-        // Criar a data de criação
-        Timestamp agora = new Timestamp(System.currentTimeMillis());
-
-        // Criar o usuário
-        String senhaCriptografada = passwordEncoder.encode(dto.getSenha());
-        Usuario novoUsuario = new Usuario(dto.getEmail(), senhaCriptografada);
-        novoUsuario.setCriadoEm(agora);
-        novoUsuario.setRole(roleOng);
-
-        // Mapear a ONG e vincular o usuário
-        Ong entidade = OngMapper.toEntity(dto);
-        entidade.setUsuario(novoUsuario);
-
-        // Salvar a ONG (e o Usuário junto)
-        Ong salvo = ongRepository.save(entidade);
-
-        return OngMapper.toResponse(salvo);
-    }=======
-
+    private final RoleRepository roleRepository;
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final OngMapper mapper;
@@ -165,38 +91,37 @@ public class OngService {
         return mapper.toDadosOngDTO(ong);
     }
 
-@Transactional
-public void atualizarOng(Authentication auth, OngUpdateRequestDTO dto) {
-    String email = ((JwtAuthenticationToken) auth).getToken().getClaim("username");
-    Ong ong = ongRepository.findByUsuarioEmail(email)
-        .orElseThrow(() -> new RecursoNaoEncontradoException("ONG não encontrada"));
+    @Transactional
+    public void atualizarOng(Authentication auth, OngUpdateRequestDTO dto) {
+        String email = ((JwtAuthenticationToken) auth).getToken().getClaim("username");
+        Ong ong = ongRepository.findByUsuarioEmail(email)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("ONG não encontrada"));
 
-    // Atualiza telefone se veio preenchido
-    if (dto.getTelefone() != null && !dto.getTelefone().isBlank()) {
-        ong.setTelefone(dto.getTelefone());
-    }
-
-    // Atualiza endereço apenas se veio endereço no DTO
-    if (dto.getEndereco() != null) {
-        Endereco endereco = ong.getEndereco();
-        if (endereco == null) {
-            endereco = new Endereco();
-            ong.setEndereco(endereco);
+        // Atualiza telefone se veio preenchido
+        if (dto.getTelefone() != null && !dto.getTelefone().isBlank()) {
+            ong.setTelefone(dto.getTelefone());
         }
-        mapper.updateEnderecoFromDto(dto.getEndereco(), endereco);
-    }
 
-    // Atualiza senha se fornecida e diferente da atual
-    if (dto.getSenha() != null && !dto.getSenha().isBlank()) {
-        String senhaAtualCriptografada = ong.getUsuario().getSenha();
-        if (passwordEncoder.matches(dto.getSenha(), senhaAtualCriptografada)) {
-            throw new IllegalArgumentException("A nova senha não pode ser igual à senha atual.");
+        // Atualiza endereço apenas se veio endereço no DTO
+        if (dto.getEndereco() != null) {
+            Endereco endereco = ong.getEndereco();
+            if (endereco == null) {
+                endereco = new Endereco();
+                ong.setEndereco(endereco);
+            }
+            mapper.updateEnderecoFromDto(dto.getEndereco(), endereco);
         }
-        ong.getUsuario().setSenha(passwordEncoder.encode(dto.getSenha()));
+
+        // Atualiza senha se fornecida e diferente da atual
+        if (dto.getSenha() != null && !dto.getSenha().isBlank()) {
+            String senhaAtualCriptografada = ong.getUsuario().getSenha();
+            if (passwordEncoder.matches(dto.getSenha(), senhaAtualCriptografada)) {
+                throw new IllegalArgumentException("A nova senha não pode ser igual à senha atual.");
+            }
+            ong.getUsuario().setSenha(passwordEncoder.encode(dto.getSenha()));
+        }
+
+        ongRepository.save(ong);
     }
 
-    ongRepository.save(ong);
-}
-
-    >>>>>>>cadastro/perfil/editar
 }

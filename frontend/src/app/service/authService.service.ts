@@ -118,17 +118,4 @@ export class AuthService {
     if (!this.getDecodedToken()) return false;
     return this.getUserRole() === 'ROLE_VOLUNTARIO';
   }
-
-  isLoggedIn(): boolean {
-    const token = localStorage.getItem('access_token');
-    if (!token) return false;
-
-    try {
-      const decoded: any = jwtDecode(token);
-      const currentTime = Math.floor(Date.now() / 1000);
-      return decoded.exp && decoded.exp > currentTime;
-    } catch (e) {
-      return false;
-    }
-  }
 }
