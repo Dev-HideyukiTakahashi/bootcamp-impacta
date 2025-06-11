@@ -20,11 +20,13 @@ import br.com.impacta.boacao.entity.Endereco;
 import br.com.impacta.boacao.entity.Ong;
 import br.com.impacta.boacao.entity.Role;
 import br.com.impacta.boacao.entity.Usuario;
+import br.com.impacta.boacao.entity.Voluntario;
 import br.com.impacta.boacao.exception.RecursoNaoEncontradoException;
 import br.com.impacta.boacao.mapper.OngMapper;
 import br.com.impacta.boacao.repository.OngRepository;
 import br.com.impacta.boacao.repository.RoleRepository;
 import br.com.impacta.boacao.repository.UsuarioRepository;
+import br.com.impacta.boacao.repository.VoluntarioRepository;
 
 @Service
 public class OngService {
@@ -34,17 +36,19 @@ public class OngService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final OngMapper mapper;
+    private final UsuarioService usuarioService;
+    private final VoluntarioRepository voluntarioRepository;
 
-    public OngService(OngRepository ongRepository,
-            RoleRepository roleRepository,
-            UsuarioRepository usuarioRepository,
-            PasswordEncoder passwordEncoder,
-            OngMapper mapper) {
+    public OngService(OngRepository ongRepository, RoleRepository roleRepository, UsuarioRepository usuarioRepository,
+            PasswordEncoder passwordEncoder, OngMapper mapper, UsuarioService usuarioService,
+            VoluntarioRepository voluntarioRepository) {
         this.ongRepository = ongRepository;
         this.roleRepository = roleRepository;
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.mapper = mapper;
+        this.usuarioService = usuarioService;
+        this.voluntarioRepository = voluntarioRepository;
     }
 
     @Transactional
@@ -130,15 +134,17 @@ public class OngService {
     @Transactional(readOnly = true)
     public Page<ListaOngResponse> buscarPorTag(String tag, Pageable pageable) {
         Page<Ong> ongs = ongRepository.buscarPorTag(tag, pageable);
+        Voluntario voluntario = voluntarioRepository.getReferenceById(usuarioService.getUsuarioAutenticado().getId());
 
-        return ongs.map(ong -> OngMapper.toListaDto(ong));
+        return ongs.map(ong -> OngMapper.toListaDto(ong, voluntario));
     }
 
     @Transactional(readOnly = true)
     public Page<ListaOngResponse> buscarPorEstado(String estado, Pageable pageable) {
         Page<Ong> ongs = ongRepository.buscarPorEstado(estado, pageable);
+        Voluntario voluntario = voluntarioRepository.getReferenceById(usuarioService.getUsuarioAutenticado().getId());
 
-        return ongs.map(ong -> OngMapper.toListaDto(ong));
+        return ongs.map(ong -> OngMapper.toListaDto(ong, voluntario));
     }
 
 }

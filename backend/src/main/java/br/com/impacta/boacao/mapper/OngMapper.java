@@ -14,6 +14,7 @@ import br.com.impacta.boacao.entity.Atividade;
 import br.com.impacta.boacao.entity.Endereco;
 import br.com.impacta.boacao.entity.Ong;
 import br.com.impacta.boacao.entity.Tag;
+import br.com.impacta.boacao.entity.Voluntario;
 
 @Component
 public class OngMapper {
@@ -105,7 +106,7 @@ public class OngMapper {
             endereco.setNumero(dto.getNumero());
     }
 
-    public static ListaOngResponse toListaDto(Ong ong) {
+    public static ListaOngResponse toListaDto(Ong ong, Voluntario voluntario) {
 
         ListaOngResponse dto = new ListaOngResponse(
                 ong.getNomeEntidade(),
@@ -117,9 +118,10 @@ public class OngMapper {
         }
 
         for (Atividade atividade : ong.getAtividades()) {
-            dto.addAtividade(AtividadeMapper.toDTO(atividade));
+            dto.addAtividade(AtividadeMapper.toMinDTO(atividade, voluntario));
         }
 
         return dto;
     }
+
 }

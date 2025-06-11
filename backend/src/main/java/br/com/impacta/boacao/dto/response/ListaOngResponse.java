@@ -10,10 +10,9 @@ public class ListaOngResponse {
     private String nomeEntidade;
     private String cidade;
     private String estado;
-    private boolean participando;
 
     private final List<TagRequestDTO> tags = new ArrayList<>();
-    private final List<AtividadeResponseDTO> atividades = new ArrayList<>();
+    private final List<AtividadeMinDTO> atividades = new ArrayList<>();
 
     public ListaOngResponse(String nomeEntidade, String cidade, String estado) {
         this.nomeEntidade = nomeEntidade;
@@ -45,14 +44,6 @@ public class ListaOngResponse {
         this.estado = estado;
     }
 
-    public boolean isParticipando() {
-        return participando;
-    }
-
-    public void setParticipando(boolean participando) {
-        this.participando = participando;
-    }
-
     public List<TagRequestDTO> getTags() {
         return tags;
     }
@@ -61,11 +52,11 @@ public class ListaOngResponse {
         tags.add(tagDTO);
     }
 
-    public List<AtividadeResponseDTO> getAtividades() {
+    public List<AtividadeMinDTO> getAtividades() {
         return atividades;
     }
 
-    public void addAtividade(AtividadeResponseDTO atividadeDTO) {
+    public void addAtividade(AtividadeMinDTO atividadeDTO) {
         atividades.add(atividadeDTO);
     }
 

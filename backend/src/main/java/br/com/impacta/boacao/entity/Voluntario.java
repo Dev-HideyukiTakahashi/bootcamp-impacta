@@ -19,13 +19,12 @@ public class Voluntario {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+  private Integer id;
   private String nomeCompleto;
   private String cpf;
   private String telefone;
   @Column(columnDefinition = "DATE")
   private LocalDate dataNascimento;
-
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "usuario_id", referencedColumnName = "id")
@@ -39,7 +38,7 @@ public class Voluntario {
 
   }
 
-  public Voluntario(int id, String nomeCompleto, String cpf, String telefone, LocalDate  dataNascimento) {
+  public Voluntario(Integer id, String nomeCompleto, String cpf, String telefone, LocalDate dataNascimento) {
     this.id = id;
     this.nomeCompleto = nomeCompleto;
     this.cpf = cpf;
@@ -47,11 +46,11 @@ public class Voluntario {
     this.dataNascimento = dataNascimento;
   }
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -79,7 +78,7 @@ public class Voluntario {
     this.telefone = telefone;
   }
 
-  public LocalDate  getDataNascimento() {
+  public LocalDate getDataNascimento() {
     return dataNascimento;
   }
 
@@ -95,7 +94,7 @@ public class Voluntario {
     this.usuario = usuario;
   }
 
-   public Endereco getEndereco() {
+  public Endereco getEndereco() {
     return endereco;
   }
 
