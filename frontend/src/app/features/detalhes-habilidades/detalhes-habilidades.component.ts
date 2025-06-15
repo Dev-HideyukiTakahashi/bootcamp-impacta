@@ -1,19 +1,18 @@
-import { Component, OnInit, Inject, PLATFORM_ID, Injectable } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnInit, PLATFORM_ID, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { TagService } from '../../service/tag.service';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
-import { RouterLink, RouterModule } from '@angular/router';
-import { TagService } from '../../service/tag.service';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-
-
 
 interface TagRequestDTO {
   id?: number;
-  nome: string; 
+  nome: string;
 }
 
 interface UiTag extends TagRequestDTO {
+  id?: number;
   isOpen: boolean;
   descricao: string;
   isSelected: boolean; // controlar o status do checkbox
@@ -25,14 +24,13 @@ interface UiTag extends TagRequestDTO {
   standalone: true,
   templateUrl: './detalhes-habilidades.component.html',
   styleUrls: ['./detalhes-habilidades.component.scss'],
-  providers: [TagService]
+  providers: [TagService],
 })
-
 export class DetalhesHabilidadesComponent implements OnInit {
   tags: UiTag[] = [];
-  habilidadesSelecionadas: string[] = [];
+  habilidadesSelecionadas: any[] = [];
+  router = inject(Router);
 
-  
   public TAG_DESCRICAO: Record<number, string> = {
     1: 'Atividades relacionadas à organização, planejamento e gestão de projetos, equipes e recursos, garantindo a eficiência e o bom funcionamento das operações.',
     2: 'Ações voltadas para o apoio e desenvolvimento de indivíduos, famílias e comunidades em situação de vulnerabilidade, promovendo inclusão social e bem-estar.',
@@ -49,14 +47,11 @@ export class DetalhesHabilidadesComponent implements OnInit {
     13: 'Ações voltadas para o resgate, cuidado, proteção e bem-estar de animais, incluindo adoção, tratamento e conscientização.',
     14: 'Suporte e desenvolvimento de soluções tecnológicas, manutenção de sistemas, redes e equipamentos, e capacitação em ferramentas digitais.',
     15: 'Planejamento, organização e execução de eventos, reuniões, workshops e outras atividades, garantindo a logística e o bom andamento.',
-    16: 'Serviços de tradução de documentos, interpretação simultânea ou consecutiva, e facilitação da comunicação entre diferentes idiomas e culturas.'
+    16: 'Serviços de tradução de documentos, interpretação simultânea ou consecutiva, e facilitação da comunicação entre diferentes idiomas e culturas.',
   };
   // ********************************************************************
 
-  constructor(
-    private tagService: TagService,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  constructor(private tagService: TagService, @Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -67,26 +62,26 @@ export class DetalhesHabilidadesComponent implements OnInit {
   carregarTags(): void {
     this.tagService.buscarTodos().subscribe({
       next: (data: TagRequestDTO[]) => {
-        this.tags = data.map(tag => ({
+        this.tags = data.map((tag) => ({
           ...tag,
           isOpen: false,
           // buscar a descrição.
           descricao: this.TAG_DESCRICAO[tag.id ?? 0] || 'Descrição não disponível.',
-          isSelected: false
-
+          isSelected: false,
         }));
-        console.log('Tags carregadas:', this.tags);
       },
       error: (err) => {
         console.error('Erro ao carregar tags:', err);
-      }
+      },
     });
   }
   adicionarHabilidades(): void {
-    const tagsSelecionadas = this.tags.filter(tag => tag.isSelected);
-    this.habilidadesSelecionadas = tagsSelecionadas.map(tag => tag.nome);
+    const tagsSelecionadas = this.tags.filter((tag) => tag.isSelected);
+    this.habilidadesSelecionadas = tagsSelecionadas.map((tag) => tag.id?.toString());
     console.log('Habilidades selecionadas:', this.habilidadesSelecionadas);
     alert('Habilidades adicionadas com sucesso!');
+
+    this.router.navigate(['/perfil-voluntario']);
   }
   toggle(tag: UiTag): void {
     tag.isOpen = !tag.isOpen;

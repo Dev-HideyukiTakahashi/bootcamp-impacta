@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,7 +16,7 @@ import br.com.impacta.boacao.dto.request.TagRequestDTO;
 import br.com.impacta.boacao.service.TagService;
 
 @RestController
-@RequestMapping(path = "/tags")
+@RequestMapping(path = "/api/tags")
 public class TagController {
 
     private final TagService tagService;
@@ -37,5 +39,13 @@ public class TagController {
         log.info("Iniciando busca de tag id {}.", id);
         TagRequestDTO dto = tagService.buscarPorId(id);
         return ResponseEntity.ok(dto);
+    }
+
+    @PutMapping
+    public ResponseEntity<List<TagRequestDTO>> adicionaTags(@RequestBody List<TagRequestDTO> request) {
+
+        List<TagRequestDTO> response = tagService.adicionaTags(request);
+
+        return ResponseEntity.ok(response);
     }
 }
