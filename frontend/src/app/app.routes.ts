@@ -73,10 +73,30 @@ export const routes: Routes = [
     path: 'dados-voluntario',
     component: EditarVoluntarioComponent,
     canActivate: [authGuard],
-    data: { roles: [UserRole.Ong] }
+    data: { roles: [UserRole.Ong] },
   },
-
+  {
+    path: 'atividades',
+    component: GestaoAtividadesComponent,
+    canActivate: [authGuard],
+    data: { roles: [UserRole.Ong] },
+  },
+  {
+    path: 'cadastro-atividade',
+    component: CadastroAtividadeComponent,
+    canActivate: [authGuard],
+    data: { roles: [UserRole.Ong] },
+  },
   { path: 'recuperar-senha/:token', component: RecuperarSenhaComponent },
 
   { path: 'detalhes-habilidades', component: DetalhesHabilidadesComponent },
+  {
+    path: 'atividades/editar/:id',
+    canActivate: [authGuard],
+    data: { roles: [UserRole.Ong] },
+    loadComponent: () =>
+      import('./features/editar-atividade/editar-atividade.component').then(
+        (m) => m.EditarAtividadeComponent
+      ),
+  },
 ];

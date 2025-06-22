@@ -7,7 +7,7 @@ export interface Atividade {
   id: number;
   nome: string;
   periodo: Periodo;
-  cargaHorariaDiaria: number;
+  cargaHorariaDiaria: String;
   enderecoCompleto: string;
   possuiCertificacao: boolean;
   descricao: string;
@@ -16,3 +16,28 @@ export interface Atividade {
   idTag: number;
   voluntariosCount: number;
 }
+
+  // atualizarAtividade , campos para alterar
+  export interface AtualizarAtividade {
+    nome: string;
+    periodo: Periodo;
+    cargaHorariaDiaria: String;
+    enderecoCompleto: string;
+    possuiCertificacao: boolean;
+    descricao: string;
+    statusAtividade: StatusAtividade;
+    dataAtividade: Date;
+  }
+
+  // carregarDadosAtividade, campos para carregar dados
+  export interface CarregarDadosAtividade {
+    nome: string;
+    periodo: Periodo;
+    cargaHorariaDiaria: String;
+    enderecoCompleto: string;
+    possuiCertificacao: boolean;
+    descricao: string;
+    statusAtividade: StatusAtividade;
+    dataAtividade: Date;
+  }
+

@@ -128,6 +128,22 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
 
     @Override
     @Transactional(readOnly = true)
+    public AtividadeResponseDTO getDadosAtividadePorId(Integer id) {
+        Integer idOng = getIdUsuarioLogado(); // Garante que a ONG logada só acesse os próprios dados
+
+        Atividade atividade = atividadeRepository
+                .findByIdAndOngId(id, idOng)
+                .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Atividade não encontrada ou não pertence à ONG."
+        ));
+
+        AtividadeResponseDTO dto = AtividadeMapper.toDTO(atividade);
+        dto.setIdOng(idOng);
+        return dto;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<AtividadeResponseDTO> buscarTodas() {
         System.out.println("Iniciando método 'buscarTodos'...");
 
@@ -219,7 +235,7 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
         log.info("ID da ONG logada: {}", idOng);
 
         // Verifica se a atividade existe e pertence à ONG logada
-        Atividade existing = atividadeRepository
+        Atividade e = atividadeRepository
                 .findByIdAndOngId(id, idOng)
                 .orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND,
@@ -230,16 +246,14 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
         StatusAtividade atual = atividade.getStatusAtividade();
 
         // 2) Valida apenas ANDAMENTO→CONGELADA e CONGELADA→ANDAMENTO
-        if (
-                (atual == StatusAtividade.ANDAMENTO && novoStatus == StatusAtividade.CONGELADA) 
+        if ((atual == StatusAtividade.ANDAMENTO && novoStatus == StatusAtividade.CONGELADA)
                 || (atual == StatusAtividade.CONGELADA && novoStatus == StatusAtividade.ANDAMENTO)
                 || atual == StatusAtividade.ANDAMENTO && novoStatus == StatusAtividade.ENCERRADA) {
             atividade.setStatusAtividade(novoStatus);
-        } 
-        else {
+        } else {
             throw new IllegalStateException(
-                "Transição de status não permitida: " 
-                + atual + " → " + novoStatus
+                    "Transição de status não permitida: "
+                    + atual + " → " + novoStatus
             );
         }
 
@@ -250,5 +264,3 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
         return AtividadeMapper.toStatusResponseDTO(atualizado);
     }
 }
-
-

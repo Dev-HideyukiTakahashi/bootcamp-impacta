@@ -1,0 +1,54 @@
+<app-header></app-header>
+
+<section class="perfil-completo">
+  <h2>Alterar Atividade</h2>
+  <form [formGroup]="form" (ngSubmit)="salvar()">
+
+    <div class="form-group">
+      <label for="idTag">Tag: <span class="obrigatorio">*</span></label>
+      <select id="idTag" formControlName="idTag" (change)="onTagChange($event)">
+        <option *ngIf="!form.get('idTag')?.value" value="" disabled selected>-- Escolha uma Tag --</option>
+        <option *ngFor="let tag of tags" [value]="tag.id">{{ tag.nome }}</option>
+      </select>
+      <div *ngIf="form.get('idTag')?.invalid && form.get('idTag')?.touched" class="mensagem-erro">
+        Escolha uma tag para a atividade.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="dataAtividade">Horário da Atividade:</label>
+      <input type="datetime-local" id="dataAtividade" formControlName="dataAtividade" />
+      <div *ngIf="form.get('dataAtividade')?.invalid && form.get('dataAtividade')?.touched" class="mensagem-erro">
+        <span *ngIf="form.get('dataAtividade')?.errors?.['required']">Data e horário são obrigatórios.</span>
+        <span *ngIf="form.get('dataAtividade')?.errors?.['min']">Data e horário não podem ser no passado.</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="nomeTag">Nome da Atividade:</label>
+      <input id="nomeTag" type="text" [value]="selectedTagName" readonly />
+    </div>
+
+    <div class="form-group">
+      <label for="nome">Descrição da Atividade:</label>
+      <textarea id="nome" formControlName="descricao" rows="4"></textarea>
+      <div *ngIf="form.get('nome')?.invalid && form.get('nome')?.touched" class="mensagem-erro">
+        <span *ngIf="form.get('nome')?.errors?.['required']">Descrição é obrigatória.</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="cargaHorariaDiaria">Carga Horária (horas): <span class="obrigatorio">*</span></label>
+      <input id="cargaHorariaDiaria" type="text" min="1" formControlName="cargaHorariaDiaria" placeholder="Informe a carga horária" />
+      <div *ngIf="form.get('cargaHorariaDiaria')?.invalid && form.get('cargaHorariaDiaria')?.touched" class="mensagem-erro">
+        <span *ngIf="form.get('cargaHorariaDiaria')?.errors?.['required']">Carga horária é obrigatória.</span>
+        <span *ngIf="form.get('cargaHorariaDiaria')?.errors?.['min']">Carga horária deve ser maior que zero.</span>
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="form.invalid || salvarDados">Salvar Alterações</button>
+  </form>
+</section>
+
+<app-footer></app-footer>
+<app-modal-mensagem (fechado)="onModalFechado()"></app-modal-mensagem>

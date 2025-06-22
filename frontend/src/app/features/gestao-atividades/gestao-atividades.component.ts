@@ -21,7 +21,7 @@ import { FooterComponent } from '../../shared/footer/footer.component';
     FormsModule,
     HeaderComponent,
     FooterComponent,
-  ]
+  ],
 })
 export class GestaoAtividadesComponent implements OnInit {
   atividades: Atividade[] = [];
@@ -38,8 +38,8 @@ export class GestaoAtividadesComponent implements OnInit {
 
   loadAtividades(): void {
     this.atividadeService.getAtividades().subscribe({
-      next: lista => (this.atividades = lista),
-      error: err => console.error('Erro ao carregar atividades', err)
+      next: (lista) => (this.atividades = lista),
+      error: (err) => console.error('Erro ao carregar atividades', err),
     });
   }
 
@@ -65,16 +65,16 @@ export class GestaoAtividadesComponent implements OnInit {
   /** Chamado ao clicar em “Congelar” */
   congelarAtividade(atividade: Atividade): void {
     this.atividadeService.atualizarStatus(atividade.id, 'CONGELADA').subscribe({
-      next: () => (atividade.statusAtividade = 'CONGELADA'),
-      error: err => console.error('Erro ao congelar atividade', err)
+      next: (updated) => (atividade.statusAtividade = updated.statusAtividade),
+      error: (err) => console.error('Erro ao congelar atividade', err),
     });
   }
 
-  /** Chamado ao clicar em “Reabrir Atividade” */
+  /*Chamado ao clicar em “Reabrir Atividade” */
   reabrirAtividade(atividade: Atividade): void {
     this.atividadeService.atualizarStatus(atividade.id, 'ANDAMENTO').subscribe({
       next: () => (atividade.statusAtividade = 'ANDAMENTO'),
-      error: err => console.error('Erro ao reabrir atividade', err)
+      error: (err) => console.error('Erro ao reabrir atividade', err),
     });
   }
 
@@ -85,7 +85,11 @@ export class GestaoAtividadesComponent implements OnInit {
 
   /** Chamado ao clicar em “Histórico de Voluntários” */
   historicoVoluntarios(atividade: Atividade): void {
-    this.router.navigate(['/atividades', atividade.id, 'historico-voluntarios']);
+    this.router.navigate([
+      '/atividades',
+      atividade.id,
+      'historico-voluntarios',
+    ]);
   }
 
   /** Botão “Nova Atividade” */

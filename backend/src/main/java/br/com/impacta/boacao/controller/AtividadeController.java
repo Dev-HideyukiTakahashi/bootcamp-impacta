@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.impacta.boacao.dto.request.AtividadeRequestDTO;
 import br.com.impacta.boacao.dto.response.AtividadeResponseDTO;
 import br.com.impacta.boacao.dto.response.AtividadeStatusResponseDTO;
+import br.com.impacta.boacao.dto.response.DadosOngResponseDTO;
 import br.com.impacta.boacao.entity.enums.StatusAtividade;
 import br.com.impacta.boacao.service.AtividadeService;
 import jakarta.validation.Valid;
@@ -93,7 +95,13 @@ public class AtividadeController {
         }
     }
 
-    @PutMapping(path = "/{id}")
+    @GetMapping("/dados-atividade/{id}")
+    public ResponseEntity<AtividadeResponseDTO> getDadosAtividade(@PathVariable Integer id) {
+        var dto = atividadeService.getDadosAtividadePorId(id);
+        return ResponseEntity.ok(dto);
+    }
+
+    @PutMapping(path = "/editar/{id}")
     public ResponseEntity<AtividadeResponseDTO> atualizar(@PathVariable Integer id,
             @Valid @RequestBody AtividadeRequestDTO dto) {
         logger.info("Ong começando atualização da atividade");

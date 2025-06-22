@@ -24,10 +24,11 @@ public interface AtividadeService {
     AtividadeResponseDTO atualizar(Integer id, AtividadeRequestDTO dto);
 
     /**
-     * Atualiza apenas o campo statusAtividade de uma Atividade,
-     * retornando somente { id, statusAtividade }.
-     * Permite apenas ANDAMENTO→CONGELADA e CONGELADA→ANDAMENTO.
+     * Atualiza apenas o campo statusAtividade de uma Atividade, retornando
+     * somente { id, statusAtividade }. Permite apenas ANDAMENTO→CONGELADA e
+     * CONGELADA→ANDAMENTO.
      */
     AtividadeStatusResponseDTO atualizarStatus(Integer id, StatusAtividade novoStatus);
 
+    AtividadeResponseDTO getDadosAtividadePorId(Integer id);
 }

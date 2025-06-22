@@ -52,9 +52,7 @@
       <div class="botoes-acao">
         <!-- Se estiver em ANDAMENTO: Editar, Congelar e Buscar Voluntários -->
         <ng-container *ngIf="atividade.statusAtividade === 'ANDAMENTO'">
-          <button (click)="editarAtividade(atividade)" class="btn-acao btn-editar">
-            Editar
-          </button>
+          <button class="btn-acao btn-editar" [routerLink]="['/atividades/editar', atividade.id]">Editar</button>
           <button (click)="congelarAtividade(atividade)" class="btn-acao btn-congelar">
             Congelar
           </button>

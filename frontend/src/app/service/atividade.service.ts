@@ -1,10 +1,13 @@
 // src/app/service/atividade.service.ts
-
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
-import { Atividade } from '../model/atividade.model';
-
+import { Observable, throwError } from 'rxjs';
+import {
+  Atividade,
+  AtualizarAtividade,
+  CarregarDadosAtividade,
+} from '../model/atividade.model';
+import { catchError } from 'rxjs/operators';
 interface Page<T> {
   content: T[];
 }
@@ -23,14 +26,33 @@ export class AtividadeService {
     return this.http.post<Atividade>(this.baseUrl, payload);
   }
 
-  /**
-   * Atualiza apenas o campo statusAtividade de uma atividade específica.
-   * Ajuste o endpoint conforme sua API (PATCH ou PUT).
-   */
-  atualizarStatus(id: number, status: string): Observable<Atividade> {
-    // Exemplo: PUT http://localhost:8080/api/atividades/{id}/status
-    return this.http.put<Atividade>(`${this.baseUrl}/${id}/status`, {
-      statusAtividade: status
-    });
+  atualizarStatus(
+    id: number,
+    status: 'ANDAMENTO' | 'ENCERRADA' | 'CONGELADA'
+  ): Observable<Atividade> {
+    const url = `${this.baseUrl}/${id}/status/${status}`;
+    return this.http.patch<Atividade>(url, null);
+  }
+
+  getAtividadePorId(id: number): Observable<Atividade> {
+    return this.http.get<Atividade>(`${this.baseUrl}/dados-atividade/${id}`);
+  }
+
+  atualizarAtividade(
+    id: number,
+    atividade: AtualizarAtividade
+  ): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/editar/${id}`, atividade);
+  }
+
+  DadosAtividade(): Observable<CarregarDadosAtividade> {
+    return this.http
+      .get<CarregarDadosAtividade>(`${this.baseUrl}/dados-atividade`)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          console.error('Erro ao buscar dados completos da atividade', error);
+          return throwError(() => error);
+        })
+      );
   }
 }

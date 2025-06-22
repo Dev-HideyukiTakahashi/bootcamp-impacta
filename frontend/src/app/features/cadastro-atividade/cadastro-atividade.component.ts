@@ -59,9 +59,9 @@ export class CadastroAtividadeComponent implements OnInit {
     });
 
     // 2) Carrega as tags disponíveis
-    this.tagService.getTags().subscribe({
-      next: listaTags => {
-        this.tags = listaTags;
+    this.tagService.buscarTodos().subscribe({
+      next: buscarTodos => {
+        this.tags = buscarTodos;
         // Opcional: se quiser definir valor padrão, pode setar aqui
         // this.form.get('idTag')!.setValue(this.tags[0].id);
       },
