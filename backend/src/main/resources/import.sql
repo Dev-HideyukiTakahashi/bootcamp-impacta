@@ -34,7 +34,7 @@ INSERT INTO Voluntario (nome_completo, cpf, telefone, data_nascimento, usuario_i
 
 -- -- ONGs
 
-INSERT INTO ong (nome_ong, cnpj, telefone, endereco, usuario_id) VALUES ( 'ONG BoAção', '12.345.678/0001-90', '(11) 98765-4321', 'Av. Paulista, 1000, Bela Vista, São Paulo', 1);
+--INSERT INTO ong (nome_ong, cnpj, telefone, endereco, usuario_id) VALUES ( 'ONG BoAção', '12.345.678/0001-90', '(11) 98765-4321', 'Av. Paulista, 1000, Bela Vista, São Paulo', 1);
 
 
 
