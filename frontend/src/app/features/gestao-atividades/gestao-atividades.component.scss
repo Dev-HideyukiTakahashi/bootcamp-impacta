@@ -4,6 +4,8 @@
   margin: 0 auto;
   padding: 24px;
   background-color: #f0f2f5; /* fundo claro */
+  flex-direction: column;
+  min-height: 90vh;      /* ocupa toda altura da janela */
 }
 
 /* Título principal */
@@ -155,21 +157,24 @@
 .wrapper-nova-atividade {
   text-align: center;
   margin-bottom: 40px;
+  /* faz o botão ficar numa linha abaixo de todos os cards */
+  grid-column: 1 / -1;    /* ocupa todas as colunas do grid */
+  text-align: center;
+  margin-top: 1rem;
 }
 
 .btn-nova-atividade {
   padding: 10px 30px;
   font-size: 1rem;
-  background-color: transparent;
+  background-color: #25214e;
   border: 2px solid #343a40;
-  border-radius: 25px;
-  color: #343a40;
+  color: #ffffff;
   cursor: pointer;
   transition: background-color 0.2s, color 0.2s;
 }
 .btn-nova-atividade:hover {
-  background-color: #343a40;
-  color: #fff;
+  background-color: #ffffff;
+  color: #25214e;
 }
 
 /* Mensagem quando não há atividades */
@@ -178,4 +183,40 @@
   color: #777;
   font-style: italic;
   padding: 20px;
+}
+
+.lista-voluntarios {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0 0;
+}
+
+.lista-voluntarios li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.lista-voluntarios .icone {
+  margin-right: 0.5rem;
+}
+
+/* Cada card de historico de voluntarios */
+.card-atividade-historico {
+  position: relative;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: background-color 0.2s ease;
+  width: 375px;
+}
+
+.btn-gestao-voluntarios {
+ background-color: #25214e;
+  color: #fff;
+
 }

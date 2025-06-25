@@ -5,7 +5,7 @@ import { LoginComponent } from './features/login/login.component';
 import { CadastroVoluntarioComponent } from './features/cadastro-voluntario/cadastro-voluntario.component';
 import { CadastroOngComponent } from './features/cadastro-ong/cadastro-ong.component';
 import { EditarVoluntarioComponent } from './features/editar-voluntario/editar-voluntario.component';
-
+import { HistoricoAtividadeComponent } from './features/historico-atividades/historico-atividades.components';
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
@@ -19,4 +19,5 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
+
 export class AppRoutingModule {}

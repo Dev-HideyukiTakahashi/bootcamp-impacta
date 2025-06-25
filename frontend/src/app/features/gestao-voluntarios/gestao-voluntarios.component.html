@@ -1,0 +1,95 @@
+<app-header></app-header>
+
+<div class="form">
+  <h1 class="page-title">Gestão de Voluntários</h1>
+
+  <!-- SEGMENTED CONTROL -->
+  <div class="tabs-wrapper">
+    <button class="tab active">Voluntários</button>
+    <button class="tab">Buscar Novos Voluntários</button>
+  </div>
+
+  <!-- === INÍCIO DA LISTA DE VOLUNTÁRIOS === -->
+  <ul class="lista-voluntarios">
+    <li *ngFor="let v of paginatedVoluntarios" class="voluntario-item">
+      <!-- avatar -->
+      <img
+        class="avatar"
+        [src]="'assets/avatar.png'"
+        [alt]="'Avatar de ' + v.nome"
+      />
+
+      <!-- detalhes -->
+      <div class="detalhes">
+        <h3 class="nome">{{ v.nome }}</h3>
+        <p> Cidade: {{ v.cidade }} </p>
+        <p>Habilidade: {{ v.habilidade }}<p>
+
+        <!-- para status PENDENTE -->
+        <p *ngIf="v.status === 'PENDENTE'">Atividade: {{ v.atividade }}</p>
+
+        <!-- para status REALIZADO -->
+        <p *ngIf="v.status === 'REALIZADO'">
+          Encerrado {{ v.dataEncerramento | date : "dd/MM/yyyy" }}
+        </p>
+        <p *ngIf="v.status === 'REALIZADO'">Projeto: {{ v.projeto }}</p>
+      </div>
+
+      <!-- botões de ação -->
+      <div class="lista">
+        <button
+          *ngIf="v.status === 'PENDENTE'"
+          class="btn-acao"
+          (click)="aceitar(v)"
+        >
+          Aceitar
+        </button>
+        <button
+          *ngIf="v.status === 'PENDENTE'"
+          class="btn-acao"
+          (click)="rejeitar(v)"
+        >
+          Rejeitar
+        </button>
+
+        <button
+          *ngIf="v.status === 'REALIZADO'"
+          class="btn-acao"
+          (click)="avaliar(v)"
+        >
+          Avaliar
+        </button>
+
+        <button
+          *ngIf="v.status === 'APROVADO'"
+          class="btn-acao"
+          (click)="encerrar(v)"
+        >
+          Encerrar
+        </button>
+      </div>
+
+      <!-- badge de status -->
+      <span
+        class="badge"
+        [ngClass]="{
+          'status-pendente': v.status === 'PENDENTE',
+          'status-realizado': v.status === 'REALIZADO',
+          'status-aprovado': v.status === 'APROVADO',
+          'status-rejeitado': v.status === 'REJEITADO'
+        }"
+      >
+        {{ v.status }}
+      </span>
+    </li>
+  </ul>
+
+  <!-- paginação -->
+  <div class="wrapper-paginacao">
+    <button class="page-btn" disabled>‹</button>
+    <button class="page-btn active">1</button>
+    <button class="page-btn">2</button>
+    <button class="page-btn">›</button>
+  </div>
+</div>
+<app-footer></app-footer>

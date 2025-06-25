@@ -16,6 +16,7 @@ import { UserRole } from './model/enum/user-role.enum';
 import { GestaoAtividadesComponent } from './features/gestao-atividades/gestao-atividades.component';
 import { CadastroOngComponent } from './features/cadastro-ong/cadastro-ong.component';
 import { CadastroAtividadeComponent } from './features/cadastro-atividade/cadastro-atividade.component';
+import { GestaoVoluntariosComponent } from './features/gestao-voluntarios/gestao-voluntarios.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -98,5 +99,9 @@ export const routes: Routes = [
       import('./features/editar-atividade/editar-atividade.component').then(
         (m) => m.EditarAtividadeComponent
       ),
+  },
+  {
+    path: 'gestao-voluntarios',
+    component: GestaoVoluntariosComponent,
   },
 ];

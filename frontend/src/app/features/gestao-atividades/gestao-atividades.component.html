@@ -7,7 +7,9 @@
     <div
       *ngFor="let atividade of atividades"
       class="card-atividade"
-      [ngClass]="{ 'card-congelada': atividade.statusAtividade === 'CONGELADA' }"
+      [ngClass]="{
+        'card-congelada': atividade.statusAtividade === 'CONGELADA'
+      }"
     >
       <!-- "X" para fechar (se quiser manter) -->
       <button class="btn-close-card" title="Fechar">✕</button>
@@ -23,14 +25,17 @@
       <!-- Carga horária e período -->
       <div class="info-linha">
         <span class="icone"><i class="fa fa-clock"></i></span>
-        <span>{{ atividade.cargaHorariaDiaria }} horas por dia – {{ atividade.periodo }}</span>
+        <span
+          >{{ atividade.cargaHorariaDiaria }} horas por dia –
+          {{ atividade.periodo }}</span
+        >
       </div>
 
       <!-- Data e status -->
       <div class="info-linha">
         <span class="icone"><i class="fa fa-calendar-alt"></i></span>
         <span>
-          {{ atividade.dataAtividade | date: 'dd/MM/yyyy' }} –
+          {{ atividade.dataAtividade | date : "dd/MM/yyyy" }} –
           <strong
             [ngClass]="{
               'status-andamento': atividade.statusAtividade === 'ANDAMENTO',
@@ -52,42 +57,105 @@
       <div class="botoes-acao">
         <!-- Se estiver em ANDAMENTO: Editar, Congelar e Buscar Voluntários -->
         <ng-container *ngIf="atividade.statusAtividade === 'ANDAMENTO'">
-          <button class="btn-acao btn-editar" [routerLink]="['/atividades/editar', atividade.id]">Editar</button>
-          <button (click)="congelarAtividade(atividade)" class="btn-acao btn-congelar">
+          <button
+            class="btn-acao btn-editar"
+            [routerLink]="['/atividades/editar', atividade.id]"
+          >
+            Editar
+          </button>
+          <button
+            (click)="congelarAtividade(atividade)"
+            class="btn-acao btn-congelar"
+          >
             Congelar
           </button>
-          <button (click)="buscarVoluntarios(atividade)" class="btn-acao btn-buscar-voluntarios">
+          <button
+            (click)="ListarVoluntarios(atividade)"
+            class="btn-acao btn-gestao-voluntarios"
+
+             [routerLink]="['/gestao-voluntarios']"
+          >   <!--- esse router link tem que consumir o back  api/atividades/1/historico/todos
+              todos os voluntarios inscritos na atv (db historico_atividade )-->
+            Gestão de Voluntários
+          </button>
+          <button
+            (click)="buscarVoluntarios(atividade)"
+            class="btn-acao btn-buscar-voluntarios"
+             [routerLink]="['/gestao-voluntarios/BuscaVoluntarios', atividade.id]"
+          >   <!--- esse router link tem que consumir o back [ainda n fiz]
+          mas devera listar, inicialmente todos os voluntarios (vou decidir com o time ou entender com o time se
+          tag atividade  = tag habilidade do volunter)-->
+
             Buscar Voluntários
           </button>
         </ng-container>
 
         <!-- Se estiver CONGELADA: apenas Reabrir -->
         <ng-container *ngIf="atividade.statusAtividade === 'CONGELADA'">
-          <button (click)="reabrirAtividade(atividade)" class="btn-acao btn-reabrir">
+          <button
+            (click)="reabrirAtividade(atividade)"
+            class="btn-acao btn-reabrir"
+          >
             Reabrir Atividade
           </button>
         </ng-container>
 
         <!-- Se estiver ENCERRADA: apenas Histórico de Voluntários -->
+        <!-- Se estiver ENCERRADA -->
         <ng-container *ngIf="atividade.statusAtividade === 'ENCERRADA'">
-          <button (click)="historicoVoluntarios(atividade)" class="btn-acao btn-historico-voluntarios">
-            Histórico de Voluntários
-          </button>
+          <!-- Quando o histórico NÃO está aberto para esta atividade: mostra o botão -->
+          <ng-container *ngIf="historicoOpenId !== atividade.id">
+            <button
+              (click)="historicoVoluntarios(atividade)"
+              class="btn-acao btn-historico-voluntarios"
+            >
+              Histórico de Voluntários
+            </button>
+          </ng-container>
+
+          <!-- Quando o histórico ESTÁ aberto para esta atividade: mostra o “modal” -->
+          <ng-container *ngIf="historicoOpenId === atividade.id">
+            <div class="card-atividade-historico">
+              <!-- Botão de fechar -->
+              <button class="btn-close-card" (click)="fecharHistorico()">
+                ✕
+              </button>
+
+              <!-- Quantidade -->
+              <div class="info-linha">
+                <span class="icone"><i class="fa fa-user-friends"></i></span>
+                <span>
+                  <b> Voluntários: </b>
+                  {{ historicos[atividade.id].quantidadeVoluntarios }}
+                </span>
+              </div>
+
+              <!-- Lista de nomes -->
+              <ul class="lista-voluntarios">
+                <li *ngFor="let v of historicos[atividade.id]?.voluntarios">
+                  <span class="icone"><i class="fa fa-user"></i></span>
+                  {{ v.nomeVoluntario }}
+                </li>
+              </ul>
+            </div>
+          </ng-container>
         </ng-container>
+        <!-- ================================================================= -->
       </div>
-      <!-- ================================================================= -->
+
+      <!-- Caso não haja nenhuma atividade -->
+      <div *ngIf="atividades.length === 0" class="nenhuma-atividade">
+        Nenhuma atividade cadastrada.
+      </div>
     </div>
 
-    <!-- Caso não haja nenhuma atividade -->
-    <div *ngIf="atividades.length === 0" class="nenhuma-atividade">
-      Nenhuma atividade cadastrada.
+    <!-- Botão “Nova Atividade” centralizado abaixo dos cards -->
+    <div class="wrapper-nova-atividade">
+      <button class="btn-nova-atividade" (click)="novaAtividade()">
+        Nova Atividade
+      </button>
     </div>
-  </div>
-
-  <!-- Botão “Nova Atividade” centralizado abaixo dos cards -->
-  <div class="wrapper-nova-atividade">
-    <button class="btn-nova-atividade" (click)="novaAtividade()">Nova Atividade</button>
   </div>
 </div>
+  <app-footer></app-footer>
 
-<app-footer></app-footer>

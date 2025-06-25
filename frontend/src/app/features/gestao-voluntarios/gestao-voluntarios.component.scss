@@ -1,0 +1,232 @@
+/* gestao-voluntarios.component.scss */
+
+/* Centraliza tudo dentro do container do Angular */
+.container {
+  //text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  background-color: #f0f2f5;
+  /* fundo claro */
+  flex-direction: column;
+  min-height: 90vh;
+}
+
+/* 1) Título */
+.page-title {
+  text-align: center;
+  font-size: 1.75rem;
+  /* tamanho aproximado ao mock */
+  font-weight: 400;
+  color: #212529;
+  /* quase preto */
+  margin: 2rem 0 1rem;
+  /* top/bottom para dar espaçamento */
+}
+
+/* 2) Wrapper das abas em formato pill */
+.tabs-wrapper {
+  text-align: center;
+  display: block;
+  border: 1px solid #212529;
+  /* borda escura */
+  border-radius: 50px;
+  /* shape pill */
+  overflow: hidden;
+  /* esconde cantos internos */
+  margin-bottom: 2rem;
+  width: fit-content;
+  margin: 0 auto 2rem;
+}
+
+/* 3) Cada aba */
+.tab {
+  padding: 0.5rem 2rem;
+  /* ajusta largura e altura */
+  background-color: #fff;
+  /* fundo branco padrão */
+  color: #212529;
+  /* texto escuro */
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+/* 4) Aba ativa */
+.tab.active {
+  background-color: #ff6f00;
+  /* laranja HEXAG */
+  color: #212529;
+  /* texto escuro sobre laranja, igual ao mock */
+}
+
+/* 5) Hover na aba inativa (opcional para feedback) */
+.tab:not(.active):hover {
+  background-color: #f8f9fa;
+  /* ligeiro cinza para indicar foco */
+}
+
+
+/* lsita de voluntarios */
+/* 1) A lista inteira permanece com fundo branco e bordas suaves */
+.lista-voluntarios {
+  border-radius: 0.25rem;
+  overflow: hidden;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* 2) Cada item vira uma linha flex, sem fill-cinza por trás */
+.lista-voluntarios li {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 0.1px solid #ffffff;
+  margin: 0 10px;
+}
+
+.lista-voluntarios li:last-child {
+  border-bottom: none;
+}
+
+/* 3) Avatar com margem direita */
+.avatar {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #fdfdfd;
+  object-fit: cover;
+  margin-right: 1rem;
+}
+
+/* 4) Detalhe: ocupa todo espaço entre avatar e ações/status */
+.detalhe {
+  flex: 1;
+  /* cresce para preencher o centro */
+  display: flex;
+  flex-direction: column;
+  /* empilha texto */
+  gap: 0.2rem;
+  /* distância entre linhas */
+  font-size: 10px;
+  color: #2e071c;
+  /* tom de cinza escuro */
+  line-height: 1.3;
+}
+
+/* 5) Títulos e labels no detalhe */
+.detalhe .nome {
+  font-weight: 100;
+  color: #07131d;
+  /* quase preto */
+  margin-bottom: 1.25rem;
+}
+
+.detalhe span {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+/* 6) Remova qualquer background cinza no <li> */
+.voluntario-item {
+  background: #e8eaeb;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  /* mantém a quebra de linha para os botões */
+  align-items: flex-start;
+  padding: 1rem 1.5rem;
+}
+
+
+.badge {
+  position: absolute;
+  top: 1rem;
+  /* distÂncia do topo do <li> */
+  right: 1.5rem;
+  /* distÂncia da borda direita do <li> */
+  padding: .25rem .75rem;
+  font-size: .75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 1rem;
+  color: #fff;
+  background-color: #adb5bd;
+}
+
+.lista {
+  flex: 0 0 100%;
+  margin-top: .5rem;
+  display: flex;
+  gap: .5rem;
+}
+
+.lista :hover {
+  color: #240404;
+}
+
+.btn-acao {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #ffffff;
+  background-color: #25214e;
+  /* cinza escuro */
+  transition: background-color 0.2s ease;
+}
+
+/* Container “tracejado” */
+.wrapper-paginacao {
+   /* encolhe ao conteúdo interno */
+  margin: 2rem auto;
+  display: inline-flex;           /* mantém os botões em linha */
+
+  border: 1px dashed #ccc;        /* borda tracejada */
+  border-radius: 0.25rem;         /* cantinhos arredondados */
+  padding: 0.5rem;                /* espaço interno */
+  background: #fff;               /* fundo branco */
+  //: 2rem auto;              /* centraliza horizontal */
+}
+
+/* Cada botão de página */
+.page-btn {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0.25rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  background: #f8f9fa;
+  color: #495057;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+/* Botão ativo */
+.page-btn.active {
+  background: #ff6f00;
+  border-color: #ff6f00;
+  color: #fff;
+}
+
+/* Hover nos inativos */
+.page-btn:not(.active):hover {
+  background: #e2e6ea;
+}
+
+/* Desabilitado */
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+

@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms'; // necessário para [(ngModel)] no <select>
 
-import { AtividadeService } from '../../service/atividade.service';
+import {  AtividadeService,  HistoricoVoluntarios} from '../../service/atividade.service';
 import { Atividade, StatusAtividade } from '../../model/atividade.model';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
@@ -26,6 +26,8 @@ import { FooterComponent } from '../../shared/footer/footer.component';
 export class GestaoAtividadesComponent implements OnInit {
   atividades: Atividade[] = [];
   statusOptions: StatusAtividade[] = ['ANDAMENTO', 'ENCERRADA', 'CONGELADA'];
+  historicoOpenId: number | null = null;
+  historicos: { [id: number]: HistoricoVoluntarios } = {};
 
   constructor(
     private atividadeService: AtividadeService,
@@ -78,22 +80,36 @@ export class GestaoAtividadesComponent implements OnInit {
     });
   }
 
-  /** Chamado ao clicar em “Buscar Voluntários” */
+  /** Chamado ao clicar em “Buscar NOVOS Voluntários” */
   buscarVoluntarios(atividade: Atividade): void {
-    this.router.navigate(['/atividades', atividade.id, 'voluntarios']);
+    this.router.navigate(['/gestao-voluntarios']);
   }
-
-  /** Chamado ao clicar em “Histórico de Voluntários” */
-  historicoVoluntarios(atividade: Atividade): void {
-    this.router.navigate([
-      '/atividades',
-      atividade.id,
-      'historico-voluntarios',
-    ]);
+  /** Chamado ao clicar em listar Voluntários” */
+  listarVoluntarios(atividade: Atividade): void {
+    this.router.navigate(['/gestao-voluntarios']);
   }
 
   /** Botão “Nova Atividade” */
   novaAtividade(): void {
     this.router.navigate(['/cadastro-atividade']);
+  }
+
+  /** Chamado ao clicar em “Histórico de Voluntários” */
+  historicoVoluntarios(atividade: Atividade): void {
+    console.log('Buscando histórico para atividade:', atividade.id);
+    this.atividadeService.getHistorico(atividade.id).subscribe({
+      next: (data) => {
+        this.historicos[atividade.id] = data;
+        this.historicoOpenId = atividade.id;
+      },
+      error: (err) => {
+        console.error('Erro ao buscar histórico', err);
+      },
+    });
+  }
+
+  /** Fecha o modal de histórico */
+  fecharHistorico(): void {
+    this.historicoOpenId = null;
   }
 }
