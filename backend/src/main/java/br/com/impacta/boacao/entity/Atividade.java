@@ -1,6 +1,8 @@
 package br.com.impacta.boacao.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import br.com.impacta.boacao.entity.enums.PeriodoAtividade;
@@ -15,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 
 @Entity
@@ -23,7 +26,6 @@ public class Atividade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    //private Integer idOng;
     private String nome;
     private String descricao;
     @Enumerated(EnumType.STRING)
@@ -35,27 +37,29 @@ public class Atividade {
     @Enumerated(EnumType.STRING)
     @Column(name = "status_atividade", nullable = false, length = 20)
     private StatusAtividade statusAtividade;
-    
+
     private LocalDateTime criadoEm;
     private LocalDateTime dataAtividade;
     private String titulo;
-/* 
+
     @OneToMany(mappedBy = "atividade")
-    private final List<HistoricoAtividade> historicoAtividades = new ArrayList<>();*/
+    private final List<HistoricoAtividade> historicoAtividades = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_TAG", nullable = false)
+    @JoinColumn(name = "ID_TAG")
     private Tag tag;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_ONG", nullable = false)
+    @JoinColumn(name = "ID_ONG")
     private Ong ong;
 
     public Atividade() {
     }
 
-    public Atividade(Integer id, Integer idOng, String nome, String descricao, PeriodoAtividade periodo, String cargaHorariaDiaria,
-            String enderecoCompleto, Boolean possuiCertificacao, StatusAtividade statusAtividade, LocalDateTime dataAtividade) {
+    public Atividade(Integer id, Integer idOng, String nome, String descricao, PeriodoAtividade periodo,
+            String cargaHorariaDiaria,
+            String enderecoCompleto, Boolean possuiCertificacao, StatusAtividade statusAtividade,
+            LocalDateTime dataAtividade) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -65,7 +69,7 @@ public class Atividade {
         this.possuiCertificacao = possuiCertificacao;
         this.statusAtividade = statusAtividade;
         this.dataAtividade = dataAtividade;
-        //this.idOng = NULL; // Inicializa com null, será setado posteriormente
+        // this.idOng = NULL; // Inicializa com null, será setado posteriormente
         this.criadoEm = LocalDateTime.now();
         this.titulo = nome; // Inicializa o título com o nome da atividade]
         this.tag = null; // Inicializa com null, será setado posteriormente
@@ -127,7 +131,7 @@ public class Atividade {
     public void setPossuiCertificacao(Boolean possuiCertificacao) {
         this.possuiCertificacao = possuiCertificacao;
     }
-/* 
+
     public List<HistoricoAtividade> getHistoricoAtividades() {
         return historicoAtividades;
     }
@@ -135,7 +139,7 @@ public class Atividade {
     public void addHistoricoAtividades(HistoricoAtividade historicoAtividade) {
         historicoAtividades.add(historicoAtividade);
     }
-*/
+
     public StatusAtividade getStatusAtividade() {
         return statusAtividade;
     }
@@ -203,4 +207,5 @@ public class Atividade {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
 }

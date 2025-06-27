@@ -2,9 +2,8 @@ package br.com.impacta.boacao.controller;
 
 import java.net.URI;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,14 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.impacta.boacao.dto.response.DadosVoluntarioResponseDTO;
 import br.com.impacta.boacao.dto.request.VoluntarioRequestDTO;
 import br.com.impacta.boacao.dto.request.VoluntarioUpdateRequestDTO;
-import br.com.impacta.boacao.dto.response.VoluntarioResponseDTO;
+import br.com.impacta.boacao.dto.response.DadosVoluntarioResponseDTO;
 import br.com.impacta.boacao.dto.response.PerfilVoluntarioResponseDTO;
+import br.com.impacta.boacao.dto.response.VoluntarioResponseDTO;
 import br.com.impacta.boacao.service.VoluntarioService;
 import jakarta.validation.Valid;
-
 
 @RestController
 @RequestMapping("/api/voluntario")
@@ -27,7 +25,6 @@ public class VoluntarioController {
 
     private final VoluntarioService voluntarioService;
 
-    @Autowired
     public VoluntarioController(VoluntarioService voluntarioService) {
         this.voluntarioService = voluntarioService;
     }
@@ -55,12 +52,12 @@ public class VoluntarioController {
         return ResponseEntity.ok(dto);
     }
 
- @PutMapping("/editar")
-public ResponseEntity<Void> atualizarVoluntario(
-        Authentication auth,
-        @Valid @RequestBody VoluntarioUpdateRequestDTO dto) {
-    voluntarioService.atualizarVoluntario(auth, dto);
-    return ResponseEntity.noContent().build();
-}
+    @PutMapping("/editar")
+    public ResponseEntity<Void> atualizarVoluntario(
+            Authentication auth,
+            @Valid @RequestBody VoluntarioUpdateRequestDTO dto) {
+        voluntarioService.atualizarVoluntario(auth, dto);
+        return ResponseEntity.noContent().build();
+    }
 
 }

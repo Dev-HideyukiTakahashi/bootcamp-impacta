@@ -89,8 +89,7 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
 
     @Override
     @Transactional
-    public AtividadeResponseDTO cadastrar(AtividadeRequestDTO dto
-    ) {
+    public AtividadeResponseDTO cadastrar(AtividadeRequestDTO dto) {
         log.debug("Iniciando método 'cadastrar'...");
         Integer idOng = getIdUsuarioLogado();
 
@@ -134,8 +133,7 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
         Atividade atividade = atividadeRepository
                 .findByIdAndOngId(id, idOng)
                 .orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "Atividade não encontrada ou não pertence à ONG."
-        ));
+                        HttpStatus.NOT_FOUND, "Atividade não encontrada ou não pertence à ONG."));
 
         AtividadeResponseDTO dto = AtividadeMapper.toDTO(atividade);
         dto.setIdOng(idOng);
@@ -173,8 +171,7 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
 
     @Override
     @Transactional
-    public AtividadeResponseDTO atualizar(Integer id, AtividadeRequestDTO dto
-    ) {
+    public AtividadeResponseDTO atualizar(Integer id, AtividadeRequestDTO dto) {
         log.info("Iniciando método 'atualizar' para o ID: {}", id);
         Integer idOng = getIdUsuarioLogado();
         log.info("ID da ONG logada: {}", idOng);
@@ -183,9 +180,8 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
         Atividade existing = atividadeRepository
                 .findByIdAndOngId(id, idOng)
                 .orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Atividade não encontrada."
-        ));
+                        HttpStatus.NOT_FOUND,
+                        "Atividade não encontrada."));
 
         log.info("Atividade existente encontrada: {}", existing);
         // Atualiza os campos da entidade com os dados do DTO
@@ -238,9 +234,8 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
         Atividade e = atividadeRepository
                 .findByIdAndOngId(id, idOng)
                 .orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Atividade não encontrada."
-        ));
+                        HttpStatus.NOT_FOUND,
+                        "Atividade não encontrada."));
 
         Atividade atividade = opt.get();
         StatusAtividade atual = atividade.getStatusAtividade();
@@ -253,14 +248,14 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
         } else {
             throw new IllegalStateException(
                     "Transição de status não permitida: "
-                    + atual + " → " + novoStatus
-            );
+                            + atual + " → " + novoStatus);
         }
 
         // 3) Salva a mudança no repositório
         Atividade atualizado = atividadeRepository.save(atividade);
 
-        // 4) Converte a entidade salva para um DTO que contenha apenas {id, statusAtividade}
+        // 4) Converte a entidade salva para um DTO que contenha apenas {id,
+        // statusAtividade}
         return AtividadeMapper.toStatusResponseDTO(atualizado);
     }
 }

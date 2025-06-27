@@ -1,9 +1,12 @@
 package br.com.impacta.boacao.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import br.com.impacta.boacao.dto.request.HistoricoAtividadeRequestDTO;
+import br.com.impacta.boacao.dto.response.HistoricoAtividadeDTO;
 import br.com.impacta.boacao.dto.response.HistoricoAtividadeResponseDTO;
 import br.com.impacta.boacao.dto.response.HistoricoAtividadeTodosResponseDTO;
-
 
 public interface HistoricoAtividadeService {
     /**
@@ -14,7 +17,12 @@ public interface HistoricoAtividadeService {
      */
     HistoricoAtividadeResponseDTO buscarHistorico(HistoricoAtividadeRequestDTO request);
 
-    // retorna lista  de voluntarios inscritos para a atividade (sem filtro pelo status de aprovado, devem ter todos)
+    // retorna lista de voluntarios inscritos para a atividade (sem filtro pelo
+    // status de aprovado, devem ter todos)
     HistoricoAtividadeTodosResponseDTO listarTodosHistorico(HistoricoAtividadeRequestDTO request);
+
+    Page<HistoricoAtividadeDTO> buscarTodos(Pageable pageable);
+
+    Page<HistoricoAtividadeDTO> buscarTodosPorData(String encerradoEm, Pageable pageable);
 
 }

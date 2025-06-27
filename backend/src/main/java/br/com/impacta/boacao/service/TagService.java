@@ -41,4 +41,18 @@ public class TagService {
 
         return TagMapper.paraDTO(entidade);
     }
+
+    @Transactional
+    public List<TagRequestDTO> adicionaTags(List<TagRequestDTO> request) {
+
+        // TODO instanciar voluntario autenticado
+
+        // TODO limpar lista de tags do usuario logado
+
+        // TODO salvar a referência de cada tag que veio do array por id
+        // na lista de tags do usuario logado
+        System.out.println("REQUEST : " + request);
+        return null;
+    }
+
 }

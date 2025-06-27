@@ -17,6 +17,7 @@ export class HeaderComponent implements OnInit {
 
   ongLogado = false;
   voluntarioLogado = false;
+  isMenuOpen: boolean = false;
 
   // o método construtor é chamado antes de iniciar do componente e portanto ainda não existe localStorage
   // o ngOnInit é chamado depois que o componente é inicializado para evitar erro de undefined
@@ -37,5 +38,9 @@ export class HeaderComponent implements OnInit {
       this.ongLogado
         ? this.router.navigate(['/home-ong'])
         : this.router.navigate(['/home-voluntario']);
+  }
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 }

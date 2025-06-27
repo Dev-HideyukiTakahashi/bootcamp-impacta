@@ -3,18 +3,17 @@
     <img class="header__logo-icon" src="logo.png" alt="Logo BoAção" />
     <h1 class="header__logo-title" (click)="logo()">BoAção</h1>
   </div>
-  <nav class="header__nav">
-    <!-- Verificando ONG logado -->
+  <nav class="header__nav" [class.is-open]="isMenuOpen">
     @if(ongLogado ){
     <app-header-menu logado="ong" (buttonLogout)="logout()"></app-header-menu>
-    }
-    <!-- Verificando VOLUNTÁRIO logado -->
-    @else if(voluntarioLogado){
+    } @else if(voluntarioLogado){
     <app-header-menu logado="voluntario" (buttonLogout)="logout()"></app-header-menu>
-    }
-    <!-- Nenhum usuário logado -->
-    @else {
+    } @else {
     <app-header-menu logado="deslogado"></app-header-menu>
     }
   </nav>
+  <button class="header__menu-toggle" (click)="toggleMenu()">
+    <span *ngIf="!isMenuOpen" style="color: white">☰</span>
+    <span *ngIf="isMenuOpen" style="color: white">✕</span>
+  </button>
 </header>
