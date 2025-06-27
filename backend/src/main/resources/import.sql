@@ -52,11 +52,11 @@ INSERT INTO ong (nome_entidade, cnpj, telefone, usuario_id, endereco_id) VALUES 
 
 
 -- -- Inserindo Atividades
-INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em, ong_id) VALUES ('Curso de Programação', 'Curso de programação para iniciantes', 'TARDE', '4 horas', 'Rua A, 10 - São Paulo', 1, 'ANDAMENTO', '2025-05-28', 1);
-INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em, ong_id) VALUES ('Ação Social', 'Distribuição de alimentos para moradores de rua', 'MANHA', '3 horas', 'Rua B, 15 - Rio de Janeiro', 0, 'ANDAMENTO', '2025-02-18', 1);
-INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em, ong_id) VALUES ('Plantio de Árvores', 'Atividade de plantio de árvores em áreas urbanas', 'MANHA', '5 horas', 'Rua C, 20 - Belo Horizonte', 1, 'ENCERRADA', '2024-06-20', 2);
-INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em, ong_id) VALUES ('Oficina de Artes', 'Oficina de pintura e escultura para crianças', 'TARDE', '2 horas', 'Rua D, 25 - Curitiba', 0, 'ANDAMENTO','2024-11-11', 2);
-INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em, ong_id) VALUES ('Aulas de Idiomas', 'Aulas de inglês para pessoas em situação de vulnerabilidade', 'NOITE', '3 horas', 'Rua E, 30 - Salvador', 1, 'CONGELADA', '2024-01-10', 3);
+INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em, id_ong) VALUES ('Curso de Programação', 'Curso de programação para iniciantes', 'TARDE', '4 horas', 'Rua A, 10 - São Paulo', 1, 'ANDAMENTO', '2025-05-28', 1);
+INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em, id_ong) VALUES ('Ação Social', 'Distribuição de alimentos para moradores de rua', 'MANHA', '3 horas', 'Rua B, 15 - Rio de Janeiro', 0, 'ANDAMENTO', '2025-02-18', 1);
+INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em, id_ong) VALUES ('Plantio de Árvores', 'Atividade de plantio de árvores em áreas urbanas', 'MANHA', '5 horas', 'Rua C, 20 - Belo Horizonte', 1, 'ENCERRADA', '2024-06-20', 2);
+INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em, id_ong) VALUES ('Oficina de Artes', 'Oficina de pintura e escultura para crianças', 'TARDE', '2 horas', 'Rua D, 25 - Curitiba', 0, 'ANDAMENTO','2024-11-11', 2);
+INSERT INTO atividade (nome, descricao, periodo, carga_horaria_diaria, endereco_completo, possui_certificacao, status_atividade, criado_em, id_ong) VALUES ('Aulas de Idiomas', 'Aulas de inglês para pessoas em situação de vulnerabilidade', 'NOITE', '3 horas', 'Rua E, 30 - Salvador', 1, 'CONGELADA', '2024-01-10', 3);
 
 
 -- -- Inserindo Avaliações
