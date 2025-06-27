@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,10 +14,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import br.com.impacta.boacao.dto.request.AtividadeIdDTO;
 import br.com.impacta.boacao.dto.request.AtividadeRequestDTO;
 import br.com.impacta.boacao.dto.response.AtividadeResponseDTO;
 import br.com.impacta.boacao.dto.response.AtividadeStatusResponseDTO;
-import br.com.impacta.boacao.dto.response.DadosOngResponseDTO;
+import br.com.impacta.boacao.dto.response.VoluntarioAtividadeDTO;
 import br.com.impacta.boacao.entity.enums.StatusAtividade;
 import br.com.impacta.boacao.service.AtividadeService;
 import jakarta.validation.Valid;
@@ -52,19 +53,19 @@ public class AtividadeController {
      * Isso fará com que o service valide e altere apenas o campo
      * `statusAtividade` na entidade.
      *
-     * @param id o ID da atividade que queremos atualizar
+     * @param id         o ID da atividade que queremos atualizar
      * @param novoStatus o novo status (string que bate com o enum
-     * StatusAtividade)
+     *                   StatusAtividade)
      * @return 200 OK + a própria entidade Atividade (com status alterado) em
-     * caso de sucesso, 404 Not Found se o ID não existir, 409 Conflict se a
-     * transição de status não for permitida, 400 Bad Request se `novoStatus`
-     * não for um valor válido do enum.
+     *         caso de sucesso, 404 Not Found se o ID não existir, 409 Conflict se a
+     *         transição de status não for permitida, 400 Bad Request se
+     *         `novoStatus`
+     *         não for um valor válido do enum.
      */
     @PatchMapping("/{id}/status/{novoStatus}")
     public ResponseEntity<?> atualizarStatus(
             @PathVariable Integer id,
-            @PathVariable String novoStatus
-    ) {
+            @PathVariable String novoStatus) {
         StatusAtividade statusEnum;
 
         // 1) Converte a string para o enum (pode lançar IllegalArgumentException)
@@ -118,11 +119,21 @@ public class AtividadeController {
         return ResponseEntity.ok(response);
     }
 
-    /*@DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id){
-        logger.info("Ong deletando atividade de id: {}", id);
+    @PutMapping(path = "/atualizar-candidatura")
+    public ResponseEntity<VoluntarioAtividadeDTO> atualizarStatusCandidatura(@RequestBody AtividadeIdDTO request) {
+        logger.info("Iniciando associação de histórico de atividade a um voluntário");
 
-        atividadeService.deletar(id);
-        return ResponseEntity.noContent().build();
-    }*/
+        VoluntarioAtividadeDTO response = atividadeService.atualizarStatusCandidatura(request.getId());
+        return ResponseEntity.ok(response);
+    }
+
+    /*
+     * @DeleteMapping(path = "/{id}")
+     * public ResponseEntity<Void> deletar(@PathVariable Integer id){
+     * logger.info("Ong deletando atividade de id: {}", id);
+     * 
+     * atividadeService.deletar(id);
+     * return ResponseEntity.noContent().build();
+     * }
+     */
 }

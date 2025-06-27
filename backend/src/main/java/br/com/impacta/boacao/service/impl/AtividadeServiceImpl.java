@@ -2,6 +2,7 @@
 package br.com.impacta.boacao.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,17 +21,24 @@ import org.springframework.web.server.ResponseStatusException;
 import br.com.impacta.boacao.dto.request.AtividadeRequestDTO;
 import br.com.impacta.boacao.dto.response.AtividadeResponseDTO;
 import br.com.impacta.boacao.dto.response.AtividadeStatusResponseDTO;
+import br.com.impacta.boacao.dto.response.VoluntarioAtividadeDTO;
 import br.com.impacta.boacao.entity.Atividade;
+import br.com.impacta.boacao.entity.HistoricoAtividade;
 import br.com.impacta.boacao.entity.Ong;
 import br.com.impacta.boacao.entity.Tag;
 import br.com.impacta.boacao.entity.Usuario;
+import br.com.impacta.boacao.entity.Voluntario;
 import br.com.impacta.boacao.entity.enums.StatusAtividade;
+import br.com.impacta.boacao.entity.enums.StatusCandidatura;
 import br.com.impacta.boacao.exception.RecursoNaoEncontradoException;
 import br.com.impacta.boacao.mapper.AtividadeMapper;
 import br.com.impacta.boacao.repository.AtividadeRepository;
+import br.com.impacta.boacao.repository.HistoricoAtividadeRepository;
 import br.com.impacta.boacao.repository.OngRepository;
 import br.com.impacta.boacao.repository.TagRepository;
 import br.com.impacta.boacao.repository.UsuarioRepository;
+import br.com.impacta.boacao.repository.VoluntarioRepository;
+import br.com.impacta.boacao.service.UsuarioService;
 
 @Service
 public class AtividadeServiceImpl implements br.com.impacta.boacao.service.AtividadeService {
@@ -41,15 +49,20 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
     private final OngRepository ongRepository;
     private final TagRepository tagRepository;
     private final UsuarioRepository usuarioRepository;
+    private final UsuarioService usuarioService;
+    private final VoluntarioRepository voluntarioRepository;
+    private final HistoricoAtividadeRepository historicoAtividadeRepository;
 
-    public AtividadeServiceImpl(AtividadeRepository atividadeRepository,
-            OngRepository ongRepository,
-            TagRepository tagRepository,
-            UsuarioRepository usuarioRepository) {
+    public AtividadeServiceImpl(AtividadeRepository atividadeRepository, OngRepository ongRepository,
+            TagRepository tagRepository, UsuarioRepository usuarioRepository, UsuarioService usuarioService,
+            VoluntarioRepository voluntarioRepository, HistoricoAtividadeRepository historicoAtividadeRepository) {
         this.atividadeRepository = atividadeRepository;
         this.ongRepository = ongRepository;
         this.tagRepository = tagRepository;
         this.usuarioRepository = usuarioRepository;
+        this.usuarioService = usuarioService;
+        this.voluntarioRepository = voluntarioRepository;
+        this.historicoAtividadeRepository = historicoAtividadeRepository;
     }
 
     /**
@@ -257,5 +270,38 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
         // 4) Converte a entidade salva para um DTO que contenha apenas {id,
         // statusAtividade}
         return AtividadeMapper.toStatusResponseDTO(atualizado);
+    }
+
+    @Transactional
+    @Override
+    public VoluntarioAtividadeDTO atualizarStatusCandidatura(Integer atividadeId) {
+
+        Integer voluntarioId = usuarioService.getUsuarioAutenticado().getId(); // id user logado
+
+        Voluntario voluntario = voluntarioRepository.getReferenceById(voluntarioId);
+        Atividade atividade = atividadeRepository.getReferenceById(atividadeId);
+
+        HistoricoAtividade historicoAtividade = buildHistoricoAtividade(atividade, voluntario);
+        historicoAtividadeRepository.save(historicoAtividade);
+
+        voluntario.getHistoricoAtividades().add(historicoAtividade);
+
+        log.info("Historico de atividade associado ao usuario de id: {} com sucesso.", voluntarioId);
+
+        return AtividadeMapper.toVoluntarioAtividadeDTO(voluntario, historicoAtividade.getStatusCandidatura(),
+                atividade.getId());
+    }
+
+    // cria historico de atividades para associar ao voluntario
+    private HistoricoAtividade buildHistoricoAtividade(Atividade atividade, Voluntario voluntario) {
+
+        HistoricoAtividade historicoAtividade = new HistoricoAtividade();
+        historicoAtividade.setAtividade(atividade);
+        historicoAtividade.setCertificado(false);
+        historicoAtividade.setVoluntario(voluntario);
+        historicoAtividade.setDataInscricao(new Date());
+        historicoAtividade.setStatusCandidatura(StatusCandidatura.PENDENTE);
+
+        return historicoAtividade;
     }
 }

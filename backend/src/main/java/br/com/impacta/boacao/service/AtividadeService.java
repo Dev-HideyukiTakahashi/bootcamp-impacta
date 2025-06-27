@@ -6,6 +6,7 @@ import java.util.List;
 import br.com.impacta.boacao.dto.request.AtividadeRequestDTO;
 import br.com.impacta.boacao.dto.response.AtividadeResponseDTO;
 import br.com.impacta.boacao.dto.response.AtividadeStatusResponseDTO;
+import br.com.impacta.boacao.dto.response.VoluntarioAtividadeDTO;
 import br.com.impacta.boacao.entity.enums.StatusAtividade;
 
 public interface AtividadeService {
@@ -15,7 +16,7 @@ public interface AtividadeService {
      */
     AtividadeResponseDTO cadastrar(AtividadeRequestDTO dto);
 
-    //Lista todas as atividades da ONG logada, paginadas */
+    // Lista todas as atividades da ONG logada, paginadas */
     List<AtividadeResponseDTO> buscarTodas();
 
     /**
@@ -31,4 +32,7 @@ public interface AtividadeService {
     AtividadeStatusResponseDTO atualizarStatus(Integer id, StatusAtividade novoStatus);
 
     AtividadeResponseDTO getDadosAtividadePorId(Integer id);
+
+    VoluntarioAtividadeDTO atualizarStatusCandidatura(Integer atividadeId);
+
 }

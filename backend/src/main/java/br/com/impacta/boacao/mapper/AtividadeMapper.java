@@ -4,6 +4,7 @@ import br.com.impacta.boacao.dto.request.AtividadeRequestDTO;
 import br.com.impacta.boacao.dto.response.AtividadeMinDTO;
 import br.com.impacta.boacao.dto.response.AtividadeResponseDTO;
 import br.com.impacta.boacao.dto.response.AtividadeStatusResponseDTO;
+import br.com.impacta.boacao.dto.response.VoluntarioAtividadeDTO;
 import br.com.impacta.boacao.entity.Atividade;
 import br.com.impacta.boacao.entity.HistoricoAtividade;
 import br.com.impacta.boacao.entity.Voluntario;
@@ -66,6 +67,13 @@ public class AtividadeMapper {
                 status);
     }
 
+    public static VoluntarioAtividadeDTO toVoluntarioAtividadeDTO(Voluntario voluntario, StatusCandidatura status,
+            Integer atividadeId) {
+
+        return new VoluntarioAtividadeDTO(voluntario.getNomeCompleto(), status, atividadeId);
+
+    }
+
     private static StatusCandidatura buscarStatusCandidatura(Atividade atividade, Voluntario voluntario) {
         return atividade.getHistoricoAtividades().stream()
                 .filter(h -> h.getVoluntario().equals(voluntario))
@@ -73,4 +81,5 @@ public class AtividadeMapper {
                 .map(HistoricoAtividade::getStatusCandidatura)
                 .orElse(null);
     }
+
 }
