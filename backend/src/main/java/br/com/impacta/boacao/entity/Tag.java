@@ -22,6 +22,9 @@ public class Tag {
     @ManyToMany(mappedBy = "tags")
     private final Set<Ong> ongs = new HashSet<>();
 
+    @ManyToMany(mappedBy = "tags")
+    private final Set<Voluntario> voluntarios = new HashSet<>();
+
     public Tag() {
     }
 
@@ -52,6 +55,10 @@ public class Tag {
 
     public Set<Ong> getOngs() {
         return ongs;
+    }
+
+    public Set<Voluntario> getVoluntarios() {
+        return voluntarios;
     }
 
 }

@@ -1,6 +1,8 @@
 package br.com.impacta.boacao.entity;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -9,6 +11,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 
 /**
@@ -33,6 +37,10 @@ public class Voluntario {
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "endereco_id")
   private Endereco endereco;
+
+  @ManyToMany
+  @JoinTable(name = "voluntarios_tags", joinColumns = @JoinColumn(name = "voluntario_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
+  private final Set<Tag> tags = new HashSet<>();
 
   public Voluntario() {
 
@@ -100,6 +108,14 @@ public class Voluntario {
 
   public void setEndereco(Endereco endereco) {
     this.endereco = endereco;
+  }
+
+  public Set<Tag> getTags() {
+    return tags;
+  }
+
+  public void addTag(Tag tag) {
+    tags.add(tag);
   }
 
 }

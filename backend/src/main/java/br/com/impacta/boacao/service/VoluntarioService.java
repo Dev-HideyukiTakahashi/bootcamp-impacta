@@ -1,5 +1,13 @@
 package br.com.impacta.boacao.service;
 
+import java.sql.Timestamp;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import br.com.impacta.boacao.dto.request.VoluntarioRequestDTO;
 import br.com.impacta.boacao.dto.request.VoluntarioUpdateRequestDTO;
 import br.com.impacta.boacao.dto.response.DadosVoluntarioResponseDTO;
@@ -14,14 +22,6 @@ import br.com.impacta.boacao.mapper.VoluntarioMapper;
 import br.com.impacta.boacao.repository.RoleRepository;
 import br.com.impacta.boacao.repository.UsuarioRepository;
 import br.com.impacta.boacao.repository.VoluntarioRepository;
-
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.sql.Timestamp;
 
 @Service
 public class VoluntarioService {
@@ -46,21 +46,20 @@ public class VoluntarioService {
 
     @Transactional
     public VoluntarioResponseDTO salvar(VoluntarioRequestDTO dto) {
-        if (dto.getNomeCompleto() == null || dto.getNomeCompleto().trim().isEmpty()) 
+        if (dto.getNomeCompleto() == null || dto.getNomeCompleto().trim().isEmpty())
             throw new IllegalArgumentException("O nome completo é obrigatório.");
-        if (dto.getCpf() == null || dto.getCpf().trim().isEmpty()) 
+        if (dto.getCpf() == null || dto.getCpf().trim().isEmpty())
             throw new IllegalArgumentException("O preenchimento do CPF é obrigatório.");
-        if (dto.getTelefone() == null || dto.getTelefone().trim().isEmpty()) 
+        if (dto.getTelefone() == null || dto.getTelefone().trim().isEmpty())
             throw new IllegalArgumentException("O preenchimento do telefone é obrigatório.");
-        if (dto.getDataNascimento() == null) 
+        if (dto.getDataNascimento() == null)
             throw new IllegalArgumentException("O preenchimento da data de nascimento é obrigatório.");
-        if (dto.getEmail() == null || dto.getEmail().trim().isEmpty()) 
+        if (dto.getEmail() == null || dto.getEmail().trim().isEmpty())
             throw new IllegalArgumentException("O preenchimento do e-mail é obrigatório.");
-        if (voluntarioRepository.existsByCpf(dto.getCpf())) 
+        if (voluntarioRepository.existsByCpf(dto.getCpf()))
             throw new IllegalArgumentException("Já existe um voluntário cadastrado com este CPF.");
-        if (usuarioRepository.existsByEmail(dto.getEmail())) 
+        if (usuarioRepository.existsByEmail(dto.getEmail()))
             throw new IllegalArgumentException("Já existe um usuário cadastrado com este e-mail.");
-        
 
         Role roleVoluntario = roleRepository.findByAuthority("ROLE_VOLUNTARIO")
                 .orElseThrow(() -> new IllegalArgumentException("Role ROLE_VOLUNTARIO não encontrada"));
@@ -80,6 +79,7 @@ public class VoluntarioService {
         return mapper.toResponse(salvo);
     }
 
+    @Transactional(readOnly = true)
     public PerfilVoluntarioResponseDTO getMeuPerfil(Authentication auth) {
         String email = ((JwtAuthenticationToken) auth).getToken().getClaim("username");
         Voluntario v = voluntarioRepository.findByUsuarioEmail(email)
@@ -87,10 +87,12 @@ public class VoluntarioService {
         return mapper.toPerfilVoluntarioDTO(v);
     }
 
+    @Transactional(readOnly = true)
     public DadosVoluntarioResponseDTO getDadosVoluntario(Authentication auth) {
         String email = ((JwtAuthenticationToken) auth).getToken().getClaim("username");
         Voluntario v = voluntarioRepository.findByUsuarioEmail(email)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Voluntário não encontrado"));
+
         return mapper.toDadosVoluntarioDTO(v);
     }
 
@@ -125,5 +127,5 @@ public class VoluntarioService {
 
         voluntarioRepository.save(v);
     }
-    
+
 }

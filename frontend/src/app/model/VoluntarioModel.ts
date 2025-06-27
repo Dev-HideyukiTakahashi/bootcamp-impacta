@@ -1,3 +1,5 @@
+import { Tag } from './tag.model';
+
 export interface CarregarDadosVoluntario {
   nomeCompleto: string;
   email: string;
@@ -15,12 +17,12 @@ export interface CarregarDadosVoluntario {
   confirmarSenha?: string;
 }
 
-
 export interface PerfilVoluntario {
   firstName: string;
   fullName: string;
   cidade: string;
   estado: string;
+  tags: Tag[];
 }
 
 export interface AtualizarVoluntario {

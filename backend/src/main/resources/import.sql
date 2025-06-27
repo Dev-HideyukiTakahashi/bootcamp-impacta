@@ -79,27 +79,5 @@ INSERT INTO ongs_tags (ong_id, tag_id) VALUES (2, (SELECT id FROM tag WHERE nome
 INSERT INTO ongs_tags (ong_id, tag_id) VALUES (2, (SELECT id FROM tag WHERE nome = 'Cuidado com Pessoas'));
 INSERT INTO ongs_tags (ong_id, tag_id) VALUES (3, (SELECT id FROM tag WHERE nome = 'Meio Ambiente e Sustentabilidade'));
 
-
-
-
 -- -- Associando voluntários com tags de atividades
--- INSERT INTO voluntario_tag (voluntario_id, tag_id) VALUES
---   (1, (SELECT id FROM tag WHERE nome = 'Educação e Mentoria')),
---   (1, (SELECT id FROM tag WHERE nome = 'Saúde e Bem-Estar')),
---   (2, (SELECT id FROM tag WHERE nome = 'Assistência Social e Comunitária')),
---   (2, (SELECT id FROM tag WHERE nome = 'Cuidado com Pessoas')),
---   (3, (SELECT id FROM tag WHERE nome = 'Meio Ambiente e Sustentabilidade')),
---   (3, (SELECT id FROM tag WHERE nome = 'Saúde e Bem-Estar')),
---   (4, (SELECT id FROM tag WHERE nome = 'Esporte, Cultura e Recreação')),
---   (4, (SELECT id FROM tag WHERE nome = 'Cuidado com Pessoas')),
---   (5, (SELECT id FROM tag WHERE nome = 'Educação e Mentoria')),
---   (5, (SELECT id FROM tag WHERE nome = 'Captação de Recursos e Marketing')),
---   (6, (SELECT id FROM tag WHERE nome = 'Saúde e Bem-Estar')),
---   (7, (SELECT id FROM tag WHERE nome = 'Assistência Social e Comunitária')),
---   (7, (SELECT id FROM tag WHERE nome = 'Cuidado com Pessoas')),
---   (8, (SELECT id FROM tag WHERE nome = 'Meio Ambiente e Sustentabilidade')),
---   (8, (SELECT id FROM tag WHERE nome = 'Saúde e Bem-Estar')),
---   (9, (SELECT id FROM tag WHERE nome = 'Esporte, Cultura e Recreação')),
---   (10, (SELECT id FROM tag WHERE nome = 'Educação e Mentoria')),
---   (10, (SELECT id FROM tag WHERE nome = 'Captação de Recursos e Marketing'));
-
+INSERT INTO voluntarios_tags (voluntario_id, tag_id) VALUES (1,(SELECT id FROM tag WHERE nome = 'Meio Ambiente e Sustentabilidade'));

@@ -1,5 +1,10 @@
 package br.com.impacta.boacao.dto.response;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import br.com.impacta.boacao.dto.request.TagRequestDTO;
+
 public class DadosVoluntarioResponseDTO {
 
     private String nomeCompleto;
@@ -15,11 +20,14 @@ public class DadosVoluntarioResponseDTO {
     private String rua;
     private String numero;
 
+    private final List<TagRequestDTO> tags = new ArrayList<>();
+
     public DadosVoluntarioResponseDTO() {
     }
 
-    public DadosVoluntarioResponseDTO(String nomeCompleto, String email, String cpf, String telefone, String dataNascimento,
-                                      String pais, String cep, String estado, String cidade, String bairro, String rua, String numero) {
+    public DadosVoluntarioResponseDTO(String nomeCompleto, String email, String cpf, String telefone,
+            String dataNascimento,
+            String pais, String cep, String estado, String cidade, String bairro, String rua, String numero) {
         this.nomeCompleto = nomeCompleto;
         this.email = email;
         this.cpf = cpf;
@@ -33,7 +41,6 @@ public class DadosVoluntarioResponseDTO {
         this.rua = rua;
         this.numero = numero;
     }
-
 
     public String getNomeCompleto() {
         return nomeCompleto;
@@ -130,4 +137,13 @@ public class DadosVoluntarioResponseDTO {
     public void setNumero(String numero) {
         this.numero = numero;
     }
+
+    public List<TagRequestDTO> getTags() {
+        return tags;
+    }
+
+    public void addTag(TagRequestDTO tag) {
+        tags.add(tag);
+    }
+
 }

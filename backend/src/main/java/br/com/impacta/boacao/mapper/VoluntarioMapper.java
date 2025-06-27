@@ -4,12 +4,14 @@ import org.springframework.stereotype.Component;
 
 import br.com.impacta.boacao.dto.request.EnderecoRequestDTO;
 import br.com.impacta.boacao.dto.request.EnderecoUpdateRequestDTO;
+import br.com.impacta.boacao.dto.request.TagRequestDTO;
 import br.com.impacta.boacao.dto.request.VoluntarioRequestDTO;
 import br.com.impacta.boacao.dto.request.VoluntarioUpdateRequestDTO;
 import br.com.impacta.boacao.dto.response.DadosVoluntarioResponseDTO;
 import br.com.impacta.boacao.dto.response.PerfilVoluntarioResponseDTO;
 import br.com.impacta.boacao.dto.response.VoluntarioResponseDTO;
 import br.com.impacta.boacao.entity.Endereco;
+import br.com.impacta.boacao.entity.Tag;
 import br.com.impacta.boacao.entity.Voluntario;
 
 @Component
@@ -48,6 +50,10 @@ public class VoluntarioMapper {
             dto.setCidade(v.getEndereco().getCidade());
             dto.setEstado(v.getEndereco().getEstado());
         }
+
+        for (Tag tag : v.getTags()) {
+            dto.addTag(new TagRequestDTO(tag.getId(), tag.getNome()));
+        }
         return dto;
     }
 
@@ -72,6 +78,11 @@ public class VoluntarioMapper {
             dto.setRua(e.getRua());
             dto.setNumero(e.getNumero());
         }
+
+        for (Tag tag : v.getTags()) {
+            dto.addTag(new TagRequestDTO(tag.getId(), tag.getNome()));
+        }
+
         return dto;
     }
 

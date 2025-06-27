@@ -11,9 +11,7 @@
       <p><strong>Nome:</strong><br />{{ perfil.fullName }}</p>
       <hr />
 
-      <p>
-        <strong>Cidade:</strong><br />{{ perfil.cidade }} - {{ perfil.estado }}
-      </p>
+      <p><strong>Cidade:</strong><br />{{ perfil.cidade }} - {{ perfil.estado }}</p>
       <hr />
 
       <p><strong>Minhas Participações:</strong><br />2</p>
@@ -24,21 +22,15 @@
       <hr />
 
       <div class="botoes">
-        <button class="btn-editar" [routerLink]="'/dados-voluntario'">
-          Editar Perfil
-        </button>
-        <button [routerLink]="'/detalhes-habilidades'">
-          Cadastrar Habilidades
-        </button>
+        <button class="btn-editar" [routerLink]="'/dados-voluntario'">Editar Perfil</button>
+        <button [routerLink]="'/detalhes-habilidades'">Cadastrar Habilidades</button>
       </div>
 
       <!-- TODO renderizar tags -->
       <div class="habilidades">
         <h3>Minhas Habilidades:</h3>
         <ul>
-          <li># Educação e Mentoria</li>
-          <li># Proteção Animal</li>
-          <li># Produção e Artesanato</li>
+          <li *ngFor="let tag of perfil.tags; let i = index"># {{ tag.nome }}</li>
         </ul>
       </div>
     </div>
@@ -47,9 +39,8 @@
     <div class="perfil-direita">
       <h2>Minha Missão</h2>
       <p>
-        Promover o desenvolvimento social e humano através de ações educativas,
-        culturais e assistenciais, contribuindo para a construção de uma
-        sociedade mais justa e igualitária.
+        Promover o desenvolvimento social e humano através de ações educativas, culturais e
+        assistenciais, contribuindo para a construção de uma sociedade mais justa e igualitária.
       </p>
       <img
         src="https://static.vecteezy.com/ti/fotos-gratis/t1/7104488-close-up-top-view-de-pessoas-colocando-as-maos-junto-conceito-unidade-de-maos-e-trabalho-em-equipe-foto.jpg"
