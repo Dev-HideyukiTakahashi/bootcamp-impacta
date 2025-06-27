@@ -1,7 +1,7 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TagService } from '../../service/tag.service';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
@@ -30,6 +30,7 @@ export class DetalhesHabilidadesComponent implements OnInit {
   tags: UiTag[] = [];
   habilidadesSelecionadas: any[] = [];
   router = inject(Router);
+  selectedTagIds: number[] = [];
 
   public TAG_DESCRICAO: Record<number, string> = {
     1: 'Atividades relacionadas à organização, planejamento e gestão de projetos, equipes e recursos, garantindo a eficiência e o bom funcionamento das operações.',
@@ -51,7 +52,18 @@ export class DetalhesHabilidadesComponent implements OnInit {
   };
   // ********************************************************************
 
-  constructor(private tagService: TagService, @Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(
+    private tagService: TagService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private route: ActivatedRoute,
+  ) {
+    this.route.queryParams.subscribe((params) => {
+      const tagIdsString = params['tagIdsString'];
+      if (tagIdsString) {
+        this.selectedTagIds = tagIdsString.split(',').map((id: string) => Number(id));
+      }
+    });
+  }
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -67,7 +79,7 @@ export class DetalhesHabilidadesComponent implements OnInit {
           isOpen: false,
           // buscar a descrição.
           descricao: this.TAG_DESCRICAO[tag.id ?? 0] || 'Descrição não disponível.',
-          isSelected: false,
+          isSelected: this.selectedTagIds.includes(tag.id ?? -1),
         }));
       },
       error: (err) => {
@@ -77,11 +89,14 @@ export class DetalhesHabilidadesComponent implements OnInit {
   }
   adicionarHabilidades(): void {
     const tagsSelecionadas = this.tags.filter((tag) => tag.isSelected);
-    this.habilidadesSelecionadas = tagsSelecionadas.map((tag) => tag.id?.toString());
-    console.log('Habilidades selecionadas:', this.habilidadesSelecionadas);
-    alert('Habilidades adicionadas com sucesso!');
+    this.habilidadesSelecionadas = tagsSelecionadas.map((tag) => tag.id!);
 
-    this.router.navigate(['/perfil-voluntario']);
+    this.tagService.atualizarTags(this.habilidadesSelecionadas).subscribe({
+      next: () => this.router.navigate(['/perfil-voluntario']),
+      error: (err) => {
+        console.error('Erro ao carregar tags:', err);
+      },
+    });
   }
   toggle(tag: UiTag): void {
     tag.isOpen = !tag.isOpen;

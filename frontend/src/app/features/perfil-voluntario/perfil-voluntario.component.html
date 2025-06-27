@@ -23,7 +23,9 @@
 
       <div class="botoes">
         <button class="btn-editar" [routerLink]="'/dados-voluntario'">Editar Perfil</button>
-        <button [routerLink]="'/detalhes-habilidades'">Cadastrar Habilidades</button>
+        <button [routerLink]="'/detalhes-habilidades'" [queryParams]="{ tagIdsString}">
+          Cadastrar Habilidades
+        </button>
       </div>
 
       <!-- TODO renderizar tags -->

@@ -30,6 +30,10 @@ export class PerfilVoluntarioComponent implements OnInit, OnDestroy {
       });
   }
 
+  get tagIdsString(): string {
+    return this.perfil!.tags.map((tag) => tag.id).join(',');
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

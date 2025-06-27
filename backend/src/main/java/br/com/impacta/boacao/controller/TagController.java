@@ -42,7 +42,7 @@ public class TagController {
     }
 
     @PutMapping
-    public ResponseEntity<List<TagRequestDTO>> adicionaTags(@RequestBody List<TagRequestDTO> request) {
+    public ResponseEntity<List<TagRequestDTO>> adicionaTags(@RequestBody List<Integer> request) {
 
         List<TagRequestDTO> response = tagService.adicionaTags(request);
 

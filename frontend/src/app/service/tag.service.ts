@@ -42,4 +42,8 @@ export class TagService {
 
     return this.http.get<TagRequestDTO>(`${this.apiUrl}/${id}`, { headers });
   }
+
+  atualizarTags(ids: number[]) {
+    return this.http.put(`${this.apiUrl}`, ids);
+  }
 }

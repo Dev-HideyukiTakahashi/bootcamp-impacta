@@ -81,3 +81,4 @@ INSERT INTO ongs_tags (ong_id, tag_id) VALUES (3, (SELECT id FROM tag WHERE nome
 
 -- -- Associando voluntários com tags de atividades
 INSERT INTO voluntarios_tags (voluntario_id, tag_id) VALUES (1,(SELECT id FROM tag WHERE nome = 'Meio Ambiente e Sustentabilidade'));
+INSERT INTO voluntarios_tags (voluntario_id, tag_id) VALUES (1,(SELECT id FROM tag WHERE nome = 'Cuidado com Pessoas'));
