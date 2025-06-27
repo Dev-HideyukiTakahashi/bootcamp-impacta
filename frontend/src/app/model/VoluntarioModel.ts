@@ -23,6 +23,7 @@ export interface PerfilVoluntario {
   cidade: string;
   estado: string;
   tags: Tag[];
+  participacoes: string;
 }
 
 export interface AtualizarVoluntario {

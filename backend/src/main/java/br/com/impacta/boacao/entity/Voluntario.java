@@ -1,7 +1,9 @@
 package br.com.impacta.boacao.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -13,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 /**
@@ -41,6 +44,9 @@ public class Voluntario {
   @ManyToMany
   @JoinTable(name = "voluntarios_tags", joinColumns = @JoinColumn(name = "voluntario_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
   private final Set<Tag> tags = new HashSet<>();
+
+  @OneToMany(mappedBy = "voluntario")
+  private final List<HistoricoAtividade> historicoAtividades = new ArrayList<>();
 
   public Voluntario() {
 
@@ -116,6 +122,14 @@ public class Voluntario {
 
   public void addTag(Tag tag) {
     tags.add(tag);
+  }
+
+  public List<HistoricoAtividade> getHistoricoAtividades() {
+    return historicoAtividades;
+  }
+
+  public void addHistoricoAtividade(HistoricoAtividade historicoAtividade) {
+    historicoAtividades.add(historicoAtividade);
   }
 
 }

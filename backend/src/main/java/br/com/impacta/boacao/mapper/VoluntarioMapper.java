@@ -54,6 +54,8 @@ public class VoluntarioMapper {
         for (Tag tag : v.getTags()) {
             dto.addTag(new TagRequestDTO(tag.getId(), tag.getNome()));
         }
+
+        dto.setParticipacoes(v.getHistoricoAtividades().size());
         return dto;
     }
 

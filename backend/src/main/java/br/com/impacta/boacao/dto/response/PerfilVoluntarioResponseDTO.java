@@ -10,6 +10,7 @@ public class PerfilVoluntarioResponseDTO {
     private String fullName;
     private String cidade;
     private String estado;
+    private Integer participacoes;
 
     private final List<TagRequestDTO> tags = new ArrayList<>();
 
@@ -52,4 +53,13 @@ public class PerfilVoluntarioResponseDTO {
     public void addTag(TagRequestDTO tag) {
         tags.add(tag);
     }
+
+    public Integer getParticipacoes() {
+        return participacoes;
+    }
+
+    public void setParticipacoes(Integer participacoes) {
+        this.participacoes = participacoes;
+    }
+
 }
