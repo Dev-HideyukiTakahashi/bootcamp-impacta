@@ -7,11 +7,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.impacta.boacao.dto.request.HistoricoAtividadeRequestDTO;
 import br.com.impacta.boacao.dto.response.HistoricoAtividadeDTO;
+import br.com.impacta.boacao.dto.response.HistoricoAtividadeResponseDTO;
+import br.com.impacta.boacao.dto.response.HistoricoAtividadeTodosResponseDTO;
 import br.com.impacta.boacao.service.HistoricoAtividadeService;
 
 @RestController
@@ -45,4 +49,48 @@ public class HistoricoAtividadeController {
         return ResponseEntity.ok().body(response);
     }
 
+    /**
+     * GET /api/atividades/{id}/historico
+     *
+     * @param id ID da atividade
+     * @return quantidade e lista de voluntários aprovados
+     */
+    @PreAuthorize("hasRole('ROLE_ONG')")
+    @GetMapping("/listar-voluntarios-aprovados/atividade/{id}")
+    public ResponseEntity<HistoricoAtividadeResponseDTO> getHistorico(
+            @PathVariable("id") Integer id) {
+
+        logger.info("Voluntarios-aprovados/atividade/{id} - Iniciando busca do histórico de atividade com ID: {}", id);
+
+        // encapsula o path-variable em um DTO de request
+        HistoricoAtividadeRequestDTO request = new HistoricoAtividadeRequestDTO(id);
+
+        // delega ao service e retorna o response DTO
+        HistoricoAtividadeResponseDTO response = historicoAtividadeService.buscarHistorico(request);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Novo endpoint: busca todos (sem filtro de status) para poder gerenciar
+     */
+    @PreAuthorize("hasRole('ROLE_ONG')")
+    @GetMapping("/gestao-voluntarios/atividade/{id}")
+    public ResponseEntity<HistoricoAtividadeTodosResponseDTO> getTodosHistorico(
+            @PathVariable Integer id) {
+        var req = new HistoricoAtividadeRequestDTO(id);
+        HistoricoAtividadeTodosResponseDTO response = historicoAtividadeService.listarTodosHistorico(req);
+        return ResponseEntity.ok(response);
+    }
+
+    /* TODO:
+     * servico para buscar voluntarios, deve permitir filtros não obgs
+     
+    @PreAuthorize("hasRole('ROLE_ONG')")
+    @GetMapping("/gestao-voluntarios/buscar/atividade/{id}")
+    public ResponseEntity<HistoricoAtividadeTodosResponseDTO> getBuscarVoluntarios(
+            @PathVariable Integer id) {
+        var req = new HistoricoAtividadeRequestDTO(id);
+        HistoricoAtividadeTodosResponseDTO response = historicoAtividadeService.listarTodosHistorico(req);
+        return ResponseEntity.ok(response);
+    }*/
 }
