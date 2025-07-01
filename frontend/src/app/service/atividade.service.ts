@@ -23,7 +23,7 @@ export interface HistoricoVoluntarios {
 export class AtividadeService {
   private baseUrl = 'http://localhost:8080/api/atividades';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAtividades(): Observable<Atividade[]> {
     return this.http.get<Atividade[]>(`${this.baseUrl}/buscar`);
@@ -76,5 +76,11 @@ export class AtividadeService {
           return throwError(() => err);
         })
       );
+  }
+  getBuscarAtividade(): Observable<{ content: Atividade[] }> {
+    return this.http.get<{ content: Atividade[] }>(this.baseUrl);
+  }
+  atualizarCandidatura(atividadeId: number): Observable<any> {
+    return this.http.post('http://localhost:8080/api/atividades/atualizar-candidatura', { atividadeId });
   }
 }

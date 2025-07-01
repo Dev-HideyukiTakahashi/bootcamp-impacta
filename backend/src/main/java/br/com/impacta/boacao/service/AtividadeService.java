@@ -25,6 +25,11 @@ public interface AtividadeService {
     AtividadeResponseDTO atualizar(Integer id, AtividadeRequestDTO dto);
 
     /**
+     * Lista todas as atividades no banco, sem filtro de ONG
+     */
+    List<AtividadeResponseDTO> buscarAtividades();
+
+    /**
      * Atualiza apenas o campo statusAtividade de uma Atividade, retornando
      * somente { id, statusAtividade }. Permite apenas ANDAMENTO→CONGELADA e
      * CONGELADA→ANDAMENTO.

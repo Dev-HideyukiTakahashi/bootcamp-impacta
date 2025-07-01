@@ -44,6 +44,12 @@ public class AtividadeController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping()
+    public ResponseEntity<List<AtividadeResponseDTO>> listarAtividades() {
+        List<AtividadeResponseDTO> atividades = atividadeService.buscarAtividades();
+        return ResponseEntity.ok(atividades);
+    }
+
     /**
      * PATCH /api/atividades/{id}/status/{novoStatus}
      *

@@ -17,6 +17,7 @@ import { GestaoAtividadesComponent } from './features/gestao-atividades/gestao-a
 import { CadastroOngComponent } from './features/cadastro-ong/cadastro-ong.component';
 import { CadastroAtividadeComponent } from './features/cadastro-atividade/cadastro-atividade.component';
 import { GestaoVoluntariosComponent } from './features/gestao-voluntarios/gestao-voluntarios.component';
+import { BuscarAtividadesComponent } from './features/buscar-atividades/buscar-atividades.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -104,4 +105,5 @@ export const routes: Routes = [
     path: 'gestao-voluntarios',
     component: GestaoVoluntariosComponent,
   },
+  { path: 'buscar-atividades', component: BuscarAtividadesComponent }
 ];

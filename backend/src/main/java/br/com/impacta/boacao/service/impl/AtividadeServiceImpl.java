@@ -304,4 +304,12 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
 
         return historicoAtividade;
     }
+
+    @Override
+    public List<AtividadeResponseDTO> buscarAtividades() {
+        return atividadeRepository.findAll()
+                .stream()
+                .map(AtividadeMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 }

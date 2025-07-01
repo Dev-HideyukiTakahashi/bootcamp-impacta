@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TagService } from '../../service/tag.service';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
+import { Location } from '@angular/common';
 
 interface TagRequestDTO {
   id?: number;
@@ -56,6 +57,7 @@ export class DetalhesHabilidadesComponent implements OnInit {
     private tagService: TagService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
+    private location: Location
   ) {
     this.route.queryParams.subscribe((params) => {
       const tagIdsString = params['tagIdsString'];
@@ -89,7 +91,7 @@ export class DetalhesHabilidadesComponent implements OnInit {
   }
   adicionarHabilidades(): void {
     const tagsSelecionadas = this.tags.filter((tag) => tag.isSelected);
-    this.habilidadesSelecionadas = tagsSelecionadas.map((tag) => tag.id!);
+    this.habilidadesSelecionadas = Array.from(new Set(tagsSelecionadas.map((tag) => tag.id!)));
 
     this.tagService.atualizarTags(this.habilidadesSelecionadas).subscribe({
       next: () => this.router.navigate(['/perfil-voluntario']),
@@ -100,5 +102,8 @@ export class DetalhesHabilidadesComponent implements OnInit {
   }
   toggle(tag: UiTag): void {
     tag.isOpen = !tag.isOpen;
+  }
+  goBack(): void {
+    this.location.back();
   }
 }
