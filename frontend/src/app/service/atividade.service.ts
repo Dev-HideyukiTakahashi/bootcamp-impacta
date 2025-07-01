@@ -57,6 +57,7 @@ export class AtividadeService {
         })
       );
   }
+
   getBuscarAtividade(): Observable<{ content: Atividade[] }> {
     return this.http.get<{ content: Atividade[] }>(this.baseUrl);
   }
