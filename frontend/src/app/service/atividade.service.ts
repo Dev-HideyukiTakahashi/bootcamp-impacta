@@ -12,13 +12,7 @@ interface Page<T> {
   content: T[];
 }
 // Define the Atividade interface
-export interface HistoricoVoluntarios {
-  quantidadeVoluntarios: number;
-  voluntarios: Array<{
-    idVoluntario: number;
-    nomeVoluntario: string;
-  }>;
-}
+
 @Injectable({ providedIn: 'root' })
 export class AtividadeService {
   private baseUrl = 'http://localhost:8080/api/atividades';
@@ -60,20 +54,6 @@ export class AtividadeService {
 
           console.error('Erro ao buscar dados completos da atividade', error);
           return throwError(() => error);
-        })
-      );
-  }
-  // Método para buscar o histórico de voluntários de uma atividade
-  // Recebe o ID da atividade e retorna um Observable com o histórico de voluntários
-  // O histórico inclui a quantidade de voluntários e uma lista com os nomes de cada voluntário
-  //api/atividades/1/historico
-  getHistorico(idAtividade: number): Observable<HistoricoVoluntarios> {
-    return this.http
-      .get<HistoricoVoluntarios>(`${this.baseUrl}/${idAtividade}/historico`)
-      .pipe(
-        catchError((err: HttpErrorResponse) => {
-          console.error('Erro ao buscar histórico', err);
-          return throwError(() => err);
         })
       );
   }

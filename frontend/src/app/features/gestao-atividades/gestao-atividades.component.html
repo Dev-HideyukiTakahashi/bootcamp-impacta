@@ -73,8 +73,8 @@
             (click)="listarVoluntarios(atividade)"
             class="btn-acao btn-gestao-voluntarios"
 
-             [routerLink]="['/gestao-voluntarios']"
-          >   <!--- esse router link tem que consumir o back  api/atividades/1/historico/todos
+             [routerLink]="['/gestao-voluntarios/atividade ', atividade.id  ]"
+          >   <!--- esse router link tem que consumir o back /gestao-voluntarios/atividade/{id}
               todos os voluntarios inscritos na atv (db historico_atividade )-->
             Gestão de Voluntários
           </button>
@@ -106,7 +106,7 @@
           <!-- Quando o histórico NÃO está aberto para esta atividade: mostra o botão -->
           <ng-container *ngIf="historicoOpenId !== atividade.id">
             <button
-              (click)="historicoVoluntarios(atividade)"
+              (click)="listaVoluntariosAprovados(atividade)"
               class="btn-acao btn-historico-voluntarios"
             >
               Histórico de Voluntários

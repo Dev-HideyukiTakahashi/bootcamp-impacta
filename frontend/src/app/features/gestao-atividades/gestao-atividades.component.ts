@@ -1,3 +1,4 @@
+import { GestaoVoluntariosComponent } from './../gestao-voluntarios/gestao-voluntarios.component';
 // src/app/features/gestao-atividades/gestao-atividades.component.ts
 
 import { Component, OnInit } from '@angular/core';
@@ -5,7 +6,9 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms'; // necessário para [(ngModel)] no <select>
 
-import {  AtividadeService,  HistoricoVoluntarios} from '../../service/atividade.service';
+import {  AtividadeService} from '../../service/atividade.service';
+import {  GestaoVoluntarioService, ListaAprovados } from '../../service/gestaoVoluntario.service';
+
 import { Atividade, StatusAtividade } from '../../model/atividade.model';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
@@ -27,11 +30,12 @@ export class GestaoAtividadesComponent implements OnInit {
   atividades: Atividade[] = [];
   statusOptions: StatusAtividade[] = ['ANDAMENTO', 'ENCERRADA', 'CONGELADA'];
   historicoOpenId: number | null = null;
-  historicos: { [id: number]: HistoricoVoluntarios } = {};
+  historicos: { [id: number]: ListaAprovados } = {};
 
   constructor(
     private atividadeService: AtividadeService,
-    private router: Router
+    private router: Router,
+    private gestaoVoluntarioService: GestaoVoluntarioService
   ) {}
 
   ngOnInit(): void {
@@ -94,16 +98,19 @@ export class GestaoAtividadesComponent implements OnInit {
     this.router.navigate(['/cadastro-atividade']);
   }
 
-  /** Chamado ao clicar em “Histórico de Voluntários” */
-  historicoVoluntarios(atividade: Atividade): void {
-    console.log('Buscando histórico para atividade:', atividade.id);
-    this.atividadeService.getHistorico(atividade.id).subscribe({
+  /** Chamado ao clicar em “Histórico de Voluntários”
+   * deve listar os voluntários aprovados para a atividade
+   * e abrir o modal com o histórico de voluntários
+  */
+  listaVoluntariosAprovados(atividade: Atividade): void {
+    console.log('Buscando voluntarios da atividade:', atividade.id);
+    this.gestaoVoluntarioService.getVoluntariosAprovados(atividade.id).subscribe({
       next: (data) => {
         this.historicos[atividade.id] = data;
         this.historicoOpenId = atividade.id;
       },
       error: (err) => {
-        console.error('Erro ao buscar histórico', err);
+        console.error('Erro ao buscar voluntarios aprovados', err);
       },
     });
   }
