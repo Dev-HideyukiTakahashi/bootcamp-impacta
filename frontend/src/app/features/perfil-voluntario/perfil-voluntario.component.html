@@ -17,10 +17,14 @@
       <p><strong>Minhas Participações:</strong><br />{{ perfil.participacoes }}</p>
       <hr />
 
-      <p><strong>Minha Avaliação:</strong></p>
-      <div class="estrelas">★ ★ ★ ★ ☆</div>
-      <hr />
+<p><strong>Minha Avaliação:</strong></p>
+<div class="estrelas">
+  <ng-container *ngFor="let star of [].constructor(5); let i = index">
+    <span>{{ i < perfil.media ? '★' : '☆' }}</span>
+  </ng-container>
+</div>
 
+<hr />
       <div class="botoes">
         <button class="btn-editar" [routerLink]="'/dados-voluntario'">Editar Perfil</button>
         <button [routerLink]="'/detalhes-habilidades'" [queryParams]="{ tagIdsString}">
@@ -28,7 +32,6 @@
         </button>
       </div>
 
-      <!-- TODO renderizar tags -->
       <div class="habilidades">
         <h3>Minhas Habilidades:</h3>
         <ul>

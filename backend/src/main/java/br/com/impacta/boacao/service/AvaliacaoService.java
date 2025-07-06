@@ -1,5 +1,7 @@
 package br.com.impacta.boacao.service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -67,6 +69,17 @@ public class AvaliacaoService {
         avaliacao.setFeedback(request.getFeedback());
 
         return avaliacao;
+    }
+
+    public int getMediaAvaliacao(List<HistoricoAtividade> historicoAtividades){
+        double soma = 0;
+        for(HistoricoAtividade atividade : historicoAtividades){
+            soma += atividade.getAvaliacao().getEstrelas();
+        }
+
+        int media = (int) Math.ceil(soma / historicoAtividades.size());
+
+        return media;
     }
 
 }

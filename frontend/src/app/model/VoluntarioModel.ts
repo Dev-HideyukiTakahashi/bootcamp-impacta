@@ -24,6 +24,7 @@ export interface PerfilVoluntario {
   estado: string;
   tags: Tag[];
   participacoes: string;
+  media: number;
 }
 
 export interface AtualizarVoluntario {
