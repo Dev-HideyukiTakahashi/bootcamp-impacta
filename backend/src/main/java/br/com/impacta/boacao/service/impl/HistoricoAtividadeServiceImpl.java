@@ -15,13 +15,17 @@ import br.com.impacta.boacao.dto.response.HistoricoAtividadeDTO;
 import br.com.impacta.boacao.dto.response.HistoricoAtividadeResponseDTO;
 import br.com.impacta.boacao.dto.response.HistoricoAtividadeTodosResponseDTO;
 import br.com.impacta.boacao.dto.response.VoluntarioAprovadoResponseDTO;
+import br.com.impacta.boacao.dto.response.VoluntarioAtividadeDTO;
 import br.com.impacta.boacao.dto.response.VoluntarioHistoricoResponseDTO;
 import br.com.impacta.boacao.entity.HistoricoAtividade;
 import br.com.impacta.boacao.entity.Usuario;
+import br.com.impacta.boacao.entity.Voluntario;
 import br.com.impacta.boacao.entity.enums.StatusCandidatura;
 import br.com.impacta.boacao.repository.HistoricoAtividadeRepository;
 import br.com.impacta.boacao.service.HistoricoAtividadeService;
 import br.com.impacta.boacao.service.UsuarioService;
+// importar entity de Tag
+import br.com.impacta.boacao.entity.Tag;
 
 @Service
 public class HistoricoAtividadeServiceImpl implements HistoricoAtividadeService {
@@ -38,10 +42,12 @@ public class HistoricoAtividadeServiceImpl implements HistoricoAtividadeService 
     }
 
     /**
-     * Busca o histórico de voluntários aprovados para uma determinada atividade.
+     * Busca o histórico de voluntários aprovados para uma determinada
+     * atividade.
      *
      * @param request DTO contendo o ID da atividade
-     * @return DTO de resposta com a quantidade e a lista de voluntários aprovados
+     * @return DTO de resposta com a quantidade e a lista de voluntários
+     * aprovados
      */
     @Override
     public HistoricoAtividadeResponseDTO buscarHistorico(HistoricoAtividadeRequestDTO request) {
@@ -71,8 +77,8 @@ public class HistoricoAtividadeServiceImpl implements HistoricoAtividadeService 
         List<VoluntarioAprovadoResponseDTO> voluntariosDTO = historicosAprovados.stream()
                 .map(HistoricoAtividade::getVoluntario)
                 .map(v -> new VoluntarioAprovadoResponseDTO(
-                        v.getId(),
-                        v.getNomeCompleto()))
+                v.getId(),
+                v.getNomeCompleto()))
                 .collect(Collectors.toList());
 
         // 4) Monta e retorna o DTO de resposta que agrupa:
@@ -82,33 +88,42 @@ public class HistoricoAtividadeServiceImpl implements HistoricoAtividadeService 
     }
 
     /**
-     * Retorna todos os voluntários vinculados à atividade, independente do status.
-     */
-    /**
-     * Retorna todos os voluntários vinculados à atividade, independente do status.
+     * Retorna todos os voluntários vinculados à atividade, independente do
+     * status.
      */
     @Override
-    public HistoricoAtividadeTodosResponseDTO listarTodosHistorico(HistoricoAtividadeRequestDTO request) {
-        Integer atividadeId = request.getAtividadeId();
+    public HistoricoAtividadeTodosResponseDTO
+            listaTodosVoluntariosInscritos(Integer atividadeId) {
 
-        // 1) busca todos os históricos sem filtrar status
-        List<HistoricoAtividade> listarTodosHistorico = repo.findByAtividade_Id(atividadeId);
+        // 1) pega as ENTIDADES carregadas
+        List<HistoricoAtividade> historicos
+                = repo.findVoluntariosByAtividadeId(atividadeId);
 
-        // 2) mapeia para DTO que inclui id, nomeCompleto e statusCandidatura
-        List<VoluntarioHistoricoResponseDTO> todosDTO = listarTodosHistorico.stream()
-                .map(h -> {
-                    var v = h.getVoluntario();
+        // 2) converte cada entidade para o DTO puro
+        List<VoluntarioHistoricoResponseDTO> dtos = historicos.stream()
+                .map(ha -> {
+                    var v = ha.getVoluntario();
+                    String cidade = v.getEndereco() != null
+                            ? v.getEndereco().getCidade()
+                            : null;
+
+                    List<String> tags = v.getTags().stream()
+                            .map(Tag::getNome)
+                            .distinct()
+                            .collect(Collectors.toList());
+
                     return new VoluntarioHistoricoResponseDTO(
-                            Integer.valueOf(v.getId()),
+                            v.getId(),
                             v.getNomeCompleto(),
-                            h.getStatusCandidatura().name());
+                            ha.getStatusCandidatura().name(),
+                            cidade,
+                            tags
+                    );
                 })
-                .collect(Collectors.toList());
+                .toList();
 
-        // 3) monta e retorna o DTO de todos
-        return new HistoricoAtividadeTodosResponseDTO(
-                todosDTO.size(),
-                todosDTO);
+        // 3) devolve apenas DTOs — nunca entidades
+        return new HistoricoAtividadeTodosResponseDTO(dtos.size(), dtos);
     }
 
     @Transactional(readOnly = true)

@@ -7,6 +7,10 @@ import {
   AtualizarAtividade,
   CarregarDadosAtividade,
 } from '../model/atividade.model';
+import {
+  HistoricoAtividade,
+  HistoricoAtividadeDetalhado,
+} from '../model/HistoricoAtividade.model';
 import { catchError } from 'rxjs/operators';
 interface Page<T> {
   content: T[];
@@ -16,8 +20,8 @@ interface Page<T> {
 @Injectable({ providedIn: 'root' })
 export class AtividadeService {
   private baseUrl = 'http://localhost:8080/api/atividades';
-
-  constructor(private http: HttpClient) { }
+  private historyBase = 'http://localhost:8080/api/historico-atividades';
+  constructor(private http: HttpClient) {}
 
   getAtividades(): Observable<Atividade[]> {
     return this.http.get<Atividade[]>(`${this.baseUrl}/buscar`);
@@ -51,7 +55,6 @@ export class AtividadeService {
       .get<CarregarDadosAtividade>(`${this.baseUrl}/dados-atividade`)
       .pipe(
         catchError((error: HttpErrorResponse) => {
-
           console.error('Erro ao buscar dados completos da atividade', error);
           return throwError(() => error);
         })
@@ -62,6 +65,20 @@ export class AtividadeService {
     return this.http.get<{ content: Atividade[] }>(this.baseUrl);
   }
   atualizarCandidatura(atividadeId: number): Observable<any> {
-    return this.http.post('http://localhost:8080/api/atividades/atualizar-candidatura', { atividadeId });
+    return this.http.post(
+      'http://localhost:8080/api/atividades/atualizar-candidatura',
+      { atividadeId }
+    );
+  }
+
+ listarTodosVoluntarios(id: number): Observable<HistoricoAtividadeDetalhado> {
+    const url = `${this.historyBase}/gestao-voluntarios/atividade/${id}`;
+    return this.http.get<HistoricoAtividadeDetalhado>(url)
+      .pipe(
+        catchError((err: HttpErrorResponse) => {
+          console.error('Erro ao buscar voluntários (atividade)', err);
+          return throwError(() => err);
+        })
+      );
   }
 }

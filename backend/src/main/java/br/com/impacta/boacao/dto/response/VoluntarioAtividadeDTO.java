@@ -7,6 +7,7 @@ public class VoluntarioAtividadeDTO {
     private String voluntario;
     private StatusCandidatura status;
     private Integer atividadeId;
+    
 
     public VoluntarioAtividadeDTO() {
     }

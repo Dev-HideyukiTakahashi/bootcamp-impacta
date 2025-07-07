@@ -14,7 +14,7 @@ export interface Atividade {
   statusAtividade: StatusAtividade;
   dataAtividade: Date;
   idTag: number;
-  voluntariosCount: number;
+  voluntariosCount?: number;
 }
 
   // atualizarAtividade , campos para alterar

@@ -1,27 +1,30 @@
+// src/app/features/gestao-voluntarios/gestao-voluntarios.component.ts
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
-import { FormsModule } from '@angular/forms'; // necessário para [(ngModel)] no <select>
+import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
+import {
+  GestaoVoluntarioService,
+  ListaInscritos,
+} from '../../service/gestaoVoluntario.service';
 
-
-interface Voluntario {
+// Interface que representa o DTO de resposta do voluntário
+export interface VoluntarioHistoricoResponseDTO {
   id: number;
-  nome: string;
-  avatarUrl?: string;
+  nomeCompleto: string;
+  statusCandidatura: 'PENDENTE' | 'APROVADO' | 'REJEITADO' | 'REALIZADO';
   cidade: string;
-  habilidade: string;
-  atividade?: string;
-  projeto?: string;
-  dataEncerramento?: Date;
-  status: 'PENDENTE' | 'REALIZADO' | 'APROVADO' | 'REJEITADO';
+  tags: string[];
 }
 
 @Component({
   selector: 'app-gestao-voluntarios',
-  templateUrl: './gestao-voluntarios.component.html',
-  styleUrls: ['./gestao-voluntarios.component.scss'],
+  standalone: true,
   imports: [
     CommonModule,
     RouterModule,
@@ -29,107 +32,92 @@ interface Voluntario {
     HeaderComponent,
     FooterComponent,
   ],
+  templateUrl: './gestao-voluntarios.component.html',
+  styleUrls: ['./gestao-voluntarios.component.scss'],
 })
 export class GestaoVoluntariosComponent implements OnInit {
-  // dados “mock” para testar o front
-  voluntarios: Voluntario[] = [
-    {
-      id: 1,
-      nome: 'Carlos Santos',
-      cidade: 'Guarulhos/SP',
-      habilidade: 'Construção/Manutenção',
-      atividade: 'Ajuda com reforma na quadra esportiva da ONG',
-      status: 'PENDENTE'
-    },
-    {
-      id: 2,
-      nome: 'Beatriz Teles',
-      cidade: 'Guarulhos/SP',
-      habilidade: 'Tradução',
-      projeto: 'Tradução de livros infantis em inglês',
-      dataEncerramento: new Date('2025-03-12'),
-      status: 'REALIZADO'
-    },
-    {
-      id: 3,
-      nome: 'André Junior',
-      cidade: 'Guarulhos/SP',
-      habilidade: 'Meio Ambiente e Sustentabilidade',
-      atividade: 'Ajudar no plantio de árvores',
-      status: 'APROVADO'
-    },
-    {
-      id: 4,
-      nome: 'Renato Penha',
-      cidade: 'Sorocaba/SP',
-      habilidade: 'Alimentação Comunitária',
-      atividade: 'Preparo de marmitas para desabrigados',
-      status: 'PENDENTE'
-    },
-    {
-      id: 5,
-      nome: 'Ana Silva',
-      cidade: 'Rio de Janeiro/RJ',
-      habilidade: 'Educação e Mentoria',
-      atividade: 'Reforço de aula de matemática',
-      status: 'REJEITADO'
-    },
-    {
-      id: 6,
-      nome: 'Maria Oliveira',
-      cidade: 'Campinas/SP',
-      habilidade: 'Saúde e Bem-Estar',
-      atividade: 'Apoio a crianças vítimas de violência doméstica',
-      status: 'PENDENTE'
-    }
-  ];
-
-  // paginação
+  // Lista de voluntários carregados para a atividade
+  v: VoluntarioHistoricoResponseDTO[] = [];
+  // ID da atividade atual (obtido da rota)
+  atividadeId!: number;
+  // Página atual da paginação
   currentPage = 1;
+  // Quantidade de voluntários por página
   pageSize = 5;
+
+  // Calcula o total de páginas para a paginação
   get totalPages(): number {
-    return Math.ceil(this.voluntarios.length / this.pageSize);
+    return Math.ceil(this.v.length / this.pageSize);
   }
+
+  // Gera um array com os números das páginas para o controle de paginação
   get pages(): number[] {
     return Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
-  get paginatedVoluntarios(): Voluntario[] {
+
+  // Retorna apenas os voluntários da página atual
+  get paginatedVoluntarios(): VoluntarioHistoricoResponseDTO[] {
     const start = (this.currentPage - 1) * this.pageSize;
-    return this.voluntarios.slice(start, start + this.pageSize);
+    return this.v.slice(start, start + this.pageSize);
   }
 
-  constructor() {}
+  // Injeta dependências: rota e serviço de voluntários
+  constructor(
+    private route: ActivatedRoute,
+    private service: GestaoVoluntarioService
+  ) {}
 
-  ngOnInit(): void {}
-
-  // ações de teste
-  aceitar(v: Voluntario) {
-    v.status = 'APROVADO';
-  }
-  rejeitar(v: Voluntario) {
-    v.status = 'REJEITADO';
-  }
-  avaliar(v: Voluntario) {
-    // para testar, só muda o status
-    v.status = 'APROVADO';
-  }
-  encerrar(v: Voluntario) {
-    v.status = 'REALIZADO';
-    v.dataEncerramento = new Date();
+  ngOnInit(): void {
+    this.route.paramMap.subscribe((params) => {
+      console.log('ROUTE PARAMS:', params.keys, params);
+      const raw = params.get('id'); // ← pega o 'id' em vez de 'atividadeId'
+      if (!raw) {
+        console.error('nenhum ID de atividade na URL');
+        return;
+      }
+      this.atividadeId = +raw;
+      this.carregarVoluntarios(this.atividadeId);
+    });
   }
 
-  // navegação de páginas
+  // Ao inicializar o componente, pega o ID da atividade da rota e carrega os voluntários
+  carregarVoluntarios(id: number) {
+    this.service
+      .carregarVoluntarios(this.atividadeId)
+      .subscribe((inscritos: ListaInscritos[]) => {
+        this.v = inscritos.map((i) => ({
+          id: i.id,
+          nomeCompleto: i.nomeCompleto,
+          cidade: i.cidade,
+          statusCandidatura: i.statusCandidatura as any,
+          tags: i.tags,
+        }));
+      });
+  }
+
+  // Vai para a página anterior na paginação
   prevPage() {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-    }
+    if (this.currentPage > 1) this.currentPage--;
   }
+  // Vai para a próxima página na paginação
   nextPage() {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-    }
+    if (this.currentPage < this.totalPages) this.currentPage++;
   }
+  // Vai para uma página específica na paginação
   goToPage(n: number) {
     this.currentPage = n;
+  }
+
+  // Marca o voluntário como aprovado
+  aceitar(v: VoluntarioHistoricoResponseDTO) {
+    v.statusCandidatura = 'APROVADO';
+  }
+  // Marca o voluntário como rejeitado
+  rejeitar(v: VoluntarioHistoricoResponseDTO) {
+    v.statusCandidatura = 'REJEITADO';
+  }
+  // Marca o voluntário como realizado
+  avaliar(v: VoluntarioHistoricoResponseDTO) {
+    v.statusCandidatura = 'REALIZADO';
   }
 }

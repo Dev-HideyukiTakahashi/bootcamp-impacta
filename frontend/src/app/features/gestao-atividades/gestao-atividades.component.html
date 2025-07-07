@@ -19,7 +19,7 @@
       <!-- Voluntários (aqui usei placeholder voluntariosCount, se existir em suas atividades) -->
       <div class="info-linha">
         <span class="icone"><i class="fa fa-user-friends"></i></span>
-        <span>Voluntários: {{ atividade.voluntariosCount ?? 0 }}</span>
+        <span>Voluntários: {{ atividade.voluntariosCount }}</span>
       </div>
 
       <!-- Carga horária e período -->
@@ -70,23 +70,10 @@
             Congelar
           </button>
           <button
-            (click)="listarVoluntarios(atividade)"
-            class="btn-acao btn-gestao-voluntarios"
-
-             [routerLink]="['/gestao-voluntarios/atividade ', atividade.id  ]"
-          >   <!--- esse router link tem que consumir o back /gestao-voluntarios/atividade/{id}
-              todos os voluntarios inscritos na atv (db historico_atividade )-->
+            class="btn btn-primary"
+            [routerLink]="['/gestao-voluntarios', 'atividade', atividade.id]"
+          >
             Gestão de Voluntários
-          </button>
-          <button
-            (click)="buscarVoluntarios(atividade)"
-            class="btn-acao btn-buscar-voluntarios"
-             [routerLink]="['/gestao-voluntarios/BuscaVoluntarios', atividade.id]"
-          >   <!--- esse router link tem que consumir o back [ainda n fiz]
-          mas devera listar, inicialmente todos os voluntarios (vou decidir com o time ou entender com o time se
-          tag atividade  = tag habilidade do volunter)-->
-
-            Buscar Voluntários
           </button>
         </ng-container>
 
@@ -157,5 +144,4 @@
     </div>
   </div>
 </div>
-  <app-footer></app-footer>
-
+<app-footer></app-footer>

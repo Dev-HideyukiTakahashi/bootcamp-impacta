@@ -19,7 +19,7 @@ public interface HistoricoAtividadeService {
 
     // retorna lista de voluntarios inscritos para a atividade (sem filtro pelo
     // status de aprovado, devem ter todos)
-    HistoricoAtividadeTodosResponseDTO listarTodosHistorico(HistoricoAtividadeRequestDTO request);
+    HistoricoAtividadeTodosResponseDTO listaTodosVoluntariosInscritos(Integer atividadeId);
 
     Page<HistoricoAtividadeDTO> buscarTodos(Pageable pageable);
 

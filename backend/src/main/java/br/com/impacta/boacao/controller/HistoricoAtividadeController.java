@@ -75,10 +75,10 @@ public class HistoricoAtividadeController {
      */
     @PreAuthorize("hasRole('ROLE_ONG')")
     @GetMapping("/gestao-voluntarios/atividade/{id}")
-    public ResponseEntity<HistoricoAtividadeTodosResponseDTO> getTodosHistorico(
+    public ResponseEntity<HistoricoAtividadeTodosResponseDTO> listaTodosVoluntariosInscritos(
             @PathVariable Integer id) {
         var req = new HistoricoAtividadeRequestDTO(id);
-        HistoricoAtividadeTodosResponseDTO response = historicoAtividadeService.listarTodosHistorico(req);
+        HistoricoAtividadeTodosResponseDTO response = historicoAtividadeService.listaTodosVoluntariosInscritos(req.getAtividadeId());
         return ResponseEntity.ok(response);
     }
 

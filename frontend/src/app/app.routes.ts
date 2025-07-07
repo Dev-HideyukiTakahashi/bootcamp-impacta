@@ -101,9 +101,13 @@ export const routes: Routes = [
         (m) => m.EditarAtividadeComponent
       ),
   },
-  {
-    path: 'gestao-voluntarios',
-    component: GestaoVoluntariosComponent,
-  },
-  { path: 'buscar-atividades', component: BuscarAtividadesComponent }
+    {
+    path: 'gestao-voluntarios/atividade/:id',
+    canActivate: [authGuard],
+    data: { roles: [UserRole.Ong] },
+    loadComponent: () =>
+      import('./features/gestao-voluntarios/gestao-voluntarios.component').then(
+        (m) => m.GestaoVoluntariosComponent
+      ),
+  }
 ];

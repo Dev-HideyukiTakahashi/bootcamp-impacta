@@ -8,3 +8,9 @@ export interface HistoricoAtividade {
   idVoluntario: number; // id do voluntario
   id: number; // sequence da tbl, precisa?
 }
+export interface HistoricoAtividadeDetalhado {
+  nomeVoluntario: string;
+  cidade: string;
+  tags: string[];
+  statusCandidatura: statusCandidatura;
+}

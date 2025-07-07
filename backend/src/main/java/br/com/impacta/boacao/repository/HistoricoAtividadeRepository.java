@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import br.com.impacta.boacao.dto.response.HistoricoAtividadeDTO;
 import br.com.impacta.boacao.entity.HistoricoAtividade;
@@ -71,6 +72,18 @@ public interface HistoricoAtividadeRepository extends JpaRepository<HistoricoAti
             Integer atividadeId,
             StatusCandidatura statusCandidatura);
 
-    // devolve todas os voluntarios da atividade
-    List<HistoricoAtividade> findByAtividade_Id(Integer atividadeId);
+    // devolve todas os voluntarios da atividade, seu id, nome, status, cidade e tags
+    // List<HistoricoAtividade> buscaDetalhesVoluntariosInscritos(Integer atividadeId);
+    @Query("""
+    SELECT DISTINCT ha
+    FROM HistoricoAtividade ha
+    JOIN FETCH ha.voluntario v
+    JOIN FETCH v.usuario u
+    LEFT JOIN FETCH v.endereco e
+    LEFT JOIN FETCH v.tags t
+    WHERE ha.atividade.id = :atividadeId
+    """)
+    List<HistoricoAtividade> findVoluntariosByAtividadeId(
+            @Param("atividadeId") Integer atividadeId
+    );
 }

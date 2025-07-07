@@ -2,12 +2,14 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+
 import {
   Atividade,
   AtualizarAtividade,
   CarregarDadosAtividade,
 } from '../model/atividade.model';
-import { catchError } from 'rxjs/operators';
+
 interface Page<T> {
   content: T[];
 }
@@ -19,22 +21,54 @@ export interface ListaAprovados {
     nomeVoluntario: string;
   }>;
 }
+export interface ListaInscritos {
+  id: number;
+  nomeCompleto: string;
+  cidade: string;
+  statusCandidatura: string;
+  tags: string[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class GestaoVoluntarioService {
   private baseUrl = 'http://localhost:8080/api/historico-atividades';
 
   constructor(private http: HttpClient) {}
 
-  //http://localhost:8080/api/historico-atividades/listar-voluntarios-aprovados/atividade/1
-  // isso será usado para listar todos os voluntários inscritos e aprovados na atividade
+  // Lista todos os voluntários aprovados na atividade
   getVoluntariosAprovados(idAtividade: number): Observable<ListaAprovados> {
     return this.http
-      .get<ListaAprovados>(`${this.baseUrl}/listar-voluntarios-aprovados/atividade/${idAtividade}`)
+      .get<ListaAprovados>(
+        `${this.baseUrl}/listar-voluntarios-aprovados/atividade/${idAtividade}`
+      )
       .pipe(
         catchError((err: HttpErrorResponse) => {
-          console.error('Erro ao buscar voluntarios aprovados para esta atividade', err);
+          console.error(
+            'Erro ao buscar voluntarios aprovados para esta atividade',
+            err
+          );
           return throwError(() => err);
         })
       );
+  }
+
+  /**
+   * Busca todos os voluntários inscritos na atividade informada
+   * Agora retorna um array de ListaInscritos
+   */
+  carregarVoluntarios(idAtividade: number): Observable<ListaInscritos[]> {
+    const url = `${this.baseUrl}/gestao-voluntarios/atividade/${idAtividade}`;
+    return (
+      this.http
+        // note que o retorno do back é { quantidade: number; voluntarios: ListaInscritos[] }
+        .get<{ quantidade: number; voluntarios: ListaInscritos[] }>(url)
+        .pipe(
+          map((resp) => resp.voluntarios), // pega apenas o array
+          catchError((err) => {
+            console.error('Erro ao buscar voluntários inscritos', err);
+            return throwError(() => err);
+          })
+        )
+    );
   }
 }
