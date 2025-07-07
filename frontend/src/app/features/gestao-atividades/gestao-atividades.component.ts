@@ -83,6 +83,14 @@ export class GestaoAtividadesComponent implements OnInit {
     });
   }
 
+   // Atualiza o status da atividade para "ENCERRADA" ao clicar em "ENCERRADA"
+  encerrarAtividade(atividade: Atividade): void {
+    this.atividadeService.atualizarStatus(atividade.id, 'ENCERRADA').subscribe({
+      next: (updated) => (atividade.statusAtividade = updated.statusAtividade),
+      error: (err) => console.error('Erro ao congelar atividade', err),
+    });
+  }
+
   // Atualiza o status da atividade para "ANDAMENTO" ao clicar em "Reabrir Atividade"
   reabrirAtividade(atividade: Atividade): void {
     this.atividadeService.atualizarStatus(atividade.id, 'ANDAMENTO').subscribe({

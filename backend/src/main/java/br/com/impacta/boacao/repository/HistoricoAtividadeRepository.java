@@ -1,6 +1,7 @@
 package br.com.impacta.boacao.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -85,5 +86,17 @@ public interface HistoricoAtividadeRepository extends JpaRepository<HistoricoAti
     """)
     List<HistoricoAtividade> findVoluntariosByAtividadeId(
             @Param("atividadeId") Integer atividadeId
+    );
+
+    //* para update do status?*/
+    @Query("""
+      SELECT ha
+      FROM HistoricoAtividade ha
+      WHERE ha.atividade.id = :atividadeId
+        AND ha.voluntario.id = :voluntarioId
+    """)
+    Optional<HistoricoAtividade> findByAtividadeIdAndVoluntarioId(
+        @Param("atividadeId") Integer atividadeId,
+        @Param("voluntarioId") Integer voluntarioId
     );
 }

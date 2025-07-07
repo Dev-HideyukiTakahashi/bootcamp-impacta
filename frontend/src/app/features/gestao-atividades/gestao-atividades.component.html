@@ -70,6 +70,14 @@
             Congelar
           </button>
           <button
+            (click)="encerrarAtividade(atividade)"
+            class="btn-acao btn-encerrar"
+          >
+            Encerrar
+          </button>
+          </ng-container>
+        <ng-container *ngIf="atividade.statusAtividade === 'ANDAMENTO' || atividade.statusAtividade === 'ENCERRADA'">
+          <button
             class="btn btn-primary"
             [routerLink]="['/gestao-voluntarios', 'atividade', atividade.id]"
           >

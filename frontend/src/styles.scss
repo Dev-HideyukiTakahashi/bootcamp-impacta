@@ -144,10 +144,22 @@ footer {
   filter: invert(1);
 }
 
+/* garante que html, body e app-root ocupem 100% da altura */
+html, body, app-root {
+  height: 100%;
+  margin: 0;
+}
+
+/* transforma o app-root num flex container vertical */
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;      /* toda a viewport */
+}
+.main-content {
+  flex: 1;                /* ocupa todo o espaço que sobra */
+}
+
 app-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;      /* garante que fique acima de outros elementos */
+  flex-shrink: 0;         /* não encolhe, fica lá embaixo */
 }

@@ -15,15 +15,17 @@ import br.com.impacta.boacao.dto.response.HistoricoAtividadeDTO;
 import br.com.impacta.boacao.dto.response.HistoricoAtividadeResponseDTO;
 import br.com.impacta.boacao.dto.response.HistoricoAtividadeTodosResponseDTO;
 import br.com.impacta.boacao.dto.response.VoluntarioAprovadoResponseDTO;
-import br.com.impacta.boacao.dto.response.VoluntarioAtividadeDTO;
+
 import br.com.impacta.boacao.dto.response.VoluntarioHistoricoResponseDTO;
 import br.com.impacta.boacao.entity.HistoricoAtividade;
 import br.com.impacta.boacao.entity.Usuario;
-import br.com.impacta.boacao.entity.Voluntario;
+
 import br.com.impacta.boacao.entity.enums.StatusCandidatura;
+import br.com.impacta.boacao.exception.RecursoNaoEncontradoException;
 import br.com.impacta.boacao.repository.HistoricoAtividadeRepository;
 import br.com.impacta.boacao.service.HistoricoAtividadeService;
 import br.com.impacta.boacao.service.UsuarioService;
+import jakarta.persistence.EntityNotFoundException;
 // importar entity de Tag
 import br.com.impacta.boacao.entity.Tag;
 
@@ -142,4 +144,20 @@ public class HistoricoAtividadeServiceImpl implements HistoricoAtividadeService 
 
         return repo.buscarTodosPorIdEData(usuario.getId(), ano, mes, pageable);
     }
+
+    @Override
+    @Transactional
+    public void atualizarStatusCandidatura(HistoricoAtividadeRequestDTO request, StatusCandidatura status) {
+        Integer atvId = request.getAtividadeId();
+        Integer volId = request.getVoluntarioId();
+
+        HistoricoAtividade ha = repo.findByAtividadeIdAndVoluntarioId(atvId, volId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException(
+                "Voluntário de ID " + volId
+                + " não encontrado na atividade " + atvId));
+
+        ha.setStatusCandidatura(status);
+
+    }
+
 }

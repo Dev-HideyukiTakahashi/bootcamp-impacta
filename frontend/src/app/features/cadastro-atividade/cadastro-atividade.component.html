@@ -28,28 +28,6 @@
         Escolha uma tag para a atividade.
       </div>
     </div>
-    <!-- 2) Campo Nome (agora será preenchido automaticamente ao mudar de tag,
-           mas o usuário ainda pode editar se quiser) -->
-    <div class="form-group">
-      <label for="nome"
-        >Nome da Atividade:<span class="obrigatorio">*</span></label
-      >
-      <input
-        id="nome"
-        type="text"
-        formControlName="nome"
-        readonly
-        class="form-input"
-        placeholder="Ex: Monitoramento de Recifes"
-      />
-      <div
-        *ngIf="form.get('nome')?.invalid && form.get('nome')?.touched"
-        class="erro-msg"
-      >
-        O campo Nome é obrigatório.
-      </div>
-    </div>
-
     <!-- 3) Campo Período -->
     <div class="form-group">
       <label for="periodo">Período:<span class="obrigatorio">*</span></label>
@@ -123,15 +101,7 @@
         class="form-checkbox"
       />
       <label for="possuiCertificacao">Possui Certificação?</label>
-      <div
-        *ngIf="
-          form.get('possuiCertificacao')?.invalid &&
-          form.get('possuiCertificacao')?.touched
-        "
-        class="erro-msg"
-      >
-        Informe se possui certificação.
-      </div>
+      <input type="hidden" [value]="form.get('possuiCertificacao')?.value ? true : false" name="possuiCertificacaoBackend" />
     </div>
 
     <!-- 7) Descrição -->
@@ -164,10 +134,7 @@
         formControlName="statusAtividade"
         class="form-select"
       >
-        <option value="" disabled>-- Selecione o status --</option>
         <option value="ANDAMENTO">ANDAMENTO</option>
-        <option value="ENCERRADA">ENCERRADA</option>
-        <option value="CONGELADA">CONGELADA</option>
       </select>
       <div
         *ngIf="

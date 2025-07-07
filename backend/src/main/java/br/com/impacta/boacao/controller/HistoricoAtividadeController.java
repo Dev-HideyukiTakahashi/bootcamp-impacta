@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,8 +17,10 @@ import br.com.impacta.boacao.dto.request.HistoricoAtividadeRequestDTO;
 import br.com.impacta.boacao.dto.response.HistoricoAtividadeDTO;
 import br.com.impacta.boacao.dto.response.HistoricoAtividadeResponseDTO;
 import br.com.impacta.boacao.dto.response.HistoricoAtividadeTodosResponseDTO;
+import br.com.impacta.boacao.entity.enums.StatusCandidatura;
 import br.com.impacta.boacao.service.HistoricoAtividadeService;
-
+import org.springframework.web.bind.annotation.RequestBody;
+import br.com.impacta.boacao.exception.handler.StatusCandidaturaInvalidoException;
 @RestController
 @RequestMapping(path = "/api/historico-atividades")
 public class HistoricoAtividadeController {
@@ -80,6 +83,26 @@ public class HistoricoAtividadeController {
         var req = new HistoricoAtividadeRequestDTO(id);
         HistoricoAtividadeTodosResponseDTO response = historicoAtividadeService.listaTodosVoluntariosInscritos(req.getAtividadeId());
         return ResponseEntity.ok(response);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ONG')")
+    @PutMapping("/gestao-voluntarios/atividade/{atividadeId}/statusCandidatura/{status}")
+    public ResponseEntity<Void> atualizarStatus(
+            @PathVariable Integer atividadeId,
+            @PathVariable String status, // STRING aqui
+            @RequestBody HistoricoAtividadeRequestDTO req
+    ) {
+        req.setAtividadeId(atividadeId);
+
+        StatusCandidatura st;
+        try {
+            st = StatusCandidatura.valueOf(status.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new StatusCandidaturaInvalidoException(status);
+        }
+
+        historicoAtividadeService.atualizarStatusCandidatura(req, st);
+        return ResponseEntity.noContent().build();
     }
 
     /* TODO:

@@ -7,6 +7,7 @@ import br.com.impacta.boacao.dto.request.HistoricoAtividadeRequestDTO;
 import br.com.impacta.boacao.dto.response.HistoricoAtividadeDTO;
 import br.com.impacta.boacao.dto.response.HistoricoAtividadeResponseDTO;
 import br.com.impacta.boacao.dto.response.HistoricoAtividadeTodosResponseDTO;
+import br.com.impacta.boacao.entity.enums.StatusCandidatura;
 
 public interface HistoricoAtividadeService {
     /**
@@ -24,5 +25,7 @@ public interface HistoricoAtividadeService {
     Page<HistoricoAtividadeDTO> buscarTodos(Pageable pageable);
 
     Page<HistoricoAtividadeDTO> buscarTodosPorData(String encerradoEm, Pageable pageable);
+    void atualizarStatusCandidatura(HistoricoAtividadeRequestDTO request, StatusCandidatura status);
+
 
 }

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import br.com.impacta.boacao.exception.RecursoNaoEncontradoException;
 import jakarta.servlet.http.HttpServletRequest;
-
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
@@ -32,14 +31,14 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<RespostaErroHttp> illegalArgumentHandler(IllegalArgumentException e, HttpServletRequest request) {
-       RespostaErroHttp respostaErroHttp = new RespostaErroHttp();
-       respostaErroHttp.setTimestamp(Instant.now());
-       respostaErroHttp.setStatus(HttpStatus.BAD_REQUEST.value());
-       respostaErroHttp.setError("Bad Request");
-       respostaErroHttp.setMessage(e.getMessage());
-       respostaErroHttp.setPath(request.getRequestURI());
+        RespostaErroHttp respostaErroHttp = new RespostaErroHttp();
+        respostaErroHttp.setTimestamp(Instant.now());
+        respostaErroHttp.setStatus(HttpStatus.BAD_REQUEST.value());
+        respostaErroHttp.setError("Bad Request");
+        respostaErroHttp.setMessage(e.getMessage());
+        respostaErroHttp.setPath(request.getRequestURI());
 
-       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respostaErroHttp);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respostaErroHttp);
     }
 
     // Erro personalizado para enums
@@ -96,4 +95,19 @@ public class ControllerExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(validacaoError);
     }
+
+    @ExceptionHandler(StatusCandidaturaInvalidoException.class)
+    public ResponseEntity<RespostaErroHttp> handleInvalidStatus(
+            StatusCandidaturaInvalidoException ex,
+            HttpServletRequest req) {
+
+        RespostaErroHttp erro = new RespostaErroHttp();
+        erro.setTimestamp(Instant.now());
+        erro.setStatus(HttpStatus.BAD_REQUEST.value());
+        erro.setError("Bad Request");
+        erro.setMessage(ex.getMessage());
+        erro.setPath(req.getRequestURI());
+        return ResponseEntity.badRequest().body(erro);
+    }
+
 }

@@ -28,6 +28,7 @@ export interface ListaInscritos {
   statusCandidatura: string;
   tags: string[];
 }
+export type StatusCandidatura = 'PENDENTE' | 'APROVADO' | 'REJEITADO' | 'REALIZADO';
 
 @Injectable({ providedIn: 'root' })
 export class GestaoVoluntarioService {
@@ -70,5 +71,18 @@ export class GestaoVoluntarioService {
           })
         )
     );
+  }
+
+  /**
+   * Chama o PUT em /gestao-voluntarios/atividade/{atividadeId}/statusCandidatura/{status}
+   * envia no body { voluntarioId }
+   */
+  atualizarStatusCandidatura(
+    atividadeId: number,
+    voluntarioId: number,
+    status: StatusCandidatura
+  ): Observable<void> {
+    const url = `${this.baseUrl}/gestao-voluntarios/atividade/${atividadeId}/statusCandidatura/${status}`;
+    return this.http.put<void>(url, { voluntarioId });
   }
 }

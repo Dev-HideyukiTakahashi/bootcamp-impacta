@@ -34,22 +34,22 @@
         <button
           *ngIf="v.statusCandidatura === 'PENDENTE'"
           class="btn-acao"
-          (click)="aceitar(v)"
+          (click)="aprovar(v.id)"
         >
           Aceitar
         </button>
         <button
           *ngIf="v.statusCandidatura === 'PENDENTE'"
           class="btn-acao"
-          (click)="rejeitar(v)"
+          (click)="rejeitar(v.id)"
         >
           Rejeitar
         </button>
 
         <button
-          *ngIf="v.statusCandidatura === 'REALIZADO'"
+          *ngIf="v.statusCandidatura === 'APROVADO'"
           class="btn-acao"
-          (click)="avaliar(v)"
+          (click)="avaliar(v.id)"
         >
           Avaliar
         </button>
@@ -106,5 +106,11 @@
     </button>
   </div>
 </div>
+
+<app-modal-avaliar-voluntario
+  *ngIf="showAvaliarModal"
+  (onClose)="fecharModal()"
+>
+</app-modal-avaliar-voluntario>
 
 <app-footer></app-footer>

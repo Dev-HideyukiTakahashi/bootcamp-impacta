@@ -1,17 +1,17 @@
-// src/app/features/gestao-voluntarios/gestao-voluntarios.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-
+// importar meu modal avaliar
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
 import {
   GestaoVoluntarioService,
   ListaInscritos,
+  StatusCandidatura,
 } from '../../service/gestaoVoluntario.service';
+import { ModalAvaliarVoluntarioComponent } from './modal-avaliar-voluntario/modal-avaliar-voluntario.component';
 
 // Interface que representa o DTO de resposta do voluntário
 export interface VoluntarioHistoricoResponseDTO {
@@ -31,6 +31,7 @@ export interface VoluntarioHistoricoResponseDTO {
     FormsModule,
     HeaderComponent,
     FooterComponent,
+    ModalAvaliarVoluntarioComponent
   ],
   templateUrl: './gestao-voluntarios.component.html',
   styleUrls: ['./gestao-voluntarios.component.scss'],
@@ -44,7 +45,7 @@ export class GestaoVoluntariosComponent implements OnInit {
   currentPage = 1;
   // Quantidade de voluntários por página
   pageSize = 5;
-
+  showAvaliarModal = false;
   // Calcula o total de páginas para a paginação
   get totalPages(): number {
     return Math.ceil(this.v.length / this.pageSize);
@@ -108,16 +109,25 @@ export class GestaoVoluntariosComponent implements OnInit {
     this.currentPage = n;
   }
 
-  // Marca o voluntário como aprovado
-  aceitar(v: VoluntarioHistoricoResponseDTO) {
-    v.statusCandidatura = 'APROVADO';
+  aprovar(volId: number): void {
+    console.log('PARAMS this.atividadeId:', this.atividadeId);
+    console.log('PARAMS volId:', volId);
+    this.service
+      .atualizarStatusCandidatura(this.atividadeId, volId, 'APROVADO')
+      .subscribe(() => this.carregarVoluntarios(this.atividadeId));
   }
-  // Marca o voluntário como rejeitado
-  rejeitar(v: VoluntarioHistoricoResponseDTO) {
-    v.statusCandidatura = 'REJEITADO';
+
+  rejeitar(volId: number): void {
+    this.service
+      .atualizarStatusCandidatura(this.atividadeId, volId, 'REJEITADO')
+      .subscribe(() => this.carregarVoluntarios(this.atividadeId));
   }
-  // Marca o voluntário como realizado
-  avaliar(v: VoluntarioHistoricoResponseDTO) {
-    v.statusCandidatura = 'REALIZADO';
+  avaliar(volId: number): void {
+    console.log('VOLUNTARIO A SER AVALIADO', volId);
+    this.showAvaliarModal = true; // sinaliza para mostrar o modal
+  }
+
+  fecharModal(): void {
+    this.showAvaliarModal = false;
   }
 }

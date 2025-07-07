@@ -1,0 +1,61 @@
+<!-- modal-avaliar-voluntario.component.html -->
+<div class="overlay" (click)="close()"></div>
+<div class="modal-box">
+  <div class="modal-header">
+    <h2>Avalie o Voluntário</h2>
+    <button class="close-btn" (click)="close()">×</button>
+  </div>
+
+  <div class="modal-content">
+    <div class="form-group">
+      <label>Voluntário participou da atividade?</label>
+      <div>
+        <label>
+          <input
+            type="radio"
+            name="participou"
+            [(ngModel)]="participou"
+            [value]="true"
+          />
+          Sim
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="participou"
+            [(ngModel)]="participou"
+            [value]="false"
+          />
+          Não
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group" *ngIf="participou">
+      <label>Quantas horas participou?</label>
+      <input type="number" min="0" (input)="selectHora($event)" />
+    </div>
+
+    <div class="form-group">
+      <label>Comentário:</label>
+      <textarea rows="4" placeholder="Escreva seu feedback..."></textarea>
+    </div>
+
+    <div class="form-group rating-group">
+      <label>Nota:</label>
+      <div class="stars">
+        <span
+          *ngFor="let _ of [1, 2, 3, 4, 5]; let idx = index"
+          (click)="setNota(idx + 1)"
+          [class.filled]="idx < nota"
+        >
+          ★
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn-evaluate" (click)="submit()">Avaliar</button>
+  </div>
+</div>
