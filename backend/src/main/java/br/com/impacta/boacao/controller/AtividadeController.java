@@ -125,11 +125,11 @@ public class AtividadeController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping(path = "/atualizar-candidatura")
+    @PostMapping(path = "/atualizar-candidatura")
     public ResponseEntity<VoluntarioAtividadeDTO> atualizarStatusCandidatura(@RequestBody AtividadeIdDTO request) {
         logger.info("Iniciando associação de histórico de atividade a um voluntário");
 
-        VoluntarioAtividadeDTO response = atividadeService.atualizarStatusCandidatura(request.getId());
+        VoluntarioAtividadeDTO response = atividadeService.atualizarStatusCandidatura(request.getAtividadeId());
         return ResponseEntity.ok(response);
     }
 

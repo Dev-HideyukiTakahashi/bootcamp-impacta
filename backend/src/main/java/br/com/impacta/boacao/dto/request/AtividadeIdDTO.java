@@ -2,18 +2,18 @@ package br.com.impacta.boacao.dto.request;
 
 public class AtividadeIdDTO {
 
-    private Integer id;
+    private Integer atividadeId;
 
-    public Integer getId() {
-        return id;
+    public AtividadeIdDTO(Integer atividadeId) {
+        this.atividadeId = atividadeId;
     }
 
-    public AtividadeIdDTO(Integer id) {
-        this.id = id;
+    public Integer getAtividadeId() {
+        return atividadeId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setAtividadeId(Integer atividadeId) {
+        this.atividadeId = atividadeId;
     }
 
 }
