@@ -81,6 +81,9 @@ public class AvaliacaoService {
     public int getMediaAvaliacao(List<HistoricoAtividade> historicoAtividades) {
         double soma = 0;
         for (HistoricoAtividade atividade : historicoAtividades) {
+            if(atividade.getAvaliacao() == null){
+                return 0;
+            }
             soma += atividade.getAvaliacao().getEstrelas();
         }
 

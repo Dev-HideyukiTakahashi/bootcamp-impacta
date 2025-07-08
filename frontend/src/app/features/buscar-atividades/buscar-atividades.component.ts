@@ -2,7 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IAtividade } from '../../model/atividade.model';
+import { Tag } from '../../model/tag.model';
 import { AtividadeService } from '../../service/atividade.service';
+import { TagService } from '../../service/tag.service';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
 
@@ -18,8 +20,12 @@ export class BuscarAtividadesComponent {
   busca: string = '';
   paginaAtual: number = 1;
   itensPorPagina: number = 6;
+  tags: Tag[] = [];
+  estados: string[] = [];
+  filtroTag: string = '';
+  filtroEstado: string = '';
 
-  constructor(private atividadeService: AtividadeService) {}
+  constructor(private atividadeService: AtividadeService, private tagService: TagService) {}
 
   ngOnInit() {
     // Faz a requisição para buscar as atividades na API
@@ -31,14 +37,29 @@ export class BuscarAtividadesComponent {
         console.error('Erro ao buscar atividades:', err);
       },
     });
+
+    this.tagService.buscarTodos().subscribe({
+      next: (res) => (this.tags = res),
+      error: (err) => console.error('Erro ao buscar tags:', err),
+    });
   }
+
   // retorna a lista filtrada com base no termo de busca
   get atividadesFiltradas() {
-    if (!this.busca?.trim()) return this.atividades;
-    const termo = this.busca.trim().toLowerCase();
-    return this.atividades.filter(
-      (a) => a.nome.toLowerCase().includes(termo) || a.descricao.toLowerCase().includes(termo),
-    );
+    let lista = this.atividades;
+
+    if (this.busca?.trim()) {
+      const termo = this.busca.trim().toLowerCase();
+      lista = lista.filter(
+        (a) => a.nome.toLowerCase().includes(termo) || a.descricao.toLowerCase().includes(termo),
+      );
+    }
+
+    if (this.filtroTag) {
+      lista = lista.filter((a) => a.titulo === this.filtroTag);
+    }
+
+    return lista;
   }
   // registra a participação em uma atividade passando o ID da atividade para o endpoint
   participar(atividadeId: number) {
@@ -62,5 +83,17 @@ export class BuscarAtividadesComponent {
   get totalPaginas(): number[] {
     const total = Math.ceil(this.atividadesFiltradas.length / this.itensPorPagina);
     return Array.from({ length: total }, (_, i) => i + 1);
+  }
+
+  filtrarAtividades() {
+    this.paginaAtual = 1;
+    this.atividadeService.buscarAtividadesPorTag(this.filtroTag).subscribe({
+      next: (res) => {
+        this.atividades = res.content;
+      },
+      error: (err) => {
+        console.error('Erro ao filtrar atividades:', err);
+      },
+    });
   }
 }

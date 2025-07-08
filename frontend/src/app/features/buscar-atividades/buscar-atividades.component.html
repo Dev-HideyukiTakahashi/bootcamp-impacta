@@ -20,6 +20,25 @@
         </button>
       </div>
     </div>
+
+    <!-- Filtros  -->
+    <div class="row justify-content-center mb-4">
+      <!-- Select de Tag -->
+      <div class="col-12 col-md-3 mb-2 mb-md-0">
+        <select class="form-select" [(ngModel)]="filtroTag" name="filtroTag">
+          <option value="">Todas as Tags</option>
+          <option *ngFor="let tag of tags" [value]="tag.nome">{{ tag.nome }}</option>
+        </select>
+      </div>
+
+      <!-- Select de Estado -->
+      <div class="col-12 col-md-3">
+        <select class="form-select" [(ngModel)]="filtroEstado" name="filtroEstado">
+          <option value="">Todos os Estados</option>
+          <option *ngFor="let estado of estados" [value]="estado">{{ estado }}</option>
+        </select>
+      </div>
+    </div>
   </form>
 
   <!-- Cards -->

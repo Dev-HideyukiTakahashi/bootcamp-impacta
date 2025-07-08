@@ -73,4 +73,8 @@ export class AtividadeService {
       }),
     );
   }
+
+  buscarAtividadesPorTag(tag:string): Observable<{ content: IAtividade[] }> {
+    return this.http.get<{ content: IAtividade[] }>(`${this.baseUrl}/tag/`+ tag);
+  }
 }
