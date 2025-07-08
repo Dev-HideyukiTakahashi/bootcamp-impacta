@@ -12,6 +12,8 @@ import br.com.impacta.boacao.dto.response.AvaliacaoResponseDTO;
 import br.com.impacta.boacao.entity.Avaliacao;
 import br.com.impacta.boacao.entity.HistoricoAtividade;
 import br.com.impacta.boacao.entity.Ong;
+import br.com.impacta.boacao.entity.Usuario;
+import br.com.impacta.boacao.exception.DomainException;
 import br.com.impacta.boacao.mapper.AvaliacaoMapper;
 import br.com.impacta.boacao.repository.AvaliacaoRepository;
 import br.com.impacta.boacao.repository.HistoricoAtividadeRepository;
@@ -38,17 +40,22 @@ public class AvaliacaoService {
     @Transactional
     public AvaliacaoResponseDTO avaliarVoluntario(AvaliacaoRequestDTO request) {
         // Busca ong logada
-        Integer ongId = usuarioService.getUsuarioAutenticado().getId();
-        System.out.println(ongId);
-        System.out.println("historico: "+ request.getHistoricoAtividadeId());
-        System.out.println("estrelas: "+ request.getEstrelas());
-        System.out.println("carga: "+ request.getCargaHoraria());
-        System.out.println("feed: "+ request.getFeedback());
-        Ong ong = ongRepository.getReferenceById(ongId);
+        Usuario usuario = usuarioService.getUsuarioAutenticado();
+        Ong ong = ongRepository.findByUsuarioEmail(usuario.getEmail()).get();
 
         // Busca histórico de atividade
         HistoricoAtividade historicoAtividade = historicoAtividadeRepository
                 .getReferenceById(request.getHistoricoAtividadeId());
+
+        // Verifica se a atividade é da ong que está avaliando
+        if (historicoAtividade.getAtividade().getOng().getId() != ong.getId()) {
+            throw new DomainException("Essa atividade não percente a esta ong.");
+        }
+
+        // Verifica se já foi avaliado
+        if (historicoAtividade.getAvaliacao() != null && historicoAtividade.getAvaliacao().isAvaliado()) {
+            throw new DomainException("Voluntário já avaliado nessa atividade.");
+        }
 
         // Cria a avaliação e salva
         Avaliacao avaliacao = buildAvaliacao(request, ong);
@@ -71,9 +78,9 @@ public class AvaliacaoService {
         return avaliacao;
     }
 
-    public int getMediaAvaliacao(List<HistoricoAtividade> historicoAtividades){
+    public int getMediaAvaliacao(List<HistoricoAtividade> historicoAtividades) {
         double soma = 0;
-        for(HistoricoAtividade atividade : historicoAtividades){
+        for (HistoricoAtividade atividade : historicoAtividades) {
             soma += atividade.getAvaliacao().getEstrelas();
         }
 
