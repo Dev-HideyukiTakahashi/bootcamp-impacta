@@ -64,7 +64,7 @@ public class AvaliacaoService {
         // Atualiza o histórico de atividade
         historicoAtividade.setAvaliacao(avaliacao);
 
-        log.info("Avaliação bem sucedida ao voluntário {}");
+        log.info("Avaliação bem sucedida");
         return AvaliacaoMapper.toDTO(avaliacao, historicoAtividade);
     }
 

@@ -311,7 +311,8 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
     @Override
     @Transactional
     public Page<AtividadeResponseDTO> buscarAtividades(Pageable pageable) {
-        Voluntario voluntario = voluntarioRepository.getReferenceById(usuarioService.getUsuarioAutenticado().getId());
+        Usuario usuario = usuarioService.getUsuarioAutenticado();
+        Voluntario voluntario = voluntarioRepository.findByUsuarioEmail(usuario.getEmail()).get();
 
         return atividadeRepository.findAll(pageable)
                 .map(atividade -> AtividadeMapper.toDTO(atividade, voluntario));
