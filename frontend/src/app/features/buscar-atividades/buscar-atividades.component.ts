@@ -43,6 +43,9 @@ export class BuscarAtividadesComponent {
   // registra a participação em uma atividade passando o ID da atividade para o endpoint
   participar(atividadeId: number) {
     this.atividadeService.atualizarCandidatura(atividadeId).subscribe({
+      next: () => {
+        this.ngOnInit();
+      },
       error: (err) => {
         alert('Erro ao participar da atividade!');
         console.error(err);

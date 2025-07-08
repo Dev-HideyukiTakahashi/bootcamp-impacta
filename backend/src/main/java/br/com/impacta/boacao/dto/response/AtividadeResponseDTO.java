@@ -5,12 +5,13 @@ import java.util.Objects;
 
 import br.com.impacta.boacao.entity.enums.PeriodoAtividade;
 import br.com.impacta.boacao.entity.enums.StatusAtividade;
+import br.com.impacta.boacao.entity.enums.StatusCandidatura;
 
 public class AtividadeResponseDTO {
 
     private Integer id;
-    private Integer idTag;            // 👈 novo
-    private String titulo;            // 👈 novo
+    private Integer idTag; // 👈 novo
+    private String titulo; // 👈 novo
     private String nome;
     private PeriodoAtividade periodo;
     private String cargaHorariaDiaria;
@@ -19,6 +20,7 @@ public class AtividadeResponseDTO {
     private String descricao;
     private StatusAtividade statusAtividade;
     private LocalDateTime dataAtividade;
+    private StatusCandidatura statusCandidatura;
 
     private Integer idOng;
 
@@ -33,21 +35,13 @@ public class AtividadeResponseDTO {
     public AtividadeResponseDTO() {
     }
 
-    public AtividadeResponseDTO(
-            Integer id,
-            String nome,
-            PeriodoAtividade periodo,
-            String cargaHorariaDiaria,
-            String enderecoCompleto,
-            Boolean possuiCertificacao,
-            String descricao,
-            StatusAtividade statusAtividade,
-            LocalDateTime dataAtividade,
-            Integer idOng,
-            Integer idTag,
-            String titulo
-    ) {
+    public AtividadeResponseDTO(Integer id, Integer idTag, String titulo, String nome, PeriodoAtividade periodo,
+            String cargaHorariaDiaria, String enderecoCompleto, Boolean possuiCertificacao, String descricao,
+            StatusAtividade statusAtividade, LocalDateTime dataAtividade, StatusCandidatura statusCandidatura,
+            Integer idOng) {
         this.id = id;
+        this.idTag = idTag;
+        this.titulo = titulo;
         this.nome = nome;
         this.periodo = periodo;
         this.cargaHorariaDiaria = cargaHorariaDiaria;
@@ -56,9 +50,8 @@ public class AtividadeResponseDTO {
         this.descricao = descricao;
         this.statusAtividade = statusAtividade;
         this.dataAtividade = dataAtividade;
+        this.statusCandidatura = statusCandidatura;
         this.idOng = idOng;
-        this.idTag = idTag;
-        this.titulo = titulo;
     }
 
     public Integer getId() {
@@ -133,7 +126,6 @@ public class AtividadeResponseDTO {
         this.dataAtividade = dataAtividade;
     }
 
-
     public Integer getIdTag() {
         return idTag;
     }
@@ -150,6 +142,14 @@ public class AtividadeResponseDTO {
         this.titulo = titulo;
     }
 
+    public StatusCandidatura getStatusCandidatura() {
+        return statusCandidatura;
+    }
+
+    public void setStatusCandidatura(StatusCandidatura statusCandidatura) {
+        this.statusCandidatura = statusCandidatura;
+    }
+
     // equals() e hashCode() continuam os mesmos..
     @Override
     public boolean equals(Object o) {
@@ -164,4 +164,5 @@ public class AtividadeResponseDTO {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
 }

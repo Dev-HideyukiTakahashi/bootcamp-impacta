@@ -308,8 +308,11 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
     }
 
     @Override
+    @Transactional
     public Page<AtividadeResponseDTO> buscarAtividades(Pageable pageable) {
+        Voluntario voluntario = voluntarioRepository.getReferenceById(usuarioService.getUsuarioAutenticado().getId());
+
         return atividadeRepository.findAll(pageable)
-                .map(AtividadeMapper::toDTO);
+                .map(atividade -> AtividadeMapper.toDTO(atividade, voluntario));
     }
 }

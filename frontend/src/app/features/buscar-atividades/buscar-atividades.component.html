@@ -28,15 +28,13 @@
       <div class="card shadow-sm rounded-4 w-100">
         <div class="card-body d-flex flex-column py-3">
           <h5 class="card-title fw-bold mb-1 text-start">{{ atividade.nome }}</h5>
-          <h6 class="card-subtitle mb-2 text-secondary text-start" style="font-size: 1rem">
-            #{{ atividade.descricao }}
+          <h6 class="card-subtitle mb-2 text-secondary text-start mt-2" style="font-size: 1rem">
+            #{{ atividade.titulo }}
           </h6>
           <ul class="list-unstyled mb-2">
             <li class="mb-1 d-flex align-items-center">
               <i class="bi bi-geo-alt-fill text-secondary me-2"></i>
-              <span class="text-secondary"
-                >Localização não informada {{ atividade.enderecoCompleto }}</span
-              >
+              <span class="text-secondary">{{ atividade.enderecoCompleto }}</span>
             </li>
             <li class="mb-1 d-flex align-items-center">
               <i class="bi bi-clock-fill text-secondary me-2"></i>
@@ -54,12 +52,30 @@
             {{ atividade.descricao }}
           </p>
           <div class="mt-auto d-flex w-100">
+            @if (atividade.statusCandidatura === null) {
             <button
-              class="btn btn-dark ms-auto px-3 py-1 rounded-3 fw-semibold"
+              class="btn btn-primary ms-auto px-3 py-1 rounded-3 fw-semibold"
               (click)="participar(atividade.id)"
             >
               Participar
             </button>
+            } @if(atividade.statusCandidatura === "PENDENTE") {
+            <button class="btn btn-success ms-auto px-3 py-1 rounded-3 fw-semibold" disabled="true">
+              Pendente
+            </button>
+            } @if(atividade.statusCandidatura === "APROVADO") {
+            <button class="btn btn-dark ms-auto px-3 py-1 rounded-3 fw-semibold" disabled="true">
+              Participando
+            </button>
+            } @if(atividade.statusCandidatura === "REJEITADO") {
+            <button class="btn btn-warning ms-auto px-3 py-1 rounded-3 fw-semibold" disabled="true">
+              Rejeitado
+            </button>
+            } @if(atividade.statusCandidatura === "REALIZADO") {
+            <button class="btn btn-light ms-auto px-3 py-1 rounded-3 fw-semibold" disabled="true">
+              Realizado
+            </button>
+            }
           </div>
         </div>
       </div>

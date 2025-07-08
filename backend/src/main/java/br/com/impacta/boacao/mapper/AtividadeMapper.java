@@ -38,6 +38,28 @@ public class AtividadeMapper {
         return dto;
     }
 
+    public static AtividadeResponseDTO toDTO(Atividade ent, Voluntario voluntario) {
+        AtividadeResponseDTO dto = new AtividadeResponseDTO();
+        dto.setId(ent.getId());
+        dto.setNome(ent.getNome());
+        dto.setDescricao(ent.getDescricao());
+        dto.setPeriodo(ent.getPeriodo());
+        dto.setCargaHorariaDiaria(ent.getCargaHorariaDiaria());
+        dto.setEnderecoCompleto(ent.getEnderecoCompleto());
+        dto.setPossuiCertificacao(ent.getPossuiCertificacao());
+        dto.setStatusAtividade(ent.getStatusAtividade());
+        dto.setDataAtividade(ent.getDataAtividade());
+        dto.setIdOng(ent.getOng().getId());
+
+        dto.setStatusCandidatura(buscarStatusCandidatura(ent, voluntario));
+
+        // ID da Tag e Título
+        dto.setIdTag(ent.getTag() != null ? ent.getTag().getId() : null);
+        dto.setTitulo(ent.getTag().getNome());
+
+        return dto;
+    }
+
     public static Atividade toEntity(AtividadeRequestDTO dto) {
         Atividade ent = new Atividade();
         ent.setId(dto.getId());
@@ -75,6 +97,7 @@ public class AtividadeMapper {
     }
 
     private static StatusCandidatura buscarStatusCandidatura(Atividade atividade, Voluntario voluntario) {
+
         return atividade.getHistoricoAtividades().stream()
                 .filter(h -> h.getVoluntario().equals(voluntario))
                 .findFirst()

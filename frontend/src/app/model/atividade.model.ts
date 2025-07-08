@@ -29,6 +29,7 @@ export interface IAtividade {
   statusAtividade: StatusAtividade;
   dataAtividade: Date | null;
   idOng: number;
+  statusCandidatura: string | null;
 }
 
 // atualizarAtividade , campos para alterar
