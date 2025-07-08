@@ -31,17 +31,17 @@ public class VoluntarioService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final VoluntarioMapper mapper;
+    private final AvaliacaoService avaliacaoService;
 
-    public VoluntarioService(VoluntarioRepository voluntarioRepository,
-            UsuarioRepository usuarioRepository,
-            RoleRepository roleRepository,
-            PasswordEncoder passwordEncoder,
-            VoluntarioMapper mapper) {
+    public VoluntarioService(VoluntarioRepository voluntarioRepository, UsuarioRepository usuarioRepository,
+            RoleRepository roleRepository, PasswordEncoder passwordEncoder, VoluntarioMapper mapper,
+            AvaliacaoService avaliacaoService) {
         this.voluntarioRepository = voluntarioRepository;
         this.usuarioRepository = usuarioRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.mapper = mapper;
+        this.avaliacaoService = avaliacaoService;
     }
 
     @Transactional
@@ -84,7 +84,9 @@ public class VoluntarioService {
         String email = ((JwtAuthenticationToken) auth).getToken().getClaim("username");
         Voluntario v = voluntarioRepository.findByUsuarioEmail(email)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Voluntário não encontrado"));
-        return mapper.toPerfilVoluntarioDTO(v);
+
+        int media = avaliacaoService.getMediaAvaliacao(v.getHistoricoAtividades());
+        return mapper.toPerfilVoluntarioDTO(v, media);
     }
 
     @Transactional(readOnly = true)

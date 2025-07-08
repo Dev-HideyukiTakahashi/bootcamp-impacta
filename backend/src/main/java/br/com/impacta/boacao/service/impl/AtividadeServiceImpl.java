@@ -278,9 +278,10 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
     @Override
     public VoluntarioAtividadeDTO atualizarStatusCandidatura(Integer atividadeId) {
 
-        Integer voluntarioId = usuarioService.getUsuarioAutenticado().getId(); // id user logado
+        // usuario logado
+        Usuario usuario = usuarioService.getUsuarioAutenticado();
+        Voluntario voluntario = voluntarioRepository.findByUsuarioEmail(usuario.getEmail()).get();
 
-        Voluntario voluntario = voluntarioRepository.getReferenceById(voluntarioId);
         Atividade atividade = atividadeRepository.getReferenceById(atividadeId);
 
         HistoricoAtividade historicoAtividade = buildHistoricoAtividade(atividade, voluntario);
@@ -288,7 +289,7 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
 
         voluntario.getHistoricoAtividades().add(historicoAtividade);
 
-        log.info("Historico de atividade associado ao usuario de id: {} com sucesso.", voluntarioId);
+        log.info("Historico de atividade associado ao usuario de id: {} com sucesso.", voluntario.getId());
 
         return AtividadeMapper.toVoluntarioAtividadeDTO(voluntario, historicoAtividade.getStatusCandidatura(),
                 atividade.getId());

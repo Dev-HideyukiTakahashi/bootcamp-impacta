@@ -1,6 +1,7 @@
 package br.com.impacta.boacao.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -23,6 +24,7 @@ public class HistoricoAtividade {
     private Date dataInscricao;
     private boolean certificado;
     private LocalDate encerradoEm;
+    private LocalDateTime cargaHoraria;
 
     @Enumerated(EnumType.STRING)
     private StatusCandidatura statusCandidatura;
@@ -40,11 +42,13 @@ public class HistoricoAtividade {
     }
 
     public HistoricoAtividade(Integer id, Date dataInscricao, boolean certificado, LocalDate encerradoEm,
-            StatusCandidatura statusCandidatura, Avaliacao avaliacao, Voluntario voluntario, Atividade atividade) {
+            LocalDateTime cargaHoraria, StatusCandidatura statusCandidatura, Avaliacao avaliacao, Voluntario voluntario,
+            Atividade atividade) {
         this.id = id;
         this.dataInscricao = dataInscricao;
         this.certificado = certificado;
         this.encerradoEm = encerradoEm;
+        this.cargaHoraria = cargaHoraria;
         this.statusCandidatura = statusCandidatura;
         this.avaliacao = avaliacao;
         this.voluntario = voluntario;
@@ -113,6 +117,14 @@ public class HistoricoAtividade {
 
     public void setEncerradoEm(LocalDate encerradoEm) {
         this.encerradoEm = encerradoEm;
+    }
+
+    public LocalDateTime getCargaHoraria() {
+        return cargaHoraria;
+    }
+
+    public void setCargaHoraria(LocalDateTime cargaHoraria) {
+        this.cargaHoraria = cargaHoraria;
     }
 
     @Override

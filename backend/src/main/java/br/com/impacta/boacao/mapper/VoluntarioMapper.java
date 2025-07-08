@@ -41,7 +41,7 @@ public class VoluntarioMapper {
         return new VoluntarioResponseDTO(v.getId(), v.getNomeCompleto());
     }
 
-    public PerfilVoluntarioResponseDTO toPerfilVoluntarioDTO(Voluntario v) {
+    public PerfilVoluntarioResponseDTO toPerfilVoluntarioDTO(Voluntario v, int media) {
         PerfilVoluntarioResponseDTO dto = new PerfilVoluntarioResponseDTO();
         String[] parts = v.getNomeCompleto().split(" ");
         dto.setFullName(v.getNomeCompleto());
@@ -56,6 +56,7 @@ public class VoluntarioMapper {
         }
 
         dto.setParticipacoes(v.getHistoricoAtividades().size());
+        dto.setMedia(media);
         return dto;
     }
 

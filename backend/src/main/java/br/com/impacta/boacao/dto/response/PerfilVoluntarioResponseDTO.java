@@ -11,8 +11,22 @@ public class PerfilVoluntarioResponseDTO {
     private String cidade;
     private String estado;
     private Integer participacoes;
+    private int media;
 
     private final List<TagRequestDTO> tags = new ArrayList<>();
+
+    public PerfilVoluntarioResponseDTO() {
+    }
+
+    public PerfilVoluntarioResponseDTO(String firstName, String fullName, String cidade, String estado,
+            Integer participacoes, int media) {
+        this.firstName = firstName;
+        this.fullName = fullName;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.participacoes = participacoes;
+        this.media = media;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -60,6 +74,14 @@ public class PerfilVoluntarioResponseDTO {
 
     public void setParticipacoes(Integer participacoes) {
         this.participacoes = participacoes;
+    }
+
+    public int getMedia() {
+        return media;
+    }
+
+    public void setMedia(int media) {
+        this.media = media;
     }
 
 }

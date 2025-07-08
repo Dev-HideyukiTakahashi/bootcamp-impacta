@@ -3,7 +3,6 @@ package br.com.impacta.boacao.exception.handler;
 import java.time.Instant;
 import java.util.Arrays;
 
-import br.com.impacta.boacao.exception.DatabaseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -11,8 +10,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import br.com.impacta.boacao.exception.DatabaseException;
+import br.com.impacta.boacao.exception.DomainException;
 import br.com.impacta.boacao.exception.RecursoNaoEncontradoException;
 import jakarta.servlet.http.HttpServletRequest;
+
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
@@ -30,7 +32,20 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<RespostaErroHttp> illegalArgumentHandler(IllegalArgumentException e, HttpServletRequest request) {
+    public ResponseEntity<RespostaErroHttp> illegalArgumentHandler(IllegalArgumentException e,
+            HttpServletRequest request) {
+        RespostaErroHttp respostaErroHttp = new RespostaErroHttp();
+        respostaErroHttp.setTimestamp(Instant.now());
+        respostaErroHttp.setStatus(HttpStatus.BAD_REQUEST.value());
+        respostaErroHttp.setError("Bad Request");
+        respostaErroHttp.setMessage(e.getMessage());
+        respostaErroHttp.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respostaErroHttp);
+    }
+
+    @ExceptionHandler(DomainException.class)
+    public ResponseEntity<RespostaErroHttp> domainException(DomainException e, HttpServletRequest request) {
         RespostaErroHttp respostaErroHttp = new RespostaErroHttp();
         respostaErroHttp.setTimestamp(Instant.now());
         respostaErroHttp.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -43,7 +58,8 @@ public class ControllerExceptionHandler {
 
     // Erro personalizado para enums
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<RespostaErroHttp> httpMessageNotReadableHandler(HttpMessageNotReadableException e, HttpServletRequest request) {
+    public ResponseEntity<RespostaErroHttp> httpMessageNotReadableHandler(HttpMessageNotReadableException e,
+            HttpServletRequest request) {
 
         String mensagemPersonalizada = "Erro de leitura no corpo da requisição.";
 
@@ -54,7 +70,8 @@ public class ControllerExceptionHandler {
 
             if (targetType.isEnum()) {
                 Object[] valoresValidos = targetType.getEnumConstants();
-                mensagemPersonalizada += " Valor inválido fornecido: \"" + ex.getValue() + "\". Valores válidos: " + Arrays.toString(valoresValidos) + ".";
+                mensagemPersonalizada += " Valor inválido fornecido: \"" + ex.getValue() + "\". Valores válidos: "
+                        + Arrays.toString(valoresValidos) + ".";
             }
         }
 
@@ -70,7 +87,8 @@ public class ControllerExceptionHandler {
 
     // Erro personalizado para integridade referencial no banco de dados
     @ExceptionHandler(DatabaseException.class)
-    public ResponseEntity<RespostaErroHttp> dataIntegrityViolationHandler(DatabaseException e, HttpServletRequest request) {
+    public ResponseEntity<RespostaErroHttp> dataIntegrityViolationHandler(DatabaseException e,
+            HttpServletRequest request) {
         RespostaErroHttp respostaErroHttp = new RespostaErroHttp();
         respostaErroHttp.setTimestamp(Instant.now());
         respostaErroHttp.setStatus(HttpStatus.CONFLICT.value());
@@ -83,7 +101,8 @@ public class ControllerExceptionHandler {
 
     // Erro personalizado para validation @Valid
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ValidacaoError> methodArgumentNotValidHandler(MethodArgumentNotValidException e, HttpServletRequest request) {
+    public ResponseEntity<ValidacaoError> methodArgumentNotValidHandler(MethodArgumentNotValidException e,
+            HttpServletRequest request) {
         ValidacaoError validacaoError = new ValidacaoError();
         validacaoError.setTimestamp(Instant.now());
         validacaoError.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());

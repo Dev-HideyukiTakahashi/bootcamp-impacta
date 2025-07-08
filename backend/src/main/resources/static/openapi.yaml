@@ -351,7 +351,7 @@ paths:
       description: Retorna uma lista paginada do histórico de atividades encerradas em uma data específica, para o usuário autenticado.
       parameters:
         - in: query
-          name: data
+          name: encerradoEm
           schema:
             type: string
             format: date
@@ -967,3 +967,15 @@ components:
         nome:
           type: string
           example: "Meio Ambiente"
+  securitySchemes:
+    OAuth2Password:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: http://localhost:8080/oauth2/token
+          scopes: {}
+security:
+  - OAuth2Password: []
+
+servers:
+  - url: http://localhost:8080

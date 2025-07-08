@@ -34,9 +34,6 @@ public class Ong {
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
 
-    @OneToOne(mappedBy = "ong")
-    private Avaliacao avaliacao;
-
     @OneToMany(mappedBy = "ong")
     private final List<Atividade> atividades = new ArrayList<>();
 
@@ -47,15 +44,13 @@ public class Ong {
     public Ong() {
     }
 
-    public Ong(int id, String nomeEntidade, String cnpj, String telefone, Usuario usuario, Endereco endereco,
-            Avaliacao avaliacao) {
+    public Ong(int id, String nomeEntidade, String cnpj, String telefone, Usuario usuario, Endereco endereco) {
         this.id = id;
         this.nomeEntidade = nomeEntidade;
         this.cnpj = cnpj;
         this.telefone = telefone;
         this.usuario = usuario;
         this.endereco = endereco;
-        this.avaliacao = avaliacao;
     }
 
     public int getId() {
@@ -104,14 +99,6 @@ public class Ong {
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
-    }
-
-    public Avaliacao getAvaliacao() {
-        return avaliacao;
-    }
-
-    public void setAvaliacao(Avaliacao avaliacao) {
-        this.avaliacao = avaliacao;
     }
 
     public List<Atividade> getAtividades() {
