@@ -43,4 +43,8 @@ public interface AtividadeService {
 
     VoluntarioAtividadeDTO atualizarStatusCandidatura(Integer atividadeId);
 
+    Page<AtividadeResponseDTO> buscarAtividadePorEstadoOng(String estado, Pageable pageable);
+
+    Page<AtividadeResponseDTO> buscarAtividadePorTag(String tag, Pageable pageable);
+
 }

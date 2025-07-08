@@ -135,13 +135,22 @@ public class AtividadeController {
         return ResponseEntity.ok(response);
     }
 
-    /*
-     * @DeleteMapping(path = "/{id}")
-     * public ResponseEntity<Void> deletar(@PathVariable Integer id){
-     * logger.info("Ong deletando atividade de id: {}", id);
-     * 
-     * atividadeService.deletar(id);
-     * return ResponseEntity.noContent().build();
-     * }
-     */
+    @GetMapping(path = "/estado/{estado}")
+    public ResponseEntity<Page<AtividadeResponseDTO>> buscarAtividadePorEstadoOng(@PathVariable String estado,
+            Pageable pageable) {
+        logger.info("Iniciando busca de atividades no estado: {}", estado);
+        Page<AtividadeResponseDTO> response = atividadeService.buscarAtividadePorEstadoOng(estado, pageable);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping(path = "/tag/{tag}")
+    public ResponseEntity<Page<AtividadeResponseDTO>> buscarAtividadePorTag(@PathVariable String tag,
+            Pageable pageable) {
+        logger.info("Iniciando busca de atividade por tag: {}", tag);
+        Page<AtividadeResponseDTO> response = atividadeService.buscarAtividadePorTag(tag, pageable);
+
+        return ResponseEntity.ok().body(response);
+    }
+
 }

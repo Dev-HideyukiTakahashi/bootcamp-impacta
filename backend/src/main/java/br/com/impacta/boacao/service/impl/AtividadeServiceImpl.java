@@ -317,4 +317,24 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
         return atividadeRepository.findAll(pageable)
                 .map(atividade -> AtividadeMapper.toDTO(atividade, voluntario));
     }
+
+    @Override
+    @Transactional
+    public Page<AtividadeResponseDTO> buscarAtividadePorEstadoOng(String estado, Pageable pageable) {
+        Usuario usuario = usuarioService.getUsuarioAutenticado();
+        Voluntario voluntario = voluntarioRepository.findByUsuarioEmail(usuario.getEmail()).get();
+
+        return atividadeRepository.buscarAtividadePorEstadoOng(estado, pageable)
+                .map(atividade -> AtividadeMapper.toDTO(atividade, voluntario));
+    }
+
+    @Override
+    @Transactional
+    public Page<AtividadeResponseDTO> buscarAtividadePorTag(String tag, Pageable pageable) {
+        Usuario usuario = usuarioService.getUsuarioAutenticado();
+        Voluntario voluntario = voluntarioRepository.findByUsuarioEmail(usuario.getEmail()).get();
+
+        return atividadeRepository.buscarAtividadePorTag(tag, pageable)
+                .map(atividade -> AtividadeMapper.toDTO(atividade, voluntario));
+    }
 }

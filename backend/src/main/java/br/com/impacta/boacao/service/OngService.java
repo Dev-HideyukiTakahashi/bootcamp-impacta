@@ -2,8 +2,6 @@ package br.com.impacta.boacao.service;
 
 import java.sql.Timestamp;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -13,14 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.impacta.boacao.dto.request.OngRequestDTO;
 import br.com.impacta.boacao.dto.request.OngUpdateRequestDTO;
 import br.com.impacta.boacao.dto.response.DadosOngResponseDTO;
-import br.com.impacta.boacao.dto.response.ListaOngResponse;
 import br.com.impacta.boacao.dto.response.OngResponseDTO;
 import br.com.impacta.boacao.dto.response.PerfilOngResponseDTO;
 import br.com.impacta.boacao.entity.Endereco;
 import br.com.impacta.boacao.entity.Ong;
 import br.com.impacta.boacao.entity.Role;
 import br.com.impacta.boacao.entity.Usuario;
-import br.com.impacta.boacao.entity.Voluntario;
 import br.com.impacta.boacao.exception.RecursoNaoEncontradoException;
 import br.com.impacta.boacao.mapper.OngMapper;
 import br.com.impacta.boacao.repository.OngRepository;
@@ -130,21 +126,4 @@ public class OngService {
 
         ongRepository.save(ong);
     }
-
-    @Transactional(readOnly = true)
-    public Page<ListaOngResponse> buscarPorTag(String tag, Pageable pageable) {
-        Page<Ong> ongs = ongRepository.buscarPorTag(tag, pageable);
-        Voluntario voluntario = voluntarioRepository.getReferenceById(usuarioService.getUsuarioAutenticado().getId());
-
-        return ongs.map(ong -> OngMapper.toListaDto(ong, voluntario));
-    }
-
-    @Transactional(readOnly = true)
-    public Page<ListaOngResponse> buscarPorEstado(String estado, Pageable pageable) {
-        Page<Ong> ongs = ongRepository.buscarPorEstado(estado, pageable);
-        Voluntario voluntario = voluntarioRepository.getReferenceById(usuarioService.getUsuarioAutenticado().getId());
-
-        return ongs.map(ong -> OngMapper.toListaDto(ong, voluntario));
-    }
-
 }
