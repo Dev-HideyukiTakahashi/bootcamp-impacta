@@ -3,6 +3,9 @@ package br.com.impacta.boacao.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import br.com.impacta.boacao.dto.request.AtividadeRequestDTO;
 import br.com.impacta.boacao.dto.response.AtividadeResponseDTO;
 import br.com.impacta.boacao.dto.response.AtividadeStatusResponseDTO;
@@ -27,7 +30,7 @@ public interface AtividadeService {
     /**
      * Lista todas as atividades no banco, sem filtro de ONG
      */
-    List<AtividadeResponseDTO> buscarAtividades();
+    Page<AtividadeResponseDTO> buscarAtividades(Pageable pageable);
 
     /**
      * Atualiza apenas o campo statusAtividade de uma Atividade, retornando

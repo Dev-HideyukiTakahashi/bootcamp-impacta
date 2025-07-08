@@ -1,6 +1,5 @@
 <app-header></app-header>
 
-
 <div class="container py-5">
   <!-- Título -->
   <h1 class="text-center mb-4 fw-semibold">Buscar Atividades</h1>
@@ -9,8 +8,13 @@
   <form class="row justify-content-center mb-4">
     <div class="col-12 col-md-6">
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Buscar por nome ou descrição..." [(ngModel)]="busca"
-          name="busca" />
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Buscar por nome ou descrição..."
+          [(ngModel)]="busca"
+          name="busca"
+        />
         <button type="submit" class="btn btn-dark d-none d-md-block" tabindex="-1" disabled>
           <i class="bi bi-search"></i>
         </button>
@@ -19,49 +23,76 @@
   </form>
 
   <!-- Cards -->
-<div class="row justify-content-center g-4">
-  <div
-    class="col-12 col-md-6 col-lg-4 d-flex"
-    *ngFor="let atividade of atividadesFiltradas"
-  >
-    <div class="card shadow-sm rounded-4 w-100">
-      <div class="card-body d-flex flex-column py-3">
-        <h5 class="card-title fw-bold mb-1 text-start">{{ atividade.nome }}</h5>
-        <h6 class="card-subtitle mb-2 text-secondary text-start" style="font-size: 1rem;">
-          #{{ atividade.descricao }}
-        </h6>
-        <ul class="list-unstyled mb-2">
-          <li class="mb-1 d-flex align-items-center">
-            <i class="bi bi-geo-alt-fill text-secondary me-2"></i>
-            <span class="text-secondary">Localização não informada {{ atividade.enderecoCompleto }}</span>
-          </li>
-          <li class="mb-1 d-flex align-items-center">
-            <i class="bi bi-clock-fill text-secondary me-2"></i>
-            <span>{{ atividade.cargaHorariaDiaria }} - {{ atividade.periodo | titlecase }}</span>
-          </li>
-          <li
-            class="mb-1 d-flex align-items-center"
-            *ngIf="atividade.statusAtividade === 'ANDAMENTO'"
-          >
-            <i class="bi bi-patch-check  me-2"></i>
-            <span>Certificado de voluntariado</span>
-          </li>
-          <li class="mb-1 d-flex align-items-center">
-            <i class="bi bi-people-fill text-secondary me-2"></i>
-            <span>Voluntários: {{ atividade.voluntariosCount }}</span>
-          </li>
-        </ul>
-        <p class="card-text text-start mb-2">
-          {{ atividade.descricao }}
-        </p>
-        <div class="mt-auto d-flex w-100">
-          <button class="btn btn-dark ms-auto px-3 py-1 rounded-3 fw-semibold" (click)="participar(atividade.id)">
-            Participar
-          </button>
+  <div class="row justify-content-center g-4">
+    <div class="col-12 col-md-6 col-lg-4 d-flex" *ngFor="let atividade of atividadesPaginadas">
+      <div class="card shadow-sm rounded-4 w-100">
+        <div class="card-body d-flex flex-column py-3">
+          <h5 class="card-title fw-bold mb-1 text-start">{{ atividade.nome }}</h5>
+          <h6 class="card-subtitle mb-2 text-secondary text-start" style="font-size: 1rem">
+            #{{ atividade.descricao }}
+          </h6>
+          <ul class="list-unstyled mb-2">
+            <li class="mb-1 d-flex align-items-center">
+              <i class="bi bi-geo-alt-fill text-secondary me-2"></i>
+              <span class="text-secondary"
+                >Localização não informada {{ atividade.enderecoCompleto }}</span
+              >
+            </li>
+            <li class="mb-1 d-flex align-items-center">
+              <i class="bi bi-clock-fill text-secondary me-2"></i>
+              <span>{{ atividade.cargaHorariaDiaria }} - {{ atividade.periodo | titlecase }}</span>
+            </li>
+            <li
+              class="mb-1 d-flex align-items-center"
+              *ngIf="atividade.statusAtividade === 'ANDAMENTO'"
+            >
+              <i class="bi bi-patch-check me-2"></i>
+              @if (atividade.possuiCertificacao) { <span>Certificado de voluntariado</span>}
+            </li>
+          </ul>
+          <p class="card-text text-start mb-2">
+            {{ atividade.descricao }}
+          </p>
+          <div class="mt-auto d-flex w-100">
+            <button
+              class="btn btn-dark ms-auto px-3 py-1 rounded-3 fw-semibold"
+              (click)="participar(atividade.id)"
+            >
+              Participar
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+  <!-- Paginação -->
+  <nav *ngIf="totalPaginas.length > 1" class="mt-4">
+    <ul class="pagination justify-content-center">
+      <li
+        class="page-item"
+        [class.disabled]="paginaAtual === 1"
+        (click)="paginaAtual = paginaAtual - 1"
+      >
+        <button class="page-link">Anterior</button>
+      </li>
+
+      <li
+        class="page-item"
+        *ngFor="let pagina of totalPaginas"
+        [class.active]="pagina === paginaAtual"
+        (click)="paginaAtual = pagina"
+      >
+        <button class="page-link">{{ pagina }}</button>
+      </li>
+
+      <li
+        class="page-item"
+        [class.disabled]="paginaAtual === totalPaginas.length"
+        (click)="paginaAtual = paginaAtual + 1"
+      >
+        <button class="page-link">Próxima</button>
+      </li>
+    </ul>
+  </nav>
 </div>
 <app-footer></app-footer>

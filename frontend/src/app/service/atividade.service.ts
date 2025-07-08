@@ -54,8 +54,8 @@ export class AtividadeService {
     );
   }
 
-  getBuscarAtividade(): Observable<IAtividade[]> {
-    return this.http.get<IAtividade[]>(this.baseUrl);
+  getBuscarAtividade(): Observable<{ content: IAtividade[] }> {
+    return this.http.get<{ content: IAtividade[] }>(this.baseUrl);
   }
 
   atualizarCandidatura(atividadeId: number): Observable<any> {

@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,8 +47,8 @@ public class AtividadeController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<AtividadeResponseDTO>> listarAtividades() {
-        List<AtividadeResponseDTO> atividades = atividadeService.buscarAtividades();
+    public ResponseEntity<Page<AtividadeResponseDTO>> listarAtividades(Pageable pageable) {
+        Page<AtividadeResponseDTO> atividades = atividadeService.buscarAtividades(pageable);
         return ResponseEntity.ok(atividades);
     }
 
