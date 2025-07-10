@@ -1,0 +1,53 @@
+.historico-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  h2 {
+    margin-top: 2rem;
+    color: #2c3e50;
+  }
+
+  .atividade {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-left: 4px solid #3498db;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+
+    &.atual {
+      border-color: #27ae60;
+    }
+
+    &.realizada {
+      border-color: #e67e22;
+    }
+
+    .info {
+      h3 {
+        margin: 0 0 0.5rem;
+      }
+
+      p {
+        margin: 0.2rem 0;
+      }
+
+      button {
+        margin-top: 0.5rem;
+        padding: 0.5rem 1rem;
+        border: none;
+        background-color: #2980b9;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #1c5980;
+        }
+      }
+    }
+  }
+}
