@@ -17,6 +17,8 @@ import { PerfilVoluntarioComponent } from './features/perfil-voluntario/perfil-v
 import { QuemSomosComponent } from './features/quem-somos/quem-somos.component';
 import { RecuperarSenhaComponent } from './features/recuperar-senha/recuperar-senha.component';
 import { UserRole } from './model/enum/user-role.enum';
+import { HistoricoAtividadeComponent } from './features/historico-atividade/historico-atividade.component';
+
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -112,6 +114,13 @@ export const routes: Routes = [
   {
     path: 'buscar-atividades',
     component: BuscarAtividadesComponent,
+    canActivate: [authGuard],
+    data: { roles: [UserRole.Voluntario] },
+  },
+
+        {
+    path: 'historico-atividade',
+    component: HistoricoAtividadeComponent,
     canActivate: [authGuard],
     data: { roles: [UserRole.Voluntario] },
   },

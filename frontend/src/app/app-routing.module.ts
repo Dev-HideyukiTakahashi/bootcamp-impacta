@@ -7,6 +7,8 @@ import { CadastroOngComponent } from './features/cadastro-ong/cadastro-ong.compo
 import { EditarVoluntarioComponent } from './features/editar-voluntario/editar-voluntario.component';
 import { GestaoAtividadesComponent } from './features/gestao-atividades/gestao-atividades.component';
 import { GestaoVoluntariosComponent } from './features/gestao-voluntarios/gestao-voluntarios.component';
+import { HistoricoAtividadeComponent } from './features/historico-atividade/historico-atividade.component';
+
 
 const routes: Routes = [
   // rota padrão redireciona para a lista de atividades
