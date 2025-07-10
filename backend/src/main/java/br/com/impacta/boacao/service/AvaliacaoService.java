@@ -80,15 +80,15 @@ public class AvaliacaoService {
 
     public int getMediaAvaliacao(List<HistoricoAtividade> historicoAtividades) {
         double soma = 0;
+        int atividadesAvaliadas = 0;
         for (HistoricoAtividade atividade : historicoAtividades) {
-            if(atividade.getAvaliacao() == null){
-                return 0;
+            if (atividade.getAvaliacao() != null) {
+                soma += atividade.getAvaliacao().getEstrelas();
+                atividadesAvaliadas++;
             }
-            soma += atividade.getAvaliacao().getEstrelas();
         }
 
-        int media = (int) Math.ceil(soma / historicoAtividades.size());
-
+        int media = (int) Math.ceil(soma) / atividadesAvaliadas;
         return media;
     }
 
