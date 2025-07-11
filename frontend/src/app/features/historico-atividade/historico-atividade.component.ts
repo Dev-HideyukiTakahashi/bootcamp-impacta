@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from '../../shared/components/header/header.component';
-import { FooterComponent } from '../../shared/footer/footer.component';
+import { Component, OnInit } from '@angular/core';
 import { HistoricoAtividade } from '../../model/historico-atividade.model';
 import { HistoricoAtividadeService } from '../../service/historico-atividade.service';
+import { HeaderComponent } from '../../shared/components/header/header.component';
+import { FooterComponent } from '../../shared/footer/footer.component';
 @Component({
   selector: 'app-historico-atividade',
   standalone: true,
@@ -18,15 +18,7 @@ export class HistoricoAtividadeComponent implements OnInit {
   constructor(private historicoService: HistoricoAtividadeService) {}
 
   ngOnInit(): void {
-    this.carregarAtividadeAtual();
     this.carregarAtividadesRealizadas();
-  }
-
-  carregarAtividadeAtual(): void {
-    this.historicoService.getAtividadeAtual().subscribe({
-      next: (atividade) => (this.atividadeAtual = atividade),
-      error: (err) => console.error('Erro ao buscar atividade atual:', err),
-    });
   }
 
   carregarAtividadesRealizadas(): void {
