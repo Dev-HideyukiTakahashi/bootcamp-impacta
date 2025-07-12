@@ -1,0 +1,40 @@
+.bg-custom {
+    background-image: url('../../../assets/img-depoimentos.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.icons {
+    padding-bottom: 5%;
+}
+
+.img-borda {
+    border: 3px solid #000;
+    border-radius: 8px;
+    /* opcional */
+    width: 120px;
+    /* ajuste o tamanho conforme necessário */
+    height: auto;
+    display: block;
+    margin: 0 auto 8px auto;
+    width: 100px;
+}
+
+.buttons {
+    justify-content: center;
+    gap: 2rem;    
+}
+
+.opcao {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.btn-ong, btn-voluntario {
+    width: 130px;
+}
+.image {
+    width: 600px;
+    height: 426px;
+}

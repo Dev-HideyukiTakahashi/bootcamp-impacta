@@ -10,13 +10,19 @@
           Não precisamos do seu dinheiro, precisamos da sua atitude.<br />
           Faça uma doação...
         </p>
-        <div class="buttons">
-          <button class="btn-voluntario" [routerLink]="'/cadastro-voluntario'">Sou Voluntário</button>
-          <button class="btn-ong" [routerLink]="'/cadastro-ong'">Sou ONG</button>
+        <div class="buttons d-flex gap-4">
+          <div class="opcao text-center">
+            <img src="sou-voluntario.png" alt="icon-sou-voluntario" class="img-borda mb-2">
+            <button class="btn-voluntario mt-2 " [routerLink]="'/cadastro-voluntario'">Sou Voluntário</button>
+          </div>
+          <div class="opcao text-center">
+            <img src="sou-ong.png" alt="icon-sou-ong" class="img-borda mb-2">
+            <button class="btn-ong mt-2" [routerLink]="'/cadastro-ong'">Sou ONG</button>
+          </div>
         </div>
       </div>
       <div class="image">
-        <img src="assets/img-ajuda.jpg" alt="Pessoa pedindo ajuda" />
+        <img src="img-ajuda.png" alt="Pessoa pedindo ajuda" />
       </div>
     </div>
   </section>
@@ -25,21 +31,24 @@
     <h2>Como funciona</h2>
     <div class="cards">
       <div class="card">
+        <div class="icons"><img src="cadastro.png" alt="icon-cadastro"></div>
         <h3>Cadastro Simples</h3>
         <p>Registre suas habilidades e disponibilidade ou cadastre sua ONG em minutos.</p>
       </div>
-      <div class="card">
+      <div class="card ">
+        <div class="icons"><img src="lupa.png" alt="icon-cadastro"></div>
         <h3>Busca Inteligente</h3>
         <p>Encontre oportunidades ou voluntários que combinem com seu perfil.</p>
       </div>
       <div class="card">
+        <div class="icons"><img src="estrela.png" alt="icon-cadastro"></div>
         <h3>Certificação Digital</h3>
         <p>Receba certificados validados para suas atividades voluntárias.</p>
       </div>
     </div>
   </section>
 
-  <section class="depoimentos">
+  <section class="depoimentos bg-custom">
     <h2>Depoimentos</h2>
     <div class="cards">
       <div class="card">

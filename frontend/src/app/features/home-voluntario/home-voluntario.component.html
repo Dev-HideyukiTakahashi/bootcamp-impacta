@@ -1,3 +1,59 @@
 <app-header />
 
-<h1>HOME VOLUNTARIO FUNCIONA</h1>
+<main>
+  <section class="hero">
+    <div class="container hero-content">
+      <div class="text">
+        <h1>Conectando corações voluntários,<br /><span>Transformando Vidas</span></h1>
+        <p>
+          Encontre oportunidades de voluntariado ou voluntários para sua ONG.<br />
+        </p>
+        <div class="button-ong">
+            <button class="btn btn-outline-secondary" type="button" router-link="/meu-perfil">acesse o seu perfil para cadastrar habilidades</button>
+        </div>
+      </div>
+      <div class="image">
+        <img src="img-ajuda.png" alt="Pessoa pedindo ajuda" />
+      </div>
+    </div>
+  </section>
+
+  <section id="como-funciona" class="como-funciona">
+    <h2>Como funciona</h2>
+    <div class="cards">
+      <div class="card">
+        <div class="icons"><img src="cadastro.png" alt="icon-cadastro"></div>
+        <h3>Cadastro Simples</h3>
+        <p>Registre suas habilidades e disponibilidade ou cadastre sua ONG em minutos.</p>
+      </div>
+      <div class="card ">
+        <div class="icons"><img src="lupa.png" alt="icon-cadastro"></div>
+        <h3>Busca Inteligente</h3>
+        <p>Encontre oportunidades ou voluntários que combinem com seu perfil.</p>
+      </div>
+      <div class="card">
+        <div class="icons"><img src="estrela.png" alt="icon-cadastro"></div>
+        <h3>Certificação Digital</h3>
+        <p>Receba certificados validados para suas atividades voluntárias.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="depoimentos bg-custom">
+    <h2>Depoimentos</h2>
+    <div class="cards">
+      <div class="card">
+        <p>"Encontrei oportunidades incríveis para ajudar minha comunidade."</p>
+        <h4>Maria Silva</h4>
+        <small>Voluntária</small>
+      </div>
+      <div class="card">
+        <p>"A plataforma facilitou muito nossa busca por voluntários qualificados."</p>
+        <h4>ONG Amor e Vida</h4>
+        <small>Organização</small>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-footer></app-footer>
