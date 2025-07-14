@@ -88,6 +88,9 @@ public class AvaliacaoService {
             }
         }
 
+        if (atividadesAvaliadas == 0) {
+            return 0;
+        }
         int media = (int) Math.ceil(soma) / atividadesAvaliadas;
         return media;
     }

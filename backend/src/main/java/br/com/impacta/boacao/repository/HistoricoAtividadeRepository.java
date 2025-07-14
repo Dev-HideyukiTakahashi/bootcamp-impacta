@@ -73,30 +73,30 @@ public interface HistoricoAtividadeRepository extends JpaRepository<HistoricoAti
             Integer atividadeId,
             StatusCandidatura statusCandidatura);
 
-    // devolve todas os voluntarios da atividade, seu id, nome, status, cidade e tags
-    // List<HistoricoAtividade> buscaDetalhesVoluntariosInscritos(Integer atividadeId);
+    // devolve todas os voluntarios da atividade, seu id, nome, status, cidade e
+    // tags
+    // List<HistoricoAtividade> buscaDetalhesVoluntariosInscritos(Integer
+    // atividadeId);
     @Query("""
-    SELECT DISTINCT ha
-    FROM HistoricoAtividade ha
-    JOIN FETCH ha.voluntario v
-    JOIN FETCH v.usuario u
-    LEFT JOIN FETCH v.endereco e
-    LEFT JOIN FETCH v.tags t
-    WHERE ha.atividade.id = :atividadeId
-    """)
+            SELECT DISTINCT ha
+            FROM HistoricoAtividade ha
+            JOIN FETCH ha.voluntario v
+            JOIN FETCH v.usuario u
+            LEFT JOIN FETCH v.endereco e
+            LEFT JOIN FETCH v.tags t
+            WHERE ha.atividade.id = :atividadeId
+            """)
     List<HistoricoAtividade> findVoluntariosByAtividadeId(
-            @Param("atividadeId") Integer atividadeId
-    );
+            @Param("atividadeId") Integer atividadeId);
 
-    //* para update do status?*/
+    // * para update do status?*/
     @Query("""
-      SELECT ha
-      FROM HistoricoAtividade ha
-      WHERE ha.atividade.id = :atividadeId
-        AND ha.voluntario.id = :voluntarioId
-    """)
+              SELECT ha
+              FROM HistoricoAtividade ha
+              WHERE ha.atividade.id = :atividadeId
+                AND ha.voluntario.id = :voluntarioId
+            """)
     Optional<HistoricoAtividade> findByAtividadeIdAndVoluntarioId(
-        @Param("atividadeId") Integer atividadeId,
-        @Param("voluntarioId") Integer voluntarioId
-    );
+            @Param("atividadeId") Integer atividadeId,
+            @Param("voluntarioId") Integer voluntarioId);
 }
