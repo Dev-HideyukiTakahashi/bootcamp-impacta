@@ -11,8 +11,10 @@ import br.com.impacta.boacao.dto.response.DadosVoluntarioResponseDTO;
 import br.com.impacta.boacao.dto.response.PerfilVoluntarioResponseDTO;
 import br.com.impacta.boacao.dto.response.VoluntarioResponseDTO;
 import br.com.impacta.boacao.entity.Endereco;
+import br.com.impacta.boacao.entity.HistoricoAtividade;
 import br.com.impacta.boacao.entity.Tag;
 import br.com.impacta.boacao.entity.Voluntario;
+import br.com.impacta.boacao.entity.enums.StatusCandidatura;
 
 @Component
 public class VoluntarioMapper {
@@ -55,7 +57,14 @@ public class VoluntarioMapper {
             dto.addTag(new TagRequestDTO(tag.getId(), tag.getNome()));
         }
 
-        dto.setParticipacoes(v.getHistoricoAtividades().size());
+        int participacoes = 0;
+        for (HistoricoAtividade h : v.getHistoricoAtividades()) {
+            if (h.getStatusCandidatura() == StatusCandidatura.REALIZADO) {
+                participacoes++;
+            }
+        }
+
+        dto.setParticipacoes(participacoes);
         dto.setMedia(media);
         return dto;
     }
