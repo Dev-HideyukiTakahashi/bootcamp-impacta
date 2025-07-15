@@ -1,59 +1,65 @@
 package br.com.impacta.boacao.dto.response;
-// Importações necessárias
 
 import java.util.List;
-//import br.com.impacta.boacao.entity.enums.StatusCandidatura;
 
 public class VoluntarioHistoricoResponseDTO {
 
-    private Integer id;
+    private Integer id;             // continua sendo o voluntário
+    private Integer historicoId;    // novo campo
     private String nomeCompleto;
-    //private StatusCandidatura statusCandidatura;
-    private String statusCandidatura; // Alterado para String para compatibilidade com o construtor
+    private String statusCandidatura;
     private String cidade;
     private List<String> tags;
 
-    /**
-     * DTO (Data Transfer Object) utilizado para representar um voluntário no
-     * histórico de atividades. * Este DTO contém as informações básicas de um
-     * voluntário, como seu ID, nome completo e status da candidatura.
-     *
-     * @param id O ID único do voluntário.
-     * @param nomeCompleto O nome completo do voluntário.
-     * @param statusCandidatura O status da candidatura do voluntário (por
-     * exemplo, "Aprovado", "Rejeitado", etc.).
-     */
-    //construtor completo necessário para o Spring converter o JSON em DTO
+    private Integer avaliacaoId;
+
     public VoluntarioHistoricoResponseDTO() {
     }
 
-    public VoluntarioHistoricoResponseDTO(Integer id, String nomeCompleto, String statusCandidatura, String cidade, List<String> tags) {
+    // construtor ampliado: reparou que agora tem 6 parâmetros?
+    public VoluntarioHistoricoResponseDTO(Integer id,
+            String nomeCompleto,
+            String statusCandidatura,
+            String cidade,
+            List<String> tags,
+            Integer historicoId,
+            Integer avaliacaoId) {
         this.id = id;
         this.nomeCompleto = nomeCompleto;
         this.statusCandidatura = statusCandidatura;
         this.cidade = cidade;
         this.tags = tags;
+        this.historicoId = historicoId;
+        this.avaliacaoId = avaliacaoId;
     }
 
+    // getters e setters existentes...
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getHistoricoId() {
+        return historicoId;
+    }
+
+    public void setHistoricoId(Integer historicoId) {
+        this.historicoId = historicoId;
     }
 
     public String getNomeCompleto() {
         return nomeCompleto;
     }
 
-    public String getStatusCandidatura() {
-        return statusCandidatura;
-    }
-
-    //setters 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public void setNomeCompleto(String nomeCompleto) {
         this.nomeCompleto = nomeCompleto;
+    }
+
+    public String getStatusCandidatura() {
+        return statusCandidatura;
     }
 
     public void setStatusCandidatura(String statusCandidatura) {
@@ -76,5 +82,12 @@ public class VoluntarioHistoricoResponseDTO {
         this.tags = tags;
     }
 
+    public Integer getAvaliacaoId() {
+        return avaliacaoId;
+    }
+
+    public void setAvaliacaoId(Integer avaliacaoId) {
+        this.avaliacaoId = avaliacaoId;
+    }
 
 }

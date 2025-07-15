@@ -27,6 +27,8 @@ export interface ListaInscritos {
   cidade: string;
   statusCandidatura: string;
   tags: string[];
+  historicoId: number;
+  avaliacaoId: number;
 }
 export type StatusCandidatura = 'PENDENTE' | 'APROVADO' | 'REJEITADO' | 'REALIZADO';
 
@@ -85,4 +87,6 @@ export class GestaoVoluntarioService {
     const url = `${this.baseUrl}/gestao-voluntarios/atividade/${atividadeId}/statusCandidatura/${status}`;
     return this.http.put<void>(url, { voluntarioId });
   }
+
+
 }
