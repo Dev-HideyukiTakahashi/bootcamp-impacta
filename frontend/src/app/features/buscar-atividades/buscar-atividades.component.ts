@@ -8,6 +8,8 @@ import { TagService } from '../../service/tag.service';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
 
+type StatusCandidatura = 'APROVADO' | 'REJEITADO' | 'REALIZADO' | 'PENDENTE';
+
 @Component({
   selector: 'app-buscar-atividades',
   standalone: true,
@@ -25,10 +27,15 @@ export class BuscarAtividadesComponent {
   filtroTag: string = '';
   filtroEstado: string = '';
 
+  filtrosStatus = {
+    APROVADO: false,
+    REJEITADO: false,
+    REALIZADO: false,
+  };
+
   constructor(private atividadeService: AtividadeService, private tagService: TagService) {}
 
   ngOnInit() {
-    // Faz a requisição para buscar as atividades na API
     this.atividadeService.getBuscarAtividade().subscribe({
       next: (res) => {
         this.atividades = res.content;
@@ -44,24 +51,41 @@ export class BuscarAtividadesComponent {
     });
   }
 
-  // retorna a lista filtrada com base no termo de busca
-  get atividadesFiltradas() {
-    let lista = this.atividades;
+  get atividadesFiltradas(): IAtividade[] {
+    let lista = [...this.atividades];
 
+    // Filtro por cidade/estado (enderecoCompleto)
     if (this.busca?.trim()) {
-      const termo = this.busca.trim().toLowerCase();
-      lista = lista.filter(
-        (a) => a.nome.toLowerCase().includes(termo) || a.descricao.toLowerCase().includes(termo),
-      );
+      const termo = this.normalizarTexto(this.busca);
+      lista = lista.filter((a) => this.normalizarTexto(a.enderecoCompleto).includes(termo));
     }
 
+    // Filtro por Tag
     if (this.filtroTag) {
       lista = lista.filter((a) => a.titulo === this.filtroTag);
     }
 
+    // Filtro por Status de Candidatura
+    const statusSelecionados = Object.entries(this.filtrosStatus)
+      .filter(([_, checked]) => checked)
+      .map(([status]) => status);
+
+    if (statusSelecionados.length > 0) {
+      lista = lista.filter((a) =>
+        statusSelecionados.includes(a.statusCandidatura as StatusCandidatura),
+      );
+    } else {
+      // Exibe apenas atividades com statusCandidatura === null
+      lista = lista.filter((a) => a.statusCandidatura == null);
+    }
+
     return lista;
   }
-  // registra a participação em uma atividade passando o ID da atividade para o endpoint
+
+  aplicarFiltros(): void {
+    this.paginaAtual = 1;
+  }
+
   participar(atividadeId: number) {
     this.atividadeService.atualizarCandidatura(atividadeId).subscribe({
       next: () => {
@@ -85,15 +109,11 @@ export class BuscarAtividadesComponent {
     return Array.from({ length: total }, (_, i) => i + 1);
   }
 
-  filtrarAtividades() {
-    this.paginaAtual = 1;
-    this.atividadeService.buscarAtividadesPorTag(this.filtroTag).subscribe({
-      next: (res) => {
-        this.atividades = res.content;
-      },
-      error: (err) => {
-        console.error('Erro ao filtrar atividades:', err);
-      },
-    });
+  private normalizarTexto(texto: string): string {
+    return texto
+      .normalize('NFD') // separa acentos das letras
+      .replace(/[\u0300-\u036f]/g, '') // remove acentos
+      .toLowerCase()
+      .trim();
   }
 }
