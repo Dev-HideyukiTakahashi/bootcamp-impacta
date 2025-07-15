@@ -58,12 +58,12 @@
           <input
             class="form-check-input"
             type="checkbox"
-            [(ngModel)]="filtrosStatus.REALIZADO"
-            name="realizado"
+            [(ngModel)]="filtrosStatus.PENDENTE"
+            name="pendente"
             (change)="aplicarFiltros()"
-            id="realizado"
+            id="pendente"
           />
-          <label class="form-check-label" for="realizado">Realizado</label>
+          <label class="form-check-label" for="pendente">Pendente</label>
         </div>
       </div>
     </form>
@@ -121,9 +121,12 @@
               >
                 Rejeitado
               </button>
-              } @if(atividade.statusCandidatura === "REALIZADO") {
-              <button class="btn btn-light ms-auto px-3 py-1 rounded-3 fw-semibold" disabled="true">
-                Realizado
+              } @if(atividade.statusCandidatura === "PENDENTE") {
+              <button
+                class="btn btn-warning ms-auto px-3 py-1 rounded-3 fw-semibold"
+                disabled="true"
+              >
+                Aguardando
               </button>
               }
             </div>

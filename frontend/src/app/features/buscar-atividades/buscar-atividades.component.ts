@@ -30,7 +30,7 @@ export class BuscarAtividadesComponent {
   filtrosStatus = {
     APROVADO: false,
     REJEITADO: false,
-    REALIZADO: false,
+    PENDENTE: false,
   };
 
   constructor(private atividadeService: AtividadeService, private tagService: TagService) {}
