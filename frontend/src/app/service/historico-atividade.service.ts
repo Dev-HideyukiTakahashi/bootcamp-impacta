@@ -1,7 +1,15 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { HistoricoAtividade } from '../model/historico-atividade.model';
+
+interface PaginaHistorico {
+  content: HistoricoAtividade[];
+  totalPages: number;
+  totalElements: number;
+  number: number;
+  size: number;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +19,8 @@ export class HistoricoAtividadeService {
 
   constructor(private http: HttpClient) {}
 
-  getAtividadesRealizadas(): Observable<HistoricoAtividade[]> {
-    return this.http.get<HistoricoAtividade[]>(`${this.baseUrl}`);
+  getAtividadesRealizadas(page: number = 0): Observable<HistoricoAtividade[]> {
+    const params = new HttpParams().set('page', page.toString());
+    return this.http.get<PaginaHistorico>(this.baseUrl, { params }).pipe(map((res) => res.content));
   }
 }
