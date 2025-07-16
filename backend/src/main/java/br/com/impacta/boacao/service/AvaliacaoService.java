@@ -1,5 +1,6 @@
 package br.com.impacta.boacao.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import br.com.impacta.boacao.entity.Avaliacao;
 import br.com.impacta.boacao.entity.HistoricoAtividade;
 import br.com.impacta.boacao.entity.Ong;
 import br.com.impacta.boacao.entity.Usuario;
+import br.com.impacta.boacao.entity.enums.StatusCandidatura;
 import br.com.impacta.boacao.exception.DomainException;
 import br.com.impacta.boacao.exception.RecursoNaoEncontradoException;
 import br.com.impacta.boacao.mapper.AvaliacaoMapper;
@@ -64,6 +66,8 @@ public class AvaliacaoService {
 
         // Atualiza o histórico de atividade
         historicoAtividade.setAvaliacao(avaliacao);
+        historicoAtividade.setEncerradoEm(LocalDate.now());
+        historicoAtividade.setStatusCandidatura(StatusCandidatura.REALIZADO);
 
         log.info("Avaliação bem sucedida");
         return AvaliacaoMapper.toDTO(avaliacao, historicoAtividade);
