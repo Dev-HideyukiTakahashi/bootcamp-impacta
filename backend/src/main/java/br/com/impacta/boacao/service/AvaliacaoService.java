@@ -92,15 +92,16 @@ public class AvaliacaoService {
         if (atividadesAvaliadas == 0) {
             return 0;
         }
-        int media = (int) Math.ceil(soma) / atividadesAvaliadas;
+        int media = (int) Math.ceil(soma / atividadesAvaliadas);
         return media;
     }
-     @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     public AvaliacaoResponseDTO buscarPorHistoricoAtividade(Integer historicoId) {
         Avaliacao avaliacao = avaliacaoRepository
-            .findByHistoricoAtividade_Id(historicoId)
-            .orElseThrow(() -> new RecursoNaoEncontradoException(
-                "Avaliação não encontrada para historicoId " + historicoId));
+                .findByHistoricoAtividade_Id(historicoId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException(
+                        "Avaliação não encontrada para historicoId " + historicoId));
 
         HistoricoAtividade historico = historicoAtividadeRepository.getReferenceById(historicoId);
         return AvaliacaoMapper.toDTO(avaliacao, historico);
