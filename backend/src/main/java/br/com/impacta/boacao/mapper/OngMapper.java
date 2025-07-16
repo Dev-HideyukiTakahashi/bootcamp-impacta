@@ -52,6 +52,7 @@ public class OngMapper {
             dto.setEstado(ong.getEndereco().getEstado());
             dto.setRua(ong.getEndereco().getRua());
             dto.setNumero(ong.getEndereco().getNumero());
+            dto.setCriadoEm(ong.getUsuario().getCriadoEm());
         }
         return dto;
     }

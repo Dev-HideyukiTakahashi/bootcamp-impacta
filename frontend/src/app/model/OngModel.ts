@@ -21,6 +21,7 @@ export interface PerfilOng {
   cidade: string;
   rua: string;
   numero: string;
+  criadoEm: string;
 }
 
 export interface AtualizarOng {
@@ -36,6 +37,3 @@ export interface AtualizarOng {
   alterarSenha: string;
   senha: string | null;
 }
-
-
-

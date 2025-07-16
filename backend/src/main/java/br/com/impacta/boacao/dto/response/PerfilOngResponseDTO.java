@@ -1,5 +1,7 @@
 package br.com.impacta.boacao.dto.response;
 
+import java.sql.Timestamp;
+
 public class PerfilOngResponseDTO {
     private String nomeEntidade;
     private String cidade;
@@ -7,6 +9,7 @@ public class PerfilOngResponseDTO {
     private String cnpj;
     private String rua;
     private String numero;
+    private Timestamp criadoEm;
 
     public String getNomeEntidade() {
         return nomeEntidade;
@@ -55,4 +58,13 @@ public class PerfilOngResponseDTO {
     public void setNumero(String numero) {
         this.numero = numero;
     }
+
+    public Timestamp getCriadoEm() {
+        return criadoEm;
+    }
+
+    public void setCriadoEm(Timestamp criadoEm) {
+        this.criadoEm = criadoEm;
+    }
+
 }

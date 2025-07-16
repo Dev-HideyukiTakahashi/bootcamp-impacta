@@ -8,19 +8,19 @@
     <div class="perfil-esquerda">
       <h2>Bem-vindo, ONG</h2>
 
-      <p><strong>Nome da Organização:</strong><br>{{ perfil.nomeEntidade }}</p>
-      <hr>
+      <p><strong>Nome da Organização:</strong><br />{{ perfil.nomeEntidade }}</p>
+      <hr />
 
-      <p><strong>CNPJ:</strong><br>{{ perfil.cnpj | mask: '00.000.000/0000-00' }}</p>
-      <hr>
-      <p><strong>Total de Voluntários:</strong><br>2</p>
-      <hr>
+      <p><strong>CNPJ:</strong><br />{{ perfil.cnpj | mask : '00.000.000/0000-00' }}</p>
+      <hr />
+      <p><strong>Ativo desde:</strong><br />{{ perfil.criadoEm | date : 'dd/MM/yyyy' }}</p>
+      <hr />
 
-      <p><strong>Endereço:</strong><br>
+      <p>
+        <strong>Endereço:</strong><br />
         {{ perfil.estado }} - {{ perfil.cidade }} - {{ perfil.rua }}, {{ perfil.numero }}
       </p>
-      <hr>
-
+      <hr />
 
       <div class="botoes">
         <button class="btn-editar" [routerLink]="'/dados-ong'">Editar Perfil</button>
@@ -41,13 +41,13 @@
     <div class="perfil-direita">
       <h2>Nossa Missão</h2>
       <p>
-        Promover o desenvolvimento social e humano através de ações educativas,
-        culturais e assistenciais, contribuindo para a construção de uma sociedade
-        mais justa e igualitária.
+        Promover o desenvolvimento social e humano através de ações educativas, culturais e
+        assistenciais, contribuindo para a construção de uma sociedade mais justa e igualitária.
       </p>
       <img
         src="https://static.vecteezy.com/ti/fotos-gratis/t1/7104488-close-up-top-view-de-pessoas-colocando-as-maos-junto-conceito-unidade-de-maos-e-trabalho-em-equipe-foto.jpg"
-        alt="Mãos unidas" />
+        alt="Mãos unidas"
+      />
     </div>
   </div>
 </div>
