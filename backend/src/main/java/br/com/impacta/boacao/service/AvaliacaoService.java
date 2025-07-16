@@ -14,6 +14,7 @@ import br.com.impacta.boacao.entity.HistoricoAtividade;
 import br.com.impacta.boacao.entity.Ong;
 import br.com.impacta.boacao.entity.Usuario;
 import br.com.impacta.boacao.exception.DomainException;
+import br.com.impacta.boacao.exception.RecursoNaoEncontradoException;
 import br.com.impacta.boacao.mapper.AvaliacaoMapper;
 import br.com.impacta.boacao.repository.AvaliacaoRepository;
 import br.com.impacta.boacao.repository.HistoricoAtividadeRepository;
@@ -93,6 +94,16 @@ public class AvaliacaoService {
         }
         int media = (int) Math.ceil(soma) / atividadesAvaliadas;
         return media;
+    }
+     @Transactional(readOnly = true)
+    public AvaliacaoResponseDTO buscarPorHistoricoAtividade(Integer historicoId) {
+        Avaliacao avaliacao = avaliacaoRepository
+            .findByHistoricoAtividade_Id(historicoId)
+            .orElseThrow(() -> new RecursoNaoEncontradoException(
+                "Avaliação não encontrada para historicoId " + historicoId));
+
+        HistoricoAtividade historico = historicoAtividadeRepository.getReferenceById(historicoId);
+        return AvaliacaoMapper.toDTO(avaliacao, historico);
     }
 
 }

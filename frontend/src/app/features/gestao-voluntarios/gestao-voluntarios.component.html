@@ -46,23 +46,25 @@
           Rejeitar
         </button>
 
-        <button
-          *ngIf="v.statusCandidatura === 'APROVADO'"
-          class="btn-acao"
-          (click)="avaliar(v.id)"
-        >
-          Avaliar
-        </button>
+        <div class="acoes">
+          <!-- se não tiver avaliação cadastrada (avaliacaoId é null ou undefined) -->
+          <button
+            *ngIf="!v.avaliacaoId"
+            class="btn-acao"
+            (click)="avaliar(v)"
+          >
+            Avaliar
+          </button>
 
-        <!--
-        <button
-          *ngIf="v.statusCandidatura === 'APROVADO'"
-          class="btn-acao"
-          (click)="encerrar(v)"
-        >
-          Encerrar
-        </button>
-        -->
+          <!-- se já tiver avaliação cadastrada (avaliacaoId não é null) -->
+          <button
+            *ngIf="v.avaliacaoId"
+            class="btn-acao"
+            (click)="verResumo(v.historicoId)"
+          >
+            Resumo da Avaliação
+          </button>
+        </div>
       </div>
 
       <!-- badge de status -->
@@ -107,9 +109,14 @@
   </div>
 </div>
 
+<!-- Modal Avaliar/Resumo -->
 <app-modal-avaliar-voluntario
-  *ngIf="showAvaliarModal"
-  (onClose)="fecharModal()"
+  *ngIf="showModal"
+  [voluntario]="selectedVoluntario"
+  [readonlyMode]="readonlyMode"
+  [initialAvaliacao]="initialAvaliacao"
+  (onSubmit)="handleAvaliacao($event)"
+  (onClose)="showModal = false"
 >
 </app-modal-avaliar-voluntario>
 

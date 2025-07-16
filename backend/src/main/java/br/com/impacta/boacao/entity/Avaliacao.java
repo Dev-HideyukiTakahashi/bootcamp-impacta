@@ -22,7 +22,7 @@ public class Avaliacao {
     private HistoricoAtividade historicoAtividade;
 
     @ManyToOne
-    @JoinColumn(name = "ong_id")
+    @JoinColumn(name = "ong_id",  unique = false )
     private Ong ong;
 
     public Avaliacao() {

@@ -32,6 +32,7 @@ import br.com.impacta.boacao.entity.Usuario;
 import br.com.impacta.boacao.entity.Voluntario;
 import br.com.impacta.boacao.entity.enums.StatusAtividade;
 import br.com.impacta.boacao.entity.enums.StatusCandidatura;
+import br.com.impacta.boacao.exception.DomainException;
 import br.com.impacta.boacao.exception.RecursoNaoEncontradoException;
 import br.com.impacta.boacao.mapper.AtividadeMapper;
 import br.com.impacta.boacao.repository.AtividadeRepository;
@@ -148,7 +149,7 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
         Atividade atividade = atividadeRepository
                 .findByIdAndOngId(id, idOng)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Atividade não encontrada ou não pertence à ONG."));
+                HttpStatus.NOT_FOUND, "Atividade não encontrada ou não pertence à ONG."));
 
         AtividadeResponseDTO dto = AtividadeMapper.toDTO(atividade);
         dto.setIdOng(idOng);
@@ -195,8 +196,8 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
         Atividade existing = atividadeRepository
                 .findByIdAndOngId(id, idOng)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Atividade não encontrada."));
+                HttpStatus.NOT_FOUND,
+                "Atividade não encontrada."));
 
         log.info("Atividade existente encontrada: {}", existing);
         // Atualiza os campos da entidade com os dados do DTO
@@ -249,8 +250,8 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
         Atividade e = atividadeRepository
                 .findByIdAndOngId(id, idOng)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Atividade não encontrada."));
+                HttpStatus.NOT_FOUND,
+                "Atividade não encontrada."));
 
         Atividade atividade = opt.get();
         StatusAtividade atual = atividade.getStatusAtividade();
@@ -263,7 +264,7 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
         } else {
             throw new IllegalStateException(
                     "Transição de status não permitida: "
-                            + atual + " → " + novoStatus);
+                    + atual + " → " + novoStatus);
         }
 
         // 3) Salva a mudança no repositório
@@ -281,7 +282,12 @@ public class AtividadeServiceImpl implements br.com.impacta.boacao.service.Ativi
         // usuario logado
         Usuario usuario = usuarioService.getUsuarioAutenticado();
         Voluntario voluntario = voluntarioRepository.findByUsuarioEmail(usuario.getEmail()).get();
-
+        boolean jaInscrito = historicoAtividadeRepository
+                .findByAtividadeIdAndVoluntarioId(atividadeId, voluntario.getId())
+                .isPresent();
+        if (jaInscrito) {
+            throw new DomainException("Voluntário já inscrito nesta atividade.");
+        }
         Atividade atividade = atividadeRepository.getReferenceById(atividadeId);
 
         HistoricoAtividade historicoAtividade = buildHistoricoAtividade(atividade, voluntario);

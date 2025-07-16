@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,9 +19,8 @@ import br.com.impacta.boacao.dto.response.HistoricoAtividadeDTO;
 import br.com.impacta.boacao.dto.response.HistoricoAtividadeResponseDTO;
 import br.com.impacta.boacao.dto.response.HistoricoAtividadeTodosResponseDTO;
 import br.com.impacta.boacao.entity.enums.StatusCandidatura;
-import br.com.impacta.boacao.service.HistoricoAtividadeService;
-import org.springframework.web.bind.annotation.RequestBody;
 import br.com.impacta.boacao.exception.handler.StatusCandidaturaInvalidoException;
+import br.com.impacta.boacao.service.HistoricoAtividadeService;
 @RestController
 @RequestMapping(path = "/api/historico-atividades")
 public class HistoricoAtividadeController {
@@ -104,16 +104,4 @@ public class HistoricoAtividadeController {
         historicoAtividadeService.atualizarStatusCandidatura(req, st);
         return ResponseEntity.noContent().build();
     }
-
-    /* TODO:
-     * servico para buscar voluntarios, deve permitir filtros não obgs
-     
-    @PreAuthorize("hasRole('ROLE_ONG')")
-    @GetMapping("/gestao-voluntarios/buscar/atividade/{id}")
-    public ResponseEntity<HistoricoAtividadeTodosResponseDTO> getBuscarVoluntarios(
-            @PathVariable Integer id) {
-        var req = new HistoricoAtividadeRequestDTO(id);
-        HistoricoAtividadeTodosResponseDTO response = historicoAtividadeService.listarTodosHistorico(req);
-        return ResponseEntity.ok(response);
-    }*/
 }
