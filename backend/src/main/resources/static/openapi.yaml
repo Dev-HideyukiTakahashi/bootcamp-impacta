@@ -16,6 +16,10 @@ tags:
     description: Endpoints para gerenciamento de Organizações Não Governamentais (ONGs)
   - name: Histórico de Atividades
     description: Endpoints para histórico de atividades de voluntários
+  - name: Voluntários
+    description: Endpoints para gerenciamento de voluntários
+  - name: Avaliações
+    description: Endpoints para gerenciamento de avaliações de voluntários
 
 paths:
   # ==========================================
@@ -61,6 +65,34 @@ paths:
                     error: "Internal Server Error"
                     message: "Erro ao processar a solicitação. Falha ao conectar com o banco de dados."
                     path: "/tags"
+    put:
+      tags: [Tags]
+      summary: Adicionar tags
+      description: Adiciona uma ou mais tags ao recurso.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+              example: [1, 2, 3]
+      responses:
+        "200":
+          description: Tags adicionadas com sucesso.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TagRequestDTO"
+        "400":
+          description: Requisição inválida.
+        "401":
+          description: Não autorizado.
+        "500":
+          description: Erro interno no servidor.
   /tags/{id}:
     get:
       tags: [Tags]
@@ -140,18 +172,20 @@ paths:
   /api/atividades:
     get:
       tags: [Atividades]
-      summary: Buscar todas as atividades
-      description: Retorna uma lista paginada de atividades vinculadas a uma ONG.
+      summary: Listar atividades paginadas
+      description: Retorna uma lista paginada de atividades.
       parameters:
         - in: query
           name: page
           schema:
             type: integer
+            default: 0
           description: Número da página (começa em 0)
         - in: query
           name: size
           schema:
             type: integer
+            default: 10
           description: Tamanho da página
         - in: query
           name: sort
@@ -169,7 +203,7 @@ paths:
                   content:
                     type: array
                     items:
-                      $ref: "#/components/schemas/AtividadeOngResponseDTO"
+                      $ref: "#/components/schemas/AtividadeResponseDTO" # Atualizado para AtividadeResponseDTO
                   totalPages:
                     type: integer
                   totalElements:
@@ -186,7 +220,7 @@ paths:
     post:
       tags: [Atividades]
       summary: Cadastrar nova atividade
-      description: Cadastra uma nova atividade para a ONG autenticada.
+      description: Cadastra uma nova atividade.
       requestBody:
         required: true
         content:
@@ -204,6 +238,25 @@ paths:
           description: Não autorizado.
         "422":
           description: Dados inválidos.
+        "500":
+          description: Erro interno no servidor.
+
+  /api/atividades/buscar:
+    get:
+      tags: [Atividades]
+      summary: Buscar todas as atividades (sem paginação)
+      description: Retorna uma lista de todas as atividades cadastradas.
+      responses:
+        "200":
+          description: Lista de atividades retornada com sucesso.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AtividadeResponseDTO"
+        "401":
+          description: Não autorizado.
         "500":
           description: Erro interno no servidor.
 
@@ -260,11 +313,72 @@ paths:
         "500":
           description: Erro interno.
 
-  /api/atividades/{id}/status:
-    put:
+  /api/atividades/{id}/status/{novoStatus}:
+    patch:
       tags: [Atividades]
       summary: Atualizar status de uma atividade
-      description: Altera o status de uma atividade com base no ID e no novo status informado.
+      description: Altera o status de uma atividade específica.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: O ID da atividade que queremos atualizar.
+          schema:
+            type: integer
+        - name: novoStatus
+          in: path
+          required: true
+          description: O novo status da atividade.
+          schema:
+            type: string
+            enum:
+              - ANDAMENTO
+              - CONGELADA
+      responses:
+        "200":
+          description: Status atualizado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AtividadeStatusResponseDTO"
+        "400":
+          description: Requisição inválida. Status inválido.
+        "404":
+          description: Atividade não encontrada.
+        "409":
+          description: Conflito. Transição de status não permitida.
+        "500":
+          description: Erro interno no servidor.
+
+  /api/atividades/dados-atividade/{id}:
+    get:
+      tags: [Atividades]
+      summary: Obter dados completos de uma atividade
+      description: Retorna todos os dados de uma atividade específica.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID da atividade
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Dados da atividade retornados com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AtividadeResponseDTO"
+        "404":
+          description: Atividade não encontrada.
+        "500":
+          description: Erro interno no servidor.
+
+  /api/atividades/editar/{id}:
+    put:
+      tags: [Atividades]
+      summary: Atualizar atividade existente
+      description: Atualiza os dados de uma atividade específica.
       parameters:
         - name: id
           in: path
@@ -276,22 +390,161 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AtividadeStatusRequestDTO"
+              $ref: "#/components/schemas/AtividadeRequestDTO"
       responses:
         "200":
-          description: Status atualizado com sucesso.
+          description: Atividade atualizada com sucesso.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AtividadeStatusResponseDTO"
-        "400":
-          description: Dados inválidos.
+                $ref: "#/components/schemas/AtividadeResponseDTO"
         "401":
           description: Não autorizado.
         "404":
           description: Atividade não encontrada.
+        "422":
+          description: Dados inválidos.
         "500":
           description: Erro interno.
+
+  /api/atividades/atualizar-candidatura:
+    post:
+      tags: [Atividades]
+      summary: Atualizar status de candidatura de voluntário em atividade
+      description: Associa o histórico de atividade a um voluntário.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AtividadeIdDTO"
+      responses:
+        "200":
+          description: Status de candidatura atualizado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VoluntarioAtividadeDTO"
+        "400":
+          description: Requisição inválida.
+        "401":
+          description: Não autorizado.
+        "500":
+          description: Erro interno no servidor.
+
+  /api/atividades/estado/{estado}:
+    get:
+      tags: [Atividades]
+      summary: Buscar atividades por estado da ONG
+      description: Retorna uma lista paginada de atividades de ONGs localizadas em um estado específico.
+      parameters:
+        - name: estado
+          in: path
+          required: true
+          description: "Estado a ser utilizado na busca de atividades (ex: SP, RJ)."
+          schema:
+            type: string
+            example: "SP"
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 0
+          description: Número da página (começa em 0)
+        - in: query
+          name: size
+          schema:
+            type: integer
+            default: 10
+          description: Tamanho da página
+        - in: query
+          name: sort
+          schema:
+            type: string
+            description: "Campo para ordenação (ex: nome,asc)"
+      responses:
+        "200":
+          description: Lista de atividades por estado retornada com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AtividadeResponseDTO"
+                  totalPages:
+                    type: integer
+                  totalElements:
+                    type: integer
+                  size:
+                    type: integer
+                  number:
+                    type: integer
+        "401":
+          description: Não autorizado.
+        "404":
+          description: Nenhuma atividade encontrada para o estado especificado.
+        "500":
+          description: Erro interno no servidor.
+
+  /api/atividades/tag/{tag}:
+    get:
+      tags: [Atividades]
+      summary: Buscar atividades por tag
+      description: Retorna uma lista paginada de atividades associadas a uma tag específica.
+      parameters:
+        - name: tag
+          in: path
+          required: true
+          description: "Tag a ser utilizada na busca de atividades (ex: Educação)."
+          schema:
+            type: string
+            example: "Educação"
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 0
+          description: Número da página (começa em 0)
+        - in: query
+          name: size
+          schema:
+            type: integer
+            default: 10
+          description: Tamanho da página
+        - in: query
+          name: sort
+          schema:
+            type: string
+            description: "Campo para ordenação (ex: nome,asc)"
+      responses:
+        "200":
+          description: Lista de atividades por tag retornada com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AtividadeResponseDTO"
+                  totalPages:
+                    type: integer
+                  totalElements:
+                    type: integer
+                  size:
+                    type: integer
+                  number:
+                    type: integer
+        "401":
+          description: Não autorizado.
+        "404":
+          description: Nenhuma atividade encontrada para a tag especificada.
+        "500":
+          description: Erro interno no servidor.
 
   # ==========================================
   # Endpoints de Histórico de Atividades
@@ -355,7 +608,7 @@ paths:
           schema:
             type: string
             format: date
-            example: "2024-06-01" 
+            example: "2024-06-01"
           required: true
           description: Data de encerramento no formato YYYY-MM-DD.
         - in: query
@@ -401,7 +654,100 @@ paths:
           description: Não autorizado.
         "500":
           description: Erro interno no servidor.
-  
+
+  /api/historico-atividades/listar-voluntarios-aprovados/atividade/{id}:
+    get:
+      tags: [Histórico de Atividades]
+      summary: Listar voluntários aprovados por atividade
+      description: Retorna a quantidade e a lista de voluntários aprovados para uma atividade específica.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID da atividade
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Sucesso. Lista de voluntários aprovados retornada.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HistoricoAtividadeResponseDTO"
+        "401":
+          description: Não autorizado.
+        "404":
+          description: Atividade não encontrada.
+        "500":
+          description: Erro interno no servidor.
+
+  /api/historico-atividades/gestao-voluntarios/atividade/{id}:
+    get:
+      tags: [Histórico de Atividades]
+      summary: Listar todos os voluntários inscritos em uma atividade
+      description: Retorna a quantidade e a lista de todos os voluntários inscritos em uma atividade, independentemente do status da candidatura.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID da atividade
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Sucesso. Lista de voluntários inscritos retornada.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HistoricoAtividadeTodosResponseDTO"
+        "401":
+          description: Não autorizado.
+        "404":
+          description: Atividade não encontrada.
+        "500":
+          description: Erro interno no servidor.
+
+  /api/historico-atividades/gestao-voluntarios/atividade/{atividadeId}/statusCandidatura/{status}:
+    put:
+      tags: [Histórico de Atividades]
+      summary: Atualizar status da candidatura de um voluntário em uma atividade
+      description: Atualiza o status da candidatura de um voluntário para uma atividade específica.
+      parameters:
+        - name: atividadeId
+          in: path
+          required: true
+          description: ID da atividade
+          schema:
+            type: integer
+        - name: status
+          in: path
+          required: true
+          description: Novo status da candidatura
+          schema:
+            type: string
+            enum:
+              - APROVADO
+              - REPROVADO
+              - PENDENTE
+              - CANCELADO
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HistoricoAtividadeRequestDTO"
+      responses:
+        "204":
+          description: Status atualizado com sucesso (No Content).
+        "400":
+          description: "Dados inválidos (ex: status inválido)."
+        "401":
+          description: Não autorizado.
+        "404":
+          description: Atividade ou histórico de candidatura não encontrado.
+        "500":
+          description: Erro interno no servidor.
+
   # ==========================================
   # Endpoints de ONGs
   # ==========================================
@@ -425,7 +771,7 @@ paths:
               schema:
                 type: string
                 format: uri
-                example: "/api/ong"
+                example: "/api/ong/101" # Atualizado para refletir o ID
           content:
             application/json:
               schema:
@@ -459,7 +805,7 @@ paths:
   /api/ong/dados-ong:
     get:
       tags: [ONGs]
-      summary: Obter dados completos da ONG autenticada
+      summary: Obter dados completos da ONG autenticade
       description: Retorna todos os dados da ONG atualmente autenticada, incluindo informações de contato e endereço.
       responses:
         "200":
@@ -612,6 +958,163 @@ paths:
         "500":
           description: Erro interno no servidor.
 
+  # ==========================================
+  # Endpoints de Voluntários
+  # ==========================================
+  /api/voluntario/cadastrar:
+    post:
+      tags: [Voluntários]
+      summary: Cadastrar novo voluntário
+      description: Registra um novo voluntário no sistema.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VoluntarioRequestDTO"
+      responses:
+        "201":
+          description: Voluntário criado com sucesso.
+          headers:
+            Location:
+              description: URI do recurso criado.
+              schema:
+                type: string
+                format: uri
+                example: "/api/voluntario/1"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VoluntarioResponseDTO"
+        "400":
+          description: Requisição inválida. Dados fornecidos são incorretos ou incompletos.
+        "409":
+          description: Conflito. CPF ou E-mail já cadastrados.
+        "500":
+          description: Erro interno no servidor.
+
+  /api/voluntario/perfil-voluntario:
+    get:
+      tags: [Voluntários]
+      summary: Obter perfil do voluntário autenticado
+      description: Retorna os detalhes do perfil do voluntário atualmente autenticado.
+      responses:
+        "200":
+          description: Perfil do voluntário retornado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PerfilVoluntarioResponseDTO"
+        "401":
+          description: Não autorizado.
+        "404":
+          description: Perfil do voluntário não encontrado.
+        "500":
+          description: Erro interno no servidor.
+
+  /api/voluntario/dados-voluntario:
+    get:
+      tags: [Voluntários]
+      summary: Obter dados completos do voluntário autenticado
+      description: Retorna todos os dados do voluntário atualmente autenticado, incluindo informações de contato e endereço.
+      responses:
+        "200":
+          description: Dados do voluntário retornados com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DadosVoluntarioResponseDTO"
+        "401":
+          description: Não autorizado.
+        "404":
+          description: Dados do voluntário não encontrados.
+        "500":
+          description: Erro interno no servidor.
+
+  /api/voluntario/editar:
+    put:
+      tags: [Voluntários]
+      summary: Atualizar dados do voluntário autenticado
+      description: Atualiza as informações do voluntário atualmente autenticado.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VoluntarioUpdateRequestDTO"
+      responses:
+        "204":
+          description: Dados do voluntário atualizados com sucesso (No Content).
+        "400":
+          description: Requisição inválida.
+        "401":
+          description: Não autorizado.
+        "404":
+          description: Voluntário não encontrado para atualização.
+        "500":
+          description: Erro interno no servidor.
+
+  # ==========================================
+  # Endpoints de Avaliações
+  # ==========================================
+  /api/avaliacoes:
+    post:
+      tags: [Avaliações]
+      summary: Avaliar um voluntário
+      description: Permite que uma ONG avalie um voluntário após uma atividade.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AvaliacaoRequestDTO"
+      responses:
+        "201":
+          description: Avaliação criada com sucesso.
+          headers:
+            Location:
+              description: URI do recurso criado.
+              schema:
+                type: string
+                format: uri
+                example: "/api/avaliacoes/1"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AvaliacaoResponseDTO"
+        "400":
+          description: Requisição inválida. Dados fornecidos são incorretos ou incompletos.
+        "401":
+          description: Não autorizado.
+        "500":
+          description: Erro interno no servidor.
+
+  /api/avaliacoes/historicoId/{historicoId}:
+    get:
+      tags: [Avaliações]
+      summary: Buscar avaliação por ID do histórico de atividade
+      description: Retorna uma avaliação específica com base no ID do histórico de atividade.
+      parameters:
+        - name: historicoId
+          in: path
+          required: true
+          description: ID do histórico de atividade
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Avaliação encontrada e retornada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AvaliacaoResponseDTO"
+        "401":
+          description: Não autorizado.
+        "404":
+          description: Avaliação não encontrada para o histórico de atividade fornecido.
+        "500":
+          description: Erro interno no servidor.
+
 components:
   schemas:
     TagDTO:
@@ -624,7 +1127,7 @@ components:
           type: string
           example: "Administração e Gestão"
 
-    AtividadeOngResponseDTO:
+    AtividadeOngResponseDTO: # Este DTO não está mais sendo usado diretamente nos endpoints do controller fornecido, mas é mantido por compatibilidade com o swagger anterior.
       type: object
       properties:
         id:
@@ -638,20 +1141,126 @@ components:
         criadoEm:
           type: string
           format: date-time
-        # Adicione os demais campos conforme seu DTO
 
     AtividadeResponseDTO:
       type: object
       properties:
         id:
           type: integer
+          example: 1
+        idTag:
+          type: integer
+          example: 10
+        titulo:
+          type: string
+          example: "Cozinha Solidária"
         nome:
           type: string
+          example: "Atividade de Cozinha"
+        periodo:
+          type: string
+          enum:
+            - MANHA
+            - TARDE
+            - NOITE
+            - INTEGRAL
+          example: "TARDE"
+        cargaHorariaDiaria:
+          type: string
+          example: "4 horas"
+        enderecoCompleto:
+          type: string
+          example: "Rua do Voluntário, 123, Centro, São Paulo - SP"
+        possuiCertificacao:
+          type: boolean
+          example: true
         descricao:
           type: string
-        status:
+          example: "Preparação de refeições para pessoas em situação de rua."
+        statusAtividade:
           type: string
-        # Adicione outros campos conforme necessário
+          enum:
+            - ATIVA
+            - INATIVA
+            - CANCELADA
+            - ANDAMENTO
+            - CONGELADA
+          example: "ATIVA"
+        dataAtividade:
+          type: string
+          format: date-time
+          example: "2025-07-20T09:00:00Z"
+        statusCandidatura:
+          type: string
+          enum:
+            - PENDENTE
+            - APROVADO
+            - REPROVADO
+            - CANCELADO
+          example: "PENDENTE"
+        idOng:
+          type: integer
+          example: 101
+
+    AtividadeRequestDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: O ID é opcional para cadastro e usado para atualização.
+          example: 1
+        idTag:
+          type: integer
+          required: true
+          example: 10
+        titulo:
+          type: string
+          required: true
+          example: "Cozinha Solidária"
+        nome:
+          type: string
+          required: true
+          example: "Atividade de Cozinha"
+        periodo:
+          type: string
+          enum:
+            - MANHA
+            - TARDE
+            - NOITE
+            - INTEGRAL
+          required: true
+          example: "TARDE"
+        cargaHorariaDiaria:
+          type: string
+          required: true
+          example: "4 horas"
+        enderecoCompleto:
+          type: string
+          required: true
+          example: "Rua do Voluntário, 123, Centro, São Paulo - SP"
+        possuiCertificacao:
+          type: boolean
+          required: true
+          example: true
+        descricao:
+          type: string
+          required: true
+          example: "Preparação de refeições para pessoas em situação de rua."
+        statusAtividade:
+          type: string
+          enum:
+            - ATIVA
+            - INATIVA
+            - CANCELADA
+            - ANDAMENTO
+            - CONGELADA
+          required: true
+          example: "ATIVA"
+        dataAtividade:
+          type: string
+          format: date-time
+          required: true
+          example: "2025-07-20T09:00:00Z"
 
     AtividadeStatusRequestDTO:
       type: object
@@ -664,6 +1273,11 @@ components:
             - ATIVA
             - INATIVA
             - CANCELADA
+            - ANDAMENTO
+            - CONGELADA # Adicionado novos status
+      example:
+        id: 1
+        statusAtividade: "ANDAMENTO"
 
     AtividadeStatusResponseDTO:
       type: object
@@ -676,38 +1290,11 @@ components:
             - ATIVA
             - INATIVA
             - CANCELADA
-
-    AtividadeRequestDTO:
-      type: object
-      properties:
-        id:
-          type: integer
-        nome:
-          type: string
-        periodo:
-          type: string
-          enum:
-            - MANHA
-            - TARDE
-            - NOITE
-            - INTEGRAL
-        cargaHorariaDiaria:
-          type: string
-        enderecoCompleto:
-          type: string
-        possuiCertificacao:
-          type: boolean
-        descricao:
-          type: string
-        statusAtividade:
-          type: string
-          enum:
-            - ATIVA
-            - INATIVA
-            - CANCELADA
-        criadoEm:
-          type: string
-          format: date-time
+            - ANDAMENTO
+            - CONGELADA # Adicionado novos status
+      example:
+        id: 1
+        statusAtividade: "ANDAMENTO"
 
     HistoricoAtividadeDTO:
       type: object
@@ -723,7 +1310,7 @@ components:
           example: "4 horas"
         periodo:
           type: string
-          enum:
+          enum: # Adicionado enum para PeriodoAtividade
             - MANHA
             - TARDE
             - NOITE
@@ -749,7 +1336,7 @@ components:
           type: string
           format: date
           example: "2024-06-01"
-    
+
     # ==========================================
     # Schemas de ONGs
     # ==========================================
@@ -814,6 +1401,10 @@ components:
         numero:
           type: string
           example: "456"
+        criadoEm:
+          type: string
+          format: date-time
+          example: "2023-01-01T10:00:00Z"
 
     DadosOngResponseDTO:
       type: object
@@ -852,6 +1443,10 @@ components:
         numero:
           type: string
           example: "123"
+        tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/TagRequestDTO"
 
     OngUpdateRequestDTO:
       type: object
@@ -886,7 +1481,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/AtividadeMinDTO"
-    
+
     EnderecoRequestDTO:
       type: object
       required:
@@ -967,6 +1562,289 @@ components:
         nome:
           type: string
           example: "Meio Ambiente"
+
+    # ==========================================
+    # Schemas de Voluntários
+    # ==========================================
+    VoluntarioRequestDTO:
+      type: object
+      required:
+        - nomeCompleto
+        - email
+        - senha
+        - cpf
+        - endereco
+      properties:
+        nomeCompleto:
+          type: string
+          example: "João da Silva"
+        email:
+          type: string
+          format: email
+          example: "joao.silva@example.com"
+        senha:
+          type: string
+          format: password
+          example: "senhaSeguraVoluntario"
+        cpf:
+          type: string
+          example: "123.456.789-00"
+        telefone:
+          type: string
+          example: "(11) 98765-1234"
+        dataNascimento:
+          type: string
+          format: date
+          example: "1990-01-01"
+        endereco:
+          $ref: "#/components/schemas/EnderecoRequestDTO"
+
+    VoluntarioResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        nomeCompleto:
+          type: string
+          example: "João da Silva"
+
+    PerfilVoluntarioResponseDTO:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: "João"
+        fullName:
+          type: string
+          example: "João da Silva"
+        cidade:
+          type: string
+          example: "São Paulo"
+        estado:
+          type: string
+          example: "SP"
+        participacoes:
+          type: integer
+          example: 10
+        media:
+          type: integer
+          example: 4 # Média de estrelas de feedback
+        tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/TagRequestDTO"
+
+    DadosVoluntarioResponseDTO:
+      type: object
+      properties:
+        nomeCompleto:
+          type: string
+          example: "João da Silva"
+        email:
+          type: string
+          format: email
+          example: "joao.silva@example.com"
+        cpf:
+          type: string
+          example: "123.456.789-00"
+        telefone:
+          type: string
+          example: "(11) 98765-1234"
+        dataNascimento:
+          type: string
+          example: "1990-01-01"
+        pais:
+          type: string
+          example: "Brasil"
+        cep:
+          type: string
+          example: "01000-000"
+        estado:
+          type: string
+          example: "SP"
+        cidade:
+          type: string
+          example: "São Paulo"
+        bairro:
+          type: string
+          example: "Centro"
+        rua:
+          type: string
+          example: "Rua do Voluntário"
+        numero:
+          type: string
+          example: "789"
+        tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/TagRequestDTO"
+
+    VoluntarioUpdateRequestDTO:
+      type: object
+      properties:
+        telefone:
+          type: string
+          example: "(11) 99887-7665"
+        dataNascimento:
+          type: string
+          format: date
+          example: "1990-01-01"
+        endereco:
+          $ref: "#/components/schemas/EnderecoUpdateRequestDTO"
+        senha:
+          type: string
+          format: password
+          example: "novaSenhaSegura456"
+
+    # ==========================================
+    # Schemas de Histórico de Atividades (Novos)
+    # ==========================================
+    VoluntarioAprovadoResponseDTO:
+      type: object
+      properties:
+        idVoluntario:
+          type: integer
+          example: 1
+        nomeVoluntario:
+          type: string
+          example: "Maria da Silva"
+
+    HistoricoAtividadeResponseDTO:
+      type: object
+      properties:
+        quantidadeVoluntariosAprovados:
+          type: integer
+          example: 5
+        voluntariosAprovados:
+          type: array
+          items:
+            $ref: "#/components/schemas/VoluntarioAprovadoResponseDTO"
+
+    VoluntarioHistoricoResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        historicoId:
+          type: integer
+          example: 101
+        nomeCompleto:
+          type: string
+          example: "Carlos Eduardo"
+        statusCandidatura:
+          type: string
+          enum:
+            - PENDENTE
+            - APROVADO
+            - REPROVADO
+            - CANCELADO
+          example: "APROVADO"
+        cidade:
+          type: string
+          example: "Rio de Janeiro"
+        tags:
+          type: array
+          items:
+            type: string
+          example: ["Educação", "Tecnologia"]
+        avaliacaoId:
+          type: integer
+          example: 201
+
+    HistoricoAtividadeTodosResponseDTO:
+      type: object
+      properties:
+        quantidade:
+          type: integer
+          example: 15
+        voluntarios:
+          type: array
+          items:
+            $ref: "#/components/schemas/VoluntarioHistoricoResponseDTO"
+
+    HistoricoAtividadeRequestDTO:
+      type: object
+      properties:
+        historicoId:
+          type: integer
+          description: ID do histórico de atividade a ser atualizado.
+          example: 101
+
+    # ==========================================
+    # Schemas de Avaliações (Novos)
+    # ==========================================
+    AvaliacaoRequestDTO:
+      type: object
+      required:
+        - historicoId
+        - feedback
+        - estrelas
+      properties:
+        historicoId:
+          type: integer
+          description: ID do histórico de atividade ao qual a avaliação se refere.
+          example: 101
+        feedback:
+          type: string
+          description: Comentário ou feedback da avaliação.
+          example: "Voluntário muito dedicado e proativo."
+        estrelas:
+          type: integer
+          description: Pontuação da avaliação (1 a 5 estrelas).
+          minimum: 1
+          maximum: 5
+          example: 5
+
+    AvaliacaoResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        feedback:
+          type: string
+          example: "Voluntário muito dedicado e proativo."
+        estrelas:
+          type: integer
+          example: 5
+        voluntarioNome:
+          type: string
+          example: "João da Silva"
+        atividadeNome:
+          type: string
+          example: "Visita a Asilos"
+
+    # ==========================================
+    # Schemas de Atividades (Novos)
+    # ==========================================
+    AtividadeIdDTO:
+      type: object
+      properties:
+        atividadeId:
+          type: integer
+          description: ID da atividade.
+          example: 1
+
+    VoluntarioAtividadeDTO:
+      type: object
+      properties:
+        idVoluntario:
+          type: integer
+          example: 1
+        nomeVoluntario:
+          type: string
+          example: "Maria da Silva"
+        statusCandidatura:
+          type: string
+          enum:
+            - PENDENTE
+            - APROVADO
+            - REPROVADO
+            - CANCELADO
+          example: "APROVADO"
+
   securitySchemes:
     OAuth2Password:
       type: oauth2
