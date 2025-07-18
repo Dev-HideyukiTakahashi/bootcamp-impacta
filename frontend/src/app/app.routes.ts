@@ -8,6 +8,7 @@ import { DetalhesHabilidadesComponent } from './features/detalhes-habilidades/de
 import { EditarOngComponent } from './features/editar-ong/editar-ong.component';
 import { EditarVoluntarioComponent } from './features/editar-voluntario/editar-voluntario.component';
 import { GestaoAtividadesComponent } from './features/gestao-atividades/gestao-atividades.component';
+import { HistoricoAtividadeComponent } from './features/historico-atividade/historico-atividade.component';
 import { HomeOngComponent } from './features/home-ong/home-ong.component';
 import { HomeVoluntarioComponent } from './features/home-voluntario/home-voluntario.component';
 import { HomeComponent } from './features/home/home.component';
@@ -17,8 +18,6 @@ import { PerfilVoluntarioComponent } from './features/perfil-voluntario/perfil-v
 import { QuemSomosComponent } from './features/quem-somos/quem-somos.component';
 import { RecuperarSenhaComponent } from './features/recuperar-senha/recuperar-senha.component';
 import { UserRole } from './model/enum/user-role.enum';
-import { HistoricoAtividadeComponent } from './features/historico-atividade/historico-atividade.component';
-
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -76,7 +75,7 @@ export const routes: Routes = [
     path: 'dados-voluntario',
     component: EditarVoluntarioComponent,
     canActivate: [authGuard],
-    data: { roles: [UserRole.Ong] },
+    data: { roles: [UserRole.Voluntario] },
   },
   {
     path: 'atividades',
@@ -118,7 +117,7 @@ export const routes: Routes = [
     data: { roles: [UserRole.Voluntario] },
   },
 
-        {
+  {
     path: 'historico-atividade',
     component: HistoricoAtividadeComponent,
     canActivate: [authGuard],

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +40,7 @@ public class AtividadeController {
 
     // GET sem paginação
     @GetMapping("/buscar")
+    @PreAuthorize("hasRole('ROLE_ONG')")
     public ResponseEntity<List<AtividadeResponseDTO>> buscarTodas() {
         logger.info("Ong começando busca por todas as atividades (sem paginação)");
         List<AtividadeResponseDTO> response = atividadeService.buscarTodas();
@@ -47,6 +49,7 @@ public class AtividadeController {
     }
 
     @GetMapping()
+    @PreAuthorize("hasRole('ROLE_VOLUNTARIO')")
     public ResponseEntity<Page<AtividadeResponseDTO>> listarAtividades(Pageable pageable) {
         Page<AtividadeResponseDTO> atividades = atividadeService.buscarAtividades(pageable);
         return ResponseEntity.ok(atividades);
@@ -71,6 +74,7 @@ public class AtividadeController {
      *         não for um valor válido do enum.
      */
     @PatchMapping("/{id}/status/{novoStatus}")
+    @PreAuthorize("hasRole('ROLE_ONG')")
     public ResponseEntity<?> atualizarStatus(
             @PathVariable Integer id,
             @PathVariable String novoStatus) {
@@ -105,12 +109,14 @@ public class AtividadeController {
     }
 
     @GetMapping("/dados-atividade/{id}")
+    @PreAuthorize("hasRole('ROLE_ONG')")
     public ResponseEntity<AtividadeResponseDTO> getDadosAtividade(@PathVariable Integer id) {
         var dto = atividadeService.getDadosAtividadePorId(id);
         return ResponseEntity.ok(dto);
     }
 
     @PutMapping(path = "/editar/{id}")
+    @PreAuthorize("hasRole('ROLE_ONG')")
     public ResponseEntity<AtividadeResponseDTO> atualizar(@PathVariable Integer id,
             @Valid @RequestBody AtividadeRequestDTO dto) {
         logger.info("Ong começando atualização da atividade");
@@ -120,6 +126,7 @@ public class AtividadeController {
     }
 
     @PostMapping()
+    @PreAuthorize("hasRole('ROLE_ONG')")
     public ResponseEntity<AtividadeResponseDTO> cadastrar(@Valid @RequestBody AtividadeRequestDTO dto) {
         logger.info("Iniciando cadastro de nova atividade");
 
@@ -128,6 +135,7 @@ public class AtividadeController {
     }
 
     @PostMapping(path = "/atualizar-candidatura")
+    @PreAuthorize("hasAnyRole('ROLE_ONG','ROLE_VOLUNTARIO')")
     public ResponseEntity<VoluntarioAtividadeDTO> atualizarStatusCandidatura(@RequestBody AtividadeIdDTO request) {
         logger.info("Iniciando associação de histórico de atividade a um voluntário");
 
@@ -136,6 +144,7 @@ public class AtividadeController {
     }
 
     @GetMapping(path = "/estado/{estado}")
+    @PreAuthorize("hasRole('ROLE_VOLUNTARIO')")
     public ResponseEntity<Page<AtividadeResponseDTO>> buscarAtividadePorEstadoOng(@PathVariable String estado,
             Pageable pageable) {
         logger.info("Iniciando busca de atividades no estado: {}", estado);
@@ -145,6 +154,7 @@ public class AtividadeController {
     }
 
     @GetMapping(path = "/tag/{tag}")
+    @PreAuthorize("hasRole('ROLE_VOLUNTARIO')")
     public ResponseEntity<Page<AtividadeResponseDTO>> buscarAtividadePorTag(@PathVariable String tag,
             Pageable pageable) {
         logger.info("Iniciando busca de atividade por tag: {}", tag);

@@ -6,10 +6,11 @@ import { jwtDecode } from 'jwt-decode';
 import { LoginModel } from '../../model/LoginModel';
 import { AuthService } from '../../service/authService.service';
 import { HeaderComponent } from '../../shared/components/header/header.component';
+import { FooterComponent } from '../../shared/footer/footer.component';
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, HeaderComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, HeaderComponent, FooterComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })

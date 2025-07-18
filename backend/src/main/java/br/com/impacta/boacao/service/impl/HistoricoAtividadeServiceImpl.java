@@ -5,6 +5,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// importar log
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -22,7 +25,6 @@ import br.com.impacta.boacao.dto.response.HistoricoAtividadeResponseDTO;
 import br.com.impacta.boacao.dto.response.HistoricoAtividadeTodosResponseDTO;
 import br.com.impacta.boacao.dto.response.VoluntarioAprovadoResponseDTO;
 import br.com.impacta.boacao.dto.response.VoluntarioHistoricoResponseDTO;
-import br.com.impacta.boacao.entity.Atividade;
 import br.com.impacta.boacao.entity.HistoricoAtividade;
 // importar entity de Tag
 import br.com.impacta.boacao.entity.Tag;
@@ -31,12 +33,9 @@ import br.com.impacta.boacao.entity.enums.StatusCandidatura;
 import br.com.impacta.boacao.exception.RecursoNaoEncontradoException;
 import br.com.impacta.boacao.repository.AtividadeRepository;
 import br.com.impacta.boacao.repository.HistoricoAtividadeRepository;
+import br.com.impacta.boacao.repository.UsuarioRepository;
 import br.com.impacta.boacao.service.HistoricoAtividadeService;
 import br.com.impacta.boacao.service.UsuarioService;
-import br.com.impacta.boacao.repository.UsuarioRepository;
-// importar log
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Service
 public class HistoricoAtividadeServiceImpl implements HistoricoAtividadeService {
@@ -95,7 +94,7 @@ public class HistoricoAtividadeServiceImpl implements HistoricoAtividadeService 
      *
      * @param request DTO contendo o ID da atividade
      * @return DTO de resposta com a quantidade e a lista de voluntários
-     * aprovados
+     *         aprovados
      */
     @Override
     public HistoricoAtividadeResponseDTO buscarHistorico(HistoricoAtividadeRequestDTO request) {
@@ -107,13 +106,13 @@ public class HistoricoAtividadeServiceImpl implements HistoricoAtividadeService 
         atividadeRepository
                 .findByIdAndOngId(atividadeId, idOng)
                 .orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "Atividade não encontrada ou não pertence à ONG."));
+                        HttpStatus.NOT_FOUND, "Atividade não encontrada ou não pertence à ONG."));
 
         // 1) Conta quantos registros de HistoricoAtividade têm status APROVADO para
         // esta atividade.
         long quantidade = repo.countByAtividadeIdAndStatusCandidatura(
                 atividadeId,
-                StatusCandidatura.APROVADO);
+                StatusCandidatura.REALIZADO);
 
         // 2) Busca todos os registros de HistoricoAtividade (join table) que:
         // - estão vinculados à atividade passada
@@ -121,7 +120,7 @@ public class HistoricoAtividadeServiceImpl implements HistoricoAtividadeService 
         List<HistoricoAtividade> historicosAprovados = repo
                 .findByAtividade_IdAndStatusCandidatura(
                         atividadeId,
-                        StatusCandidatura.APROVADO);
+                        StatusCandidatura.REALIZADO);
 
         // 3) Transforma a lista de entidades HistoricoAtividade em DTOs específicos de
         // voluntário:
@@ -132,8 +131,8 @@ public class HistoricoAtividadeServiceImpl implements HistoricoAtividadeService 
         List<VoluntarioAprovadoResponseDTO> voluntariosDTO = historicosAprovados.stream()
                 .map(HistoricoAtividade::getVoluntario)
                 .map(v -> new VoluntarioAprovadoResponseDTO(
-                v.getId(),
-                v.getNomeCompleto()))
+                        v.getId(),
+                        v.getNomeCompleto()))
                 .collect(Collectors.toList());
 
         // 4) Monta e retorna o DTO de resposta que agrupa:
@@ -156,7 +155,7 @@ public class HistoricoAtividadeServiceImpl implements HistoricoAtividadeService 
         atividadeRepository
                 .findByIdAndOngId(atividadeId, idOng)
                 .orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "Atividade não encontrada ou não pertence à ONG."));
+                        HttpStatus.NOT_FOUND, "Atividade não encontrada ou não pertence à ONG."));
 
         List<VoluntarioHistoricoResponseDTO> dtos = historicos.stream()
                 .map(ha -> {
@@ -212,12 +211,12 @@ public class HistoricoAtividadeServiceImpl implements HistoricoAtividadeService 
         atividadeRepository
                 .findByIdAndOngId(atvId, idOng)
                 .orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "Atividade não encontrada ou não pertence à ONG."));
+                        HttpStatus.NOT_FOUND, "Atividade não encontrada ou não pertence à ONG."));
 
         HistoricoAtividade ha = repo.findByAtividadeIdAndVoluntarioId(atvId, volId)
                 .orElseThrow(() -> new RecursoNaoEncontradoException(
-                "Voluntário de ID " + volId
-                + " não encontrado na atividade " + atvId));
+                        "Voluntário de ID " + volId
+                                + " não encontrado na atividade " + atvId));
 
         ha.setStatusCandidatura(status);
 

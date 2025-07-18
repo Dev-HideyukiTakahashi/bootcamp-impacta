@@ -3,6 +3,7 @@ package br.com.impacta.boacao.controller;
 import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,18 +42,21 @@ public class VoluntarioController {
     }
 
     @GetMapping("/perfil-voluntario")
+    @PreAuthorize("hasRole('ROLE_VOLUNTARIO')")
     public ResponseEntity<PerfilVoluntarioResponseDTO> meuPerfil(Authentication auth) {
         PerfilVoluntarioResponseDTO dto = voluntarioService.getMeuPerfil(auth);
         return ResponseEntity.ok(dto);
     }
 
     @GetMapping("/dados-voluntario")
+    @PreAuthorize("hasRole('ROLE_VOLUNTARIO')")
     public ResponseEntity<DadosVoluntarioResponseDTO> getDadosVoluntario(Authentication auth) {
         DadosVoluntarioResponseDTO dto = voluntarioService.getDadosVoluntario(auth);
         return ResponseEntity.ok(dto);
     }
 
     @PutMapping("/editar")
+    @PreAuthorize("hasRole('ROLE_VOLUNTARIO')")
     public ResponseEntity<Void> atualizarVoluntario(
             Authentication auth,
             @Valid @RequestBody VoluntarioUpdateRequestDTO dto) {

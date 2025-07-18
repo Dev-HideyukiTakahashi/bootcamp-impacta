@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -27,6 +28,7 @@ public class TagController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_VOLUNTARIO','ROLE_ONG')")
     public ResponseEntity<List<TagRequestDTO>> buscarTodos() {
         log.info("Iniciando busca de todas as tags.");
         List<TagRequestDTO> dto = tagService.buscarTodos();
@@ -35,6 +37,7 @@ public class TagController {
     }
 
     @GetMapping(path = "/{id}")
+    @PreAuthorize("hasRole('ROLE_VOLUNTARIO')")
     public ResponseEntity<TagRequestDTO> buscarPorId(@PathVariable Integer id) {
         log.info("Iniciando busca de tag id {}.", id);
         TagRequestDTO dto = tagService.buscarPorId(id);
@@ -42,6 +45,7 @@ public class TagController {
     }
 
     @PutMapping
+    @PreAuthorize("hasRole('ROLE_VOLUNTARIO')")
     public ResponseEntity<List<TagRequestDTO>> adicionaTags(@RequestBody List<Integer> request) {
 
         List<TagRequestDTO> response = tagService.adicionaTags(request);

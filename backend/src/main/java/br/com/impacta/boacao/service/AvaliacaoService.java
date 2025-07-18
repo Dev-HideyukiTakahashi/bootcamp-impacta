@@ -68,6 +68,7 @@ public class AvaliacaoService {
         historicoAtividade.setAvaliacao(avaliacao);
         historicoAtividade.setEncerradoEm(LocalDate.now());
         historicoAtividade.setStatusCandidatura(StatusCandidatura.REALIZADO);
+        historicoAtividade.setCertificado(true);
 
         log.info("Avaliação bem sucedida");
         return AvaliacaoMapper.toDTO(avaliacao, historicoAtividade);

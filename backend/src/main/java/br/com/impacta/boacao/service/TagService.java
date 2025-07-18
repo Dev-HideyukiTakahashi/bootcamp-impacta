@@ -54,8 +54,8 @@ public class TagService {
     @Transactional
     public List<TagRequestDTO> adicionaTags(List<Integer> request) {
 
-        Integer idLogado = usuarioService.getUsuarioAutenticado().getId();
-        Voluntario voluntario = voluntarioRepository.getReferenceById(idLogado);
+        String emailLogado = usuarioService.getUsuarioAutenticado().getEmail();
+        Voluntario voluntario = voluntarioRepository.findByUsuarioEmail(emailLogado).get();
 
         voluntario.getTags().clear();
 

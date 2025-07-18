@@ -3,6 +3,7 @@ package br.com.impacta.boacao.controller;
 import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,18 +42,21 @@ public class OngController {
   }
 
   @GetMapping("/perfil-ong")
+  @PreAuthorize("hasRole('ROLE_ONG')")
   public ResponseEntity<PerfilOngResponseDTO> meuPerfil(Authentication auth) {
     PerfilOngResponseDTO dto = ongService.getMeuPerfil(auth);
     return ResponseEntity.ok(dto);
   }
 
   @GetMapping("/dados-ong")
+  @PreAuthorize("hasRole('ROLE_ONG')")
   public ResponseEntity<DadosOngResponseDTO> getDadosOng(Authentication auth) {
     var dto = ongService.getDadosOng(auth);
     return ResponseEntity.ok(dto);
   }
 
   @PutMapping("/editar")
+  @PreAuthorize("hasRole('ROLE_ONG')")
   public ResponseEntity<Void> atualizarOng(
       Authentication auth,
       @Valid @RequestBody OngUpdateRequestDTO dto) {

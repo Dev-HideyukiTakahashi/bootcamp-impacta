@@ -5,6 +5,7 @@ import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +31,7 @@ public class AvaliacaoController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ONG')")
     public ResponseEntity<AvaliacaoResponseDTO> avaliarVoluntario(@RequestBody @Valid AvaliacaoRequestDTO request) {
         log.info("Iniciando avaliacao de voluntario");
         AvaliacaoResponseDTO response = avaliacaoService.avaliarVoluntario(request);
@@ -44,6 +46,7 @@ public class AvaliacaoController {
     }
 
     @GetMapping("/historicoId/{historicoId}")
+    @PreAuthorize("hasRole('ROLE_ONG')")
     public ResponseEntity<AvaliacaoResponseDTO> getByHistoricoId(@PathVariable Integer historicoId) {
         return ResponseEntity.ok(avaliacaoService.buscarPorHistoricoAtividade(historicoId));
     }

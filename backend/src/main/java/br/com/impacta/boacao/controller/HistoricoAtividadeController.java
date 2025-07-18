@@ -21,6 +21,7 @@ import br.com.impacta.boacao.dto.response.HistoricoAtividadeTodosResponseDTO;
 import br.com.impacta.boacao.entity.enums.StatusCandidatura;
 import br.com.impacta.boacao.exception.handler.StatusCandidaturaInvalidoException;
 import br.com.impacta.boacao.service.HistoricoAtividadeService;
+
 @RestController
 @RequestMapping(path = "/api/historico-atividades")
 public class HistoricoAtividadeController {
@@ -32,8 +33,8 @@ public class HistoricoAtividadeController {
         this.historicoAtividadeService = historicoAtividadeService;
     }
 
-    @PreAuthorize("hasRole('ROLE_VOLUNTARIO')")
     @GetMapping
+    @PreAuthorize("hasRole('ROLE_VOLUNTARIO')")
     public ResponseEntity<Page<HistoricoAtividadeDTO>> buscarTodos(Pageable pageable) {
         logger.info("Iniciando busca do histórico de atividades");
         Page<HistoricoAtividadeDTO> response = historicoAtividadeService.buscarTodos(pageable);
@@ -41,8 +42,8 @@ public class HistoricoAtividadeController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PreAuthorize("hasRole('ROLE_VOLUNTARIO')")
     @GetMapping(path = "/data")
+    @PreAuthorize("hasRole('ROLE_VOLUNTARIO')")
     public ResponseEntity<Page<HistoricoAtividadeDTO>> buscarTodosPorData(
             @RequestParam String encerradoEm,
             Pageable pageable) {
@@ -58,8 +59,8 @@ public class HistoricoAtividadeController {
      * @param id ID da atividade
      * @return quantidade e lista de voluntários aprovados
      */
-    @PreAuthorize("hasRole('ROLE_ONG')")
     @GetMapping("/listar-voluntarios-aprovados/atividade/{id}")
+    @PreAuthorize("hasRole('ROLE_ONG')")
     public ResponseEntity<HistoricoAtividadeResponseDTO> getHistorico(
             @PathVariable("id") Integer id) {
 
@@ -76,22 +77,22 @@ public class HistoricoAtividadeController {
     /**
      * Novo endpoint: busca todos (sem filtro de status) para poder gerenciar
      */
-    @PreAuthorize("hasRole('ROLE_ONG')")
     @GetMapping("/gestao-voluntarios/atividade/{id}")
+    @PreAuthorize("hasRole('ROLE_ONG')")
     public ResponseEntity<HistoricoAtividadeTodosResponseDTO> listaTodosVoluntariosInscritos(
             @PathVariable Integer id) {
         var req = new HistoricoAtividadeRequestDTO(id);
-        HistoricoAtividadeTodosResponseDTO response = historicoAtividadeService.listaTodosVoluntariosInscritos(req.getAtividadeId());
+        HistoricoAtividadeTodosResponseDTO response = historicoAtividadeService
+                .listaTodosVoluntariosInscritos(req.getAtividadeId());
         return ResponseEntity.ok(response);
     }
 
-    @PreAuthorize("hasRole('ROLE_ONG')")
     @PutMapping("/gestao-voluntarios/atividade/{atividadeId}/statusCandidatura/{status}")
+    @PreAuthorize("hasRole('ROLE_ONG')")
     public ResponseEntity<Void> atualizarStatus(
             @PathVariable Integer atividadeId,
             @PathVariable String status, // STRING aqui
-            @RequestBody HistoricoAtividadeRequestDTO req
-    ) {
+            @RequestBody HistoricoAtividadeRequestDTO req) {
         req.setAtividadeId(atividadeId);
 
         StatusCandidatura st;

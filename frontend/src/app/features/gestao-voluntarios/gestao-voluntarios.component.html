@@ -15,7 +15,7 @@
       <div class="detalhes">
         <h3 class="nome">{{ v.nomeCompleto }}</h3>
         <p>Cidade: {{ v.cidade }}</p>
-        <p>Habilidade: {{ v.tags.join(", ") }}</p>
+        <p>Habilidade: {{ v.tags.join(', ') }}</p>
 
         <!-- para status PENDENTE -->
         <p *ngIf="v.statusCandidatura === 'PENDENTE'"></p>
@@ -31,11 +31,7 @@
 
       <!-- botões de ação -->
       <div class="lista">
-        <button
-          *ngIf="v.statusCandidatura === 'PENDENTE'"
-          class="btn-acao"
-          (click)="aprovar(v.id)"
-        >
+        <button *ngIf="v.statusCandidatura === 'PENDENTE'" class="btn-acao" (click)="aprovar(v.id)">
           Aceitar
         </button>
         <button
@@ -49,7 +45,7 @@
         <div class="acoes">
           <!-- se não tiver avaliação cadastrada (avaliacaoId é null ou undefined) -->
           <button
-            *ngIf="!v.avaliacaoId"
+            *ngIf="!v.avaliacaoId && v.statusCandidatura !== 'PENDENTE'"
             class="btn-acao"
             (click)="avaliar(v)"
           >
@@ -57,11 +53,7 @@
           </button>
 
           <!-- se já tiver avaliação cadastrada (avaliacaoId não é null) -->
-          <button
-            *ngIf="v.avaliacaoId"
-            class="btn-acao"
-            (click)="verResumo(v.historicoId)"
-          >
+          <button *ngIf="v.avaliacaoId" class="btn-acao" (click)="verResumo(v.historicoId)">
             Resumo da Avaliação
           </button>
         </div>
@@ -84,13 +76,7 @@
 
   <!-- paginação -->
   <div class="wrapper-paginacao">
-    <button
-      class="page-btn"
-      (click)="prevPage()"
-      [disabled]="currentPage === 1"
-    >
-      ‹
-    </button>
+    <button class="page-btn" (click)="prevPage()" [disabled]="currentPage === 1">‹</button>
     <button
       *ngFor="let p of pages"
       class="page-btn"
@@ -99,13 +85,7 @@
     >
       {{ p }}
     </button>
-    <button
-      class="page-btn"
-      (click)="nextPage()"
-      [disabled]="currentPage === totalPages"
-    >
-      ›
-    </button>
+    <button class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages">›</button>
   </div>
 </div>
 
